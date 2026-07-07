@@ -1,0 +1,40 @@
+## Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Bb]in/
+[Oo]bj/
+
+## Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Rider
+.idea/
+
+## VS Code
+.vscode/
+
+## NuGet
+*.nupkg
+packages/
+!packages/build/
+*.snupkg
+
+## Logs
+*.log
+
+## Test Results
+TestResults/
+
+## Windows
+Thumbs.db
+Desktop.ini
+
+## Temporary files
+*.tmp
+*.temp

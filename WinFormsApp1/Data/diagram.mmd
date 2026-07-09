@@ -1,0 +1,127 @@
+erDiagram
+    MembershipTiers {
+        int Id PK
+        text Name
+        int MaxBorrowLimit
+        text CreatedAt
+        text UpdatedAt
+    }
+
+    Authors {
+        int Id PK
+        text FirstName
+        text LastName
+        text Bio
+        text CreatedAt
+        text UpdatedAt
+    }
+
+    Categories {
+        int Id PK
+        text Name
+        text Description
+        text CreatedAt
+        text UpdatedAt
+    }
+
+    Books {
+        int Id PK
+        text Title
+        text ISBN
+        text Publisher
+        int PublicationYear
+        text Description
+        text ShelfLocation
+        real ReplacementCost
+        text CreatedAt
+        text UpdatedAt
+    }
+
+    BookCopies {
+        int Id PK
+        int BookId FK
+        int Status
+        text CreatedAt
+        text UpdatedAt
+    }
+
+    Members {
+        int Id PK
+        text FirstName
+        text LastName
+        text Email
+        text Phone
+        int Status
+        int MembershipTierId FK
+        text CreatedAt
+        text UpdatedAt
+    }
+
+    ApplicationUsers {
+        int Id PK
+        text Username
+        text PasswordHash
+        int Role
+        text CreatedAt
+        text UpdatedAt
+    }
+
+    BorrowRecords {
+        int Id PK
+        int BookCopyId FK
+        int MemberId FK
+        text BorrowDate
+        text DueDate
+        text ReturnDate
+        int Status
+        int RenewalCount
+        int CheckedOutByUserId FK
+        int ReturnedByUserId FK
+        text CreatedAt
+        text UpdatedAt
+    }
+
+    LateFees {
+        int Id PK
+        int BorrowRecordId FK
+        real Amount
+        text DateIncurred
+        int Status
+        int WaivedByUserId FK
+        text CreatedAt
+        text UpdatedAt
+    }
+
+    FeePayments {
+        int Id PK
+        int LateFeeId FK
+        real Amount
+        text PaymentDate
+        text CreatedAt
+        text UpdatedAt
+    }
+
+    BookAuthors {
+        int BookId FK
+        int AuthorId FK
+    }
+
+    BookCategories {
+        int BookId FK
+        int CategoryId FK
+    }
+
+    MembershipTiers ||--o{ Members : "has"
+    Members ||--o{ BorrowRecords : "borrows"
+    Members ||--o{ LateFees : "incurs"
+    BookCopies ||--o{ BorrowRecords : "checked out"
+    BorrowRecords ||--o{ LateFees : "generates"
+    LateFees ||--o{ FeePayments : "paid via"
+    ApplicationUsers ||--o{ BorrowRecords : "CheckedOutBy"
+    ApplicationUsers ||--o{ BorrowRecords : "ReturnedBy"
+    ApplicationUsers ||--o{ LateFees : "WaivedBy"
+    Books ||--o{ BookCopies : "has"
+    Books ||--o{ BookAuthors : "written by"
+    Authors ||--o{ BookAuthors : "authored"
+    Books ||--o{ BookCategories : "categorized in"
+    Categories ||--o{ BookCategories : "contains"

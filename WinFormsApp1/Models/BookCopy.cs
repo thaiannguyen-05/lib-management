@@ -9,5 +9,6 @@ namespace WinFormsApp1.Models
         public CopyStatus Status { get; set; } = CopyStatus.Available;
 
         public ICollection<BorrowRecord> BorrowRecords { get; set; } = new List<BorrowRecord>();
+        public ICollection<InventoryLog> InventoryLogs { get; set; } = new List<InventoryLog>();
     }
 }

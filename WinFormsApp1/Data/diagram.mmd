@@ -1,12 +1,4 @@
 erDiagram
-    MembershipTiers {
-        int Id PK
-        text Name
-        int MaxBorrowLimit
-        text CreatedAt
-        text UpdatedAt
-    }
-
     Authors {
         int Id PK
         text FirstName
@@ -24,11 +16,20 @@ erDiagram
         text UpdatedAt
     }
 
+    Publishers {
+        int Id PK
+        text Name
+        text Address
+        text Phone
+        text CreatedAt
+        text UpdatedAt
+    }
+
     Books {
         int Id PK
         text Title
         text ISBN
-        text Publisher
+        int PublisherId FK
         int PublicationYear
         text Description
         text ShelfLocation
@@ -40,7 +41,35 @@ erDiagram
     BookCopies {
         int Id PK
         int BookId FK
+        text Barcode
+        text ShelfLocation
         int Status
+        text CreatedAt
+        text UpdatedAt
+    }
+
+    BookAuthors {
+        int BookId FK
+        int AuthorId FK
+    }
+
+    BookCategories {
+        int BookId FK
+        int CategoryId FK
+    }
+
+    Departments {
+        int Id PK
+        text Name
+        text Code
+        text CreatedAt
+        text UpdatedAt
+    }
+
+    StudentClasses {
+        int Id PK
+        text Name
+        int DepartmentId FK
         text CreatedAt
         text UpdatedAt
     }
@@ -52,7 +81,20 @@ erDiagram
         text Email
         text Phone
         int Status
-        int MembershipTierId FK
+        int MemberType
+        text StudentId
+        int DepartmentId FK
+        int ClassId FK
+        text CreatedAt
+        text UpdatedAt
+    }
+
+    LibraryCards {
+        int Id PK
+        int MemberId FK
+        text CardNumber
+        text ExpiryDate
+        int Status
         text CreatedAt
         text UpdatedAt
     }
@@ -62,6 +104,8 @@ erDiagram
         text Username
         text PasswordHash
         int Role
+        int IsActive
+        text LastLoginAt
         text CreatedAt
         text UpdatedAt
     }
@@ -84,6 +128,7 @@ erDiagram
     LateFees {
         int Id PK
         int BorrowRecordId FK
+        int FeeType
         real Amount
         text DateIncurred
         int Status
@@ -101,27 +146,58 @@ erDiagram
         text UpdatedAt
     }
 
-    BookAuthors {
+    Reservations {
+        int Id PK
         int BookId FK
-        int AuthorId FK
+        int MemberId FK
+        text ReservationDate
+        text ExpiryDate
+        int Status
+        text CreatedAt
+        text UpdatedAt
     }
 
-    BookCategories {
-        int BookId FK
-        int CategoryId FK
+    InventoryLogs {
+        int Id PK
+        int BookCopyId FK
+        int Action
+        int Quantity
+        text Note
+        int PerformedByUserId FK
+        text CreatedAt
+        text UpdatedAt
     }
 
-    MembershipTiers ||--o{ Members : "has"
-    Members ||--o{ BorrowRecords : "borrows"
-    Members ||--o{ LateFees : "incurs"
-    BookCopies ||--o{ BorrowRecords : "checked out"
-    BorrowRecords ||--o{ LateFees : "generates"
-    LateFees ||--o{ FeePayments : "paid via"
-    ApplicationUsers ||--o{ BorrowRecords : "CheckedOutBy"
-    ApplicationUsers ||--o{ BorrowRecords : "ReturnedBy"
-    ApplicationUsers ||--o{ LateFees : "WaivedBy"
+    AuditLogs {
+        int Id PK
+        int UserId FK
+        text Action
+        text EntityName
+        int EntityId
+        text Details
+        text Timestamp
+    }
+
+    Publishers ||--o{ Books : "publishes"
     Books ||--o{ BookCopies : "has"
     Books ||--o{ BookAuthors : "written by"
     Authors ||--o{ BookAuthors : "authored"
     Books ||--o{ BookCategories : "categorized in"
     Categories ||--o{ BookCategories : "contains"
+    Departments ||--o{ StudentClasses : "has"
+    Departments ||--o{ Members : "belongs to"
+    StudentClasses ||--o{ Members : "has"
+    Members ||--o{ LibraryCards : "has"
+    Members ||--o{ BorrowRecords : "borrows"
+    Members ||--o{ LateFees : "incurs"
+    Members ||--o{ Reservations : "reserves"
+    Books ||--o{ Reservations : "reserved"
+    BookCopies ||--o{ BorrowRecords : "checked out"
+    BookCopies ||--o{ InventoryLogs : "logged"
+    BorrowRecords ||--o{ LateFees : "generates"
+    LateFees ||--o{ FeePayments : "paid via"
+    ApplicationUsers ||--o{ BorrowRecords : "CheckedOutBy"
+    ApplicationUsers ||--o{ BorrowRecords : "ReturnedBy"
+    ApplicationUsers ||--o{ LateFees : "WaivedBy"
+    ApplicationUsers ||--o{ InventoryLogs : "performed"
+    ApplicationUsers ||--o{ AuditLogs : "actions"

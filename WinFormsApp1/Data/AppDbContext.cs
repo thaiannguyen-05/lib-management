@@ -6,6 +6,10 @@ namespace WinFormsApp1.Data
 {
     public class AppDbContext : DbContext
     {
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        {
+        }
+
         public DbSet<Book> Books => Set<Book>();
         public DbSet<BookCopy> BookCopies => Set<BookCopy>();
         public DbSet<Member> Members => Set<Member>();
@@ -22,15 +26,6 @@ namespace WinFormsApp1.Data
         public DbSet<Reservation> Reservations => Set<Reservation>();
         public DbSet<InventoryLog> InventoryLogs => Set<InventoryLog>();
         public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                var dbPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Library.db");
-                optionsBuilder.UseSqlite($"Data Source={dbPath}");
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -13,12 +13,8 @@ A physical copy of a Book. Has its own ID and status (Available, Borrowed, Damag
 _Avoid_: Copy, Instance
 
 **Member**:
-A person registered with the library. Has contact info, membership status, and a maximum borrow limit determined by their MembershipTier.
+A person registered with the library. Has contact info and membership status. No borrow limit — can borrow as many books as available.
 _Avoid_: User, Patron, Account
-
-**MembershipTier**:
-A named tier (e.g. "Basic", "Premium") that determines a Member's borrow limit. Stored in DB, admin-configurable, seeded with defaults.
-_Avoid_: Role, Level
 
 **BorrowRecord**:
 A loan of a specific BookCopy to a specific Member. Tracks borrow date, due date, return date, status, renewal count, and audit trail (who checked out, who returned).
@@ -69,11 +65,11 @@ _Avoid_: Role (use UserRole), Permission
 ## Business Rules
 
 - Borrow a BookCopy (not a Book title)
+- No borrow limit — members can borrow as many books as they want
 - Max 2 renewals per borrow, always allowed (no holds system)
 - Late fee = daily rate x days overdue, calculated on return
 - Lost book = mark copy Lost + charge member replacement cost
 - Unpaid fees block new borrows
-- Membership tier determines max active borrows per member
 - Single role per ApplicationUser
 - Authors and Categories are separate entities with full CRUD
 - BorrowRecord tracks which ApplicationUser checked out and returned

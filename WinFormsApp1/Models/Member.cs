@@ -10,9 +10,6 @@ namespace WinFormsApp1.Models
         public string? Phone { get; set; }
         public MemberStatus Status { get; set; } = MemberStatus.Active;
 
-        public int MembershipTierId { get; set; }
-        public MembershipTier MembershipTier { get; set; } = null!;
-
         public ICollection<BorrowRecord> BorrowRecords { get; set; } = new List<BorrowRecord>();
         public ICollection<LateFee> LateFees { get; set; } = new List<LateFee>();
     }

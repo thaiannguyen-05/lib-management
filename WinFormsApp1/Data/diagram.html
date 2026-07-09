@@ -8,27 +8,28 @@
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #1a1a2e;
-            color: #eee;
+            background: #f8f9fa;
+            color: #333;
             margin: 0;
             padding: 20px;
         }
         h1 {
             text-align: center;
-            color: #00d4ff;
+            color: #2c3e50;
             margin-bottom: 10px;
         }
         .subtitle {
             text-align: center;
-            color: #888;
+            color: #666;
             margin-bottom: 30px;
         }
         .diagram-container {
-            background: #16213e;
+            background: #fff;
             border-radius: 12px;
             padding: 30px;
             overflow-x: auto;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            border: 1px solid #e9ecef;
         }
         .mermaid {
             display: flex;
@@ -38,24 +39,25 @@
             margin-top: 20px;
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 16px;
             flex-wrap: wrap;
         }
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 8px;
-            color: #aaa;
+            gap: 6px;
+            color: #555;
             font-size: 12px;
         }
         .legend-color {
             width: 14px;
             height: 14px;
             border-radius: 3px;
+            border: 1px solid rgba(0,0,0,0.1);
         }
         .table-count {
             text-align: center;
-            color: #00d4ff;
+            color: #2c3e50;
             margin-top: 20px;
             font-size: 14px;
         }
@@ -73,16 +75,12 @@ erDiagram
         text FirstName
         text LastName
         text Bio
-        text CreatedAt
-        text UpdatedAt
     }
 
     Categories {
         int Id PK
         text Name
         text Description
-        text CreatedAt
-        text UpdatedAt
     }
 
     Publishers {
@@ -90,8 +88,6 @@ erDiagram
         text Name
         text Address
         text Phone
-        text CreatedAt
-        text UpdatedAt
     }
 
     Books {
@@ -103,8 +99,6 @@ erDiagram
         text Description
         text ShelfLocation
         real ReplacementCost
-        text CreatedAt
-        text UpdatedAt
     }
 
     BookCopies {
@@ -113,8 +107,6 @@ erDiagram
         text Barcode
         text ShelfLocation
         int Status
-        text CreatedAt
-        text UpdatedAt
     }
 
     BookAuthors {
@@ -131,16 +123,12 @@ erDiagram
         int Id PK
         text Name
         text Code
-        text CreatedAt
-        text UpdatedAt
     }
 
     StudentClasses {
         int Id PK
         text Name
         int DepartmentId FK
-        text CreatedAt
-        text UpdatedAt
     }
 
     Members {
@@ -154,8 +142,6 @@ erDiagram
         text StudentId
         int DepartmentId FK
         int ClassId FK
-        text CreatedAt
-        text UpdatedAt
     }
 
     LibraryCards {
@@ -164,8 +150,6 @@ erDiagram
         text CardNumber
         text ExpiryDate
         int Status
-        text CreatedAt
-        text UpdatedAt
     }
 
     ApplicationUsers {
@@ -174,9 +158,6 @@ erDiagram
         text PasswordHash
         int Role
         int IsActive
-        text LastLoginAt
-        text CreatedAt
-        text UpdatedAt
     }
 
     BorrowRecords {
@@ -190,8 +171,6 @@ erDiagram
         int RenewalCount
         int CheckedOutByUserId FK
         int ReturnedByUserId FK
-        text CreatedAt
-        text UpdatedAt
     }
 
     LateFees {
@@ -202,8 +181,6 @@ erDiagram
         text DateIncurred
         int Status
         int WaivedByUserId FK
-        text CreatedAt
-        text UpdatedAt
     }
 
     FeePayments {
@@ -211,8 +188,6 @@ erDiagram
         int LateFeeId FK
         real Amount
         text PaymentDate
-        text CreatedAt
-        text UpdatedAt
     }
 
     Reservations {
@@ -222,8 +197,6 @@ erDiagram
         text ReservationDate
         text ExpiryDate
         int Status
-        text CreatedAt
-        text UpdatedAt
     }
 
     InventoryLogs {
@@ -233,8 +206,6 @@ erDiagram
         int Quantity
         text Note
         int PerformedByUserId FK
-        text CreatedAt
-        text UpdatedAt
     }
 
     AuditLogs {
@@ -275,71 +246,71 @@ erDiagram
 
     <div class="legend">
         <div class="legend-item">
-            <div class="legend-color" style="background: #ff6b6b;"></div>
+            <div class="legend-color" style="background: #ffc9c9;"></div>
             FeePayments
         </div>
         <div class="legend-item">
-            <div class="legend-color" style="background: #4ecdc4;"></div>
+            <div class="legend-color" style="background: #99e6e6;"></div>
             BookCategories
         </div>
         <div class="legend-item">
-            <div class="legend-color" style="background: #45b7d1;"></div>
+            <div class="legend-color" style="background: #b3e0f2;"></div>
             BookCopies
         </div>
         <div class="legend-item">
-            <div class="legend-color" style="background: #96ceb4;"></div>
+            <div class="legend-color" style="background: #c8e6c9;"></div>
             Members
         </div>
         <div class="legend-item">
-            <div class="legend-color" style="background: #feca57;"></div>
+            <div class="legend-color" style="background: #fff9c4;"></div>
             LateFees
         </div>
         <div class="legend-item">
-            <div class="legend-color" style="background: #ff9ff3;"></div>
+            <div class="legend-color" style="background: #f8bbd0;"></div>
             BorrowRecords
         </div>
         <div class="legend-item">
-            <div class="legend-color" style="background: #54a0ff;"></div>
+            <div class="legend-color" style="background: #bbdefb;"></div>
             Books
         </div>
         <div class="legend-item">
-            <div class="legend-color" style="background: #5f27cd;"></div>
+            <div class="legend-color" style="background: #d1c4e9;"></div>
             Authors
         </div>
         <div class="legend-item">
-            <div class="legend-color" style="background: #01a3a4;"></div>
+            <div class="legend-color" style="background: #b2dfdb;"></div>
             Categories
         </div>
         <div class="legend-item">
-            <div class="legend-color" style="background: #2ed573;"></div>
+            <div class="legend-color" style="background: #c8e6c9;"></div>
             ApplicationUsers
         </div>
         <div class="legend-item">
-            <div class="legend-color" style="background: #ff6348;"></div>
+            <div class="legend-color" style="background: #ffe0b2;"></div>
             Publishers
         </div>
         <div class="legend-item">
-            <div class="legend-color" style="background: #7bed9f;"></div>
+            <div class="legend-color" style="background: #dcedc8;"></div>
             Departments
         </div>
         <div class="legend-item">
-            <div class="legend-color" style="background: #e056fd;"></div>
+            <div class="legend-color" style="background: #e1bee7;"></div>
             StudentClasses
         </div>
         <div class="legend-item">
-            <div class="legend-color" style="background: #f9ca24;"></div>
+            <div class="legend-color" style="background: #fff3e0;"></div>
             LibraryCards
         </div>
         <div class="legend-item">
-            <div class="legend-color" style="background: #6ab04c;"></div>
+            <div class="legend-color" style="background: #e8f5e9;"></div>
             Reservations
         </div>
         <div class="legend-item">
-            <div class="legend-color" style="background: #eb4d4b;"></div>
+            <div class="legend-color" style="background: #fce4ec;"></div>
             InventoryLogs
         </div>
         <div class="legend-item">
-            <div class="legend-color" style="background: #30336b;"></div>
+            <div class="legend-color" style="background: #e0e0e0;"></div>
             AuditLogs
         </div>
     </div>
@@ -349,7 +320,7 @@ erDiagram
     <script>
         mermaid.initialize({
             startOnLoad: true,
-            theme: 'dark',
+            theme: 'default',
             er: {
                 layoutDirection: 'TB',
                 useMaxWidth: false,
@@ -357,12 +328,12 @@ erDiagram
                 curve: 'basis'
             },
             themeVariables: {
-                primaryColor: '#00d4ff',
-                primaryTextColor: '#fff',
-                primaryBorderColor: '#00d4ff',
-                lineColor: '#00d4ff',
-                secondaryColor: '#16213e',
-                tertiaryColor: '#1a1a2e'
+                primaryColor: '#e3f2fd',
+                primaryTextColor: '#333',
+                primaryBorderColor: '#90caf9',
+                lineColor: '#90caf9',
+                secondaryColor: '#fff',
+                tertiaryColor: '#f5f5f5'
             }
         });
     </script>

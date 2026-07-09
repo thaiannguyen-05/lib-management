@@ -40,6 +40,34 @@ _Avoid_: Genre, Tag
 A user who can log into the app. Has username, password hash, and a single role (Admin/Librarian/Staff). Not the same as Member. Referenced by BorrowRecord and LateFee for audit trail.
 _Avoid_: User, Account, Staff (use Member or ApplicationUser)
 
+**Publisher**:
+A publishing house. Separate entity with full CRUD. A Book optionally belongs to one Publisher (nullable FK). A Publisher has many Books.
+_Avoid_: Press, PublishingHouse
+
+**Department**:
+An organizational unit (e.g. department in a university). Has a name and unique code. A Department has many StudentClasses and many Members.
+_Avoid_: Division, Unit
+
+**StudentClass**:
+A class/cohort within a Department. Has a name and belongs to one Department. A StudentClass has many Members.
+_Avoid_: Class, Group, Cohort
+
+**LibraryCard**:
+A physical or digital card issued to a Member. One-to-one with Member. Tracks card number (unique), expiry date, and status.
+_Avoid_: Card, MembershipCard
+
+**Reservation**:
+A hold placed by a Member on a Book title (not a specific copy). When a copy of the reserved Book becomes available, it can be fulfilled. Has reservation date, expiry date, and status.
+_Avoid_: Hold, Request
+
+**InventoryLog**:
+A record of an inventory action performed on a specific BookCopy. Tracks the action type, quantity, optional note, and which ApplicationUser performed it.
+_Avoid_: StockLog, InventoryEntry
+
+**AuditLog**:
+A system-wide log of entity mutations. Records which ApplicationUser performed what action on which entity, with optional details and timestamp. Separate from domain-specific audit trails on BorrowRecord/LateFee.
+_Avoid_: ActivityLog, ChangeLog
+
 ## Enums
 
 **CopyStatus**:
@@ -62,6 +90,26 @@ _Avoid_: PaymentStatus
 Permission level for ApplicationUsers: Admin, Librarian, Staff.
 _Avoid_: Role (use UserRole), Permission
 
+**MemberType**:
+Classification of a Member by their role in the institution: Student, Teacher, Staff, External.
+_Avoid_: UserType, Role (use MemberType)
+
+**CardStatus**:
+Lifecycle state of a LibraryCard: Active, Expired, Locked.
+_Avoid_: LibraryCardStatus
+
+**FeeType**:
+Classification of what kind of LateFee was incurred: Late, Lost, Damaged. Orthogonal to FeeStatus (payment state).
+_Avoid_: ChargeType
+
+**ReservationStatus**:
+Lifecycle state of a Reservation: Pending, Ready, Cancelled, Expired.
+_Avoid_: HoldStatus
+
+**InventoryAction**:
+Type of inventory action on a BookCopy: Import, Dispose, Transfer, Count, Lost, Damaged.
+_Avoid_: StockAction
+
 ## Business Rules
 
 - Borrow a BookCopy (not a Book title)
@@ -74,6 +122,8 @@ _Avoid_: Role (use UserRole), Permission
 - Authors and Categories are separate entities with full CRUD
 - BorrowRecord tracks which ApplicationUser checked out and returned
 - LateFee tracks which ApplicationUser waived the fee
+- Members can reserve Book titles (not specific copies). Reserved books go to the first pending reservation when returned.
+- FeeType (Late/Lost/Damaged) classifies the fee; FeeStatus (Unpaid/Paid/Waived) tracks payment state
 
 ## Architecture
 

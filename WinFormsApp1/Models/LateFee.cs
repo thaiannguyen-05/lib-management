@@ -9,6 +9,7 @@ namespace WinFormsApp1.Models
 
         public decimal Amount { get; set; }
         public DateTime DateIncurred { get; set; }
+        public FeeType Type { get; set; }
         public FeeStatus Status { get; set; } = FeeStatus.Unpaid;
 
         public int? WaivedByUserId { get; set; }

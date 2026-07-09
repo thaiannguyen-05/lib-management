@@ -4,11 +4,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WinFormsApp1.Data;
 using WinFormsApp1.Forms;
+using WinFormsApp1.Services;
 
 namespace WinFormsApp1
 {
     internal static class Program
     {
+        public static IServiceProvider? ServiceProvider { get; private set; }
+
         [STAThread]
         static void Main()
         {
@@ -29,21 +32,37 @@ namespace WinFormsApp1
                     // ── Repositories (open generic) ────────────────
                     services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
                     services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+                    // ── Services ───────────────────────────────────
+                    services.AddScoped<IAuthService, AuthService>();
+                    services.AddScoped<IAuditService, AuditService>();
+                    services.AddScoped<IAuthorService, AuthorService>();
+                    services.AddScoped<ICategoryService, CategoryService>();
+
+                    // ── Forms ──────────────────────────────────────
+                    services.AddTransient<LoginForm>();
+                    services.AddTransient<MainForm>();
+                    services.AddTransient<ChangePasswordForm>();
+                    services.AddTransient<AuthorForm>();
+                    services.AddTransient<CategoryForm>();
                 })
                 .Build();
+
+            ServiceProvider = host.Services;
 
             // ── Auto-migration ────────────────────────────────────
             using (var scope = host.Services.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                db.Database.EnsureDeleted();
                 db.Database.EnsureCreated();
             }
 
-            // ── Resolve Form1 and run ─────────────────────────────
+            // ── Resolve LoginForm and run ─────────────────────────
             using (var scope = host.Services.CreateScope())
             {
-                var form = scope.ServiceProvider.GetRequiredService<Form1>();
-                Application.Run(form);
+                var loginForm = scope.ServiceProvider.GetRequiredService<LoginForm>();
+                Application.Run(loginForm);
             }
         }
     }

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using WinFormsApp1.Helpers;
 using WinFormsApp1.Models;
 using WinFormsApp1.Models.Enums;
 
@@ -258,20 +259,24 @@ namespace WinFormsApp1.Data
             var seedDate = new DateTime(2025, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
             // ── ApplicationUsers ──────────────────────────────────
+            // Passwords are BCrypt hashed. Seed passwords: admin, lib123, staff123
             modelBuilder.Entity<ApplicationUser>().HasData(
                 new ApplicationUser
                 {
-                    Id = 1, Username = "admin", PasswordHash = "admin",
+                    Id = 1, Username = "admin",
+                    PasswordHash = PasswordHasher.HashPassword("admin"),
                     Role = UserRole.Admin, CreatedAt = seedDate, UpdatedAt = seedDate
                 },
                 new ApplicationUser
                 {
-                    Id = 2, Username = "librarian1", PasswordHash = "lib123",
+                    Id = 2, Username = "librarian1",
+                    PasswordHash = PasswordHasher.HashPassword("lib123"),
                     Role = UserRole.Librarian, CreatedAt = seedDate, UpdatedAt = seedDate
                 },
                 new ApplicationUser
                 {
-                    Id = 3, Username = "staff1", PasswordHash = "staff123",
+                    Id = 3, Username = "staff1",
+                    PasswordHash = PasswordHasher.HashPassword("staff123"),
                     Role = UserRole.Staff, CreatedAt = seedDate, UpdatedAt = seedDate
                 });
 

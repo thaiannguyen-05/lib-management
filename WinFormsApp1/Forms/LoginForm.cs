@@ -7,12 +7,12 @@ namespace WinFormsApp1.Forms
     public partial class LoginForm : Form
     {
         private readonly IAuthService _authService;
-        private readonly IAuditService _auditService;
+        private readonly IServiceProvider _serviceProvider;
 
-        public LoginForm(IAuthService authService, IAuditService auditService)
+        public LoginForm(IAuthService authService, IServiceProvider serviceProvider)
         {
             _authService = authService;
-            _auditService = auditService;
+            _serviceProvider = serviceProvider;
             InitializeComponent();
         }
 
@@ -46,10 +46,8 @@ namespace WinFormsApp1.Forms
 
                 SessionManager.Login(user);
 
-                await _auditService.LogAsync(user.Id, "Login", "ApplicationUser", user.Id, $"User '{user.Username}' logged in");
-
-                var mainForm = Program.ServiceProvider!.GetRequiredService<MainForm>();
-                mainForm.FormClosed += (_, _) => this.Close();
+                var mainForm = _serviceProvider.GetRequiredService<MainForm>();
+                mainForm.OwnerLoginForm = this;
                 mainForm.Show();
                 this.Hide();
             }
@@ -73,12 +71,21 @@ namespace WinFormsApp1.Forms
             }
         }
 
+        public void ResetForm()
+        {
+            lblStatus.Text = string.Empty;
+            txtPassword.Clear();
+            btnLogin.Enabled = true;
+        }
+
         private void LoginForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (SessionManager.IsLoggedIn)
             {
                 SessionManager.Logout();
             }
+
+            Application.Exit();
         }
     }
 }

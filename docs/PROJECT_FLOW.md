@@ -89,7 +89,7 @@ IRepository<T> / IUnitOfWork (Data Access)
 AppDbContext (EF Core) → SQLite DB
 ```
 
-**Example —未来 Milestone 3 (Books):**
+**Example — Milestone 3 (Books):**
 ```
 BookForm
   → BookService.GetAllAsync()

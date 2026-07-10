@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
 using WinFormsApp1.Helpers;
 using WinFormsApp1.Services;
@@ -7,10 +8,20 @@ namespace WinFormsApp1.Forms
     public partial class MainForm : Form
     {
         private readonly IAuditService _auditService;
+        private readonly IServiceProvider _serviceProvider;
+        private LoginForm? _ownerLoginForm;
 
-        public MainForm(IAuditService auditService)
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public LoginForm? OwnerLoginForm
+        {
+            get => _ownerLoginForm;
+            set => _ownerLoginForm = value;
+        }
+
+        public MainForm(IAuditService auditService, IServiceProvider serviceProvider)
         {
             _auditService = auditService;
+            _serviceProvider = serviceProvider;
             InitializeComponent();
             UpdateUIForRole();
         }
@@ -42,10 +53,13 @@ namespace WinFormsApp1.Forms
                 SessionManager.Logout();
             }
 
-            var loginForm = Program.ServiceProvider!.GetRequiredService<LoginForm>();
-            loginForm.FormClosed += (_, _) => this.Close();
-            loginForm.Show();
-            this.Hide();
+            if (OwnerLoginForm != null)
+            {
+                OwnerLoginForm.ResetForm();
+                OwnerLoginForm.Show();
+                OwnerLoginForm.BringToFront();
+            }
+            this.Close();
         }
 
         private void btnBooks_Click(object sender, EventArgs e)
@@ -75,19 +89,19 @@ namespace WinFormsApp1.Forms
 
         private void btnAuthors_Click(object sender, EventArgs e)
         {
-            var authorForm = Program.ServiceProvider!.GetRequiredService<AuthorForm>();
+            var authorForm = _serviceProvider.GetRequiredService<AuthorForm>();
             authorForm.ShowDialog(this);
         }
 
         private void btnCategories_Click(object sender, EventArgs e)
         {
-            var categoryForm = Program.ServiceProvider!.GetRequiredService<CategoryForm>();
+            var categoryForm = _serviceProvider.GetRequiredService<CategoryForm>();
             categoryForm.ShowDialog(this);
         }
 
         private void btnChangePassword_Click(object sender, EventArgs e)
         {
-            var changePasswordForm = Program.ServiceProvider!.GetRequiredService<ChangePasswordForm>();
+            var changePasswordForm = _serviceProvider.GetRequiredService<ChangePasswordForm>();
             changePasswordForm.ShowDialog(this);
         }
     }

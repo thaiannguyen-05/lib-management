@@ -1,69 +1,32 @@
+using Microsoft.EntityFrameworkCore;
 using WinFormsApp1.Data;
 using WinFormsApp1.Models;
 
 namespace WinFormsApp1.Services
 {
-    public class CategoryService : ICategoryService
+    public class CategoryService : CatalogEntityService<Category>, ICategoryService
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        public CategoryService(IUnitOfWork unitOfWork)
+        public CategoryService(IUnitOfWork unitOfWork, AppDbContext context)
+            : base(unitOfWork, context)
         {
-            _unitOfWork = unitOfWork;
         }
 
-        public async Task<IReadOnlyList<Category>> GetAllAsync()
-        {
-            return await _unitOfWork.Repository<Category>()
-                .GetAllAsync();
-        }
-
-        public async Task<IReadOnlyList<Category>> SearchByNameAsync(string name)
+        public override async Task<IReadOnlyList<Category>> SearchByNameAsync(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
                 return await GetAllAsync();
 
-            var lowerName = name.ToLower();
+            var pattern = $"%{name}%";
             return await _unitOfWork.Repository<Category>()
-                .FindAsync(c => c.Name.ToLower().Contains(lowerName));
+                .FindAsync(c => EF.Functions.Like(c.Name, pattern));
         }
 
-        public async Task<Category?> GetByIdAsync(int id)
+        public override async Task<bool> HasBooksAsync(int categoryId)
         {
-            return await _unitOfWork.Repository<Category>().GetByIdAsync(id);
-        }
-
-        public async Task<Category> CreateAsync(Category category)
-        {
-            category.CreatedAt = DateTime.UtcNow;
-            category.UpdatedAt = DateTime.UtcNow;
-
-            await _unitOfWork.Repository<Category>().AddAsync(category);
-            await _unitOfWork.SaveChangesAsync();
-            return category;
-        }
-
-        public async Task UpdateAsync(Category category)
-        {
-            category.UpdatedAt = DateTime.UtcNow;
-            await _unitOfWork.Repository<Category>().UpdateAsync(category);
-            await _unitOfWork.SaveChangesAsync();
-        }
-
-        public async Task<bool> DeleteAsync(int id)
-        {
-            if (await HasBooksAsync(id))
-                return false;
-
-            await _unitOfWork.Repository<Category>().DeleteAsync(id);
-            await _unitOfWork.SaveChangesAsync();
-            return true;
-        }
-
-        public async Task<bool> HasBooksAsync(int categoryId)
-        {
-            var cat = await _unitOfWork.Repository<Category>().GetByIdAsync(categoryId);
-            return cat?.Books?.Any() ?? false;
+            return await _context.Categories
+                .Where(c => c.Id == categoryId)
+                .SelectMany(c => c.Books)
+                .AnyAsync();
         }
     }
 }

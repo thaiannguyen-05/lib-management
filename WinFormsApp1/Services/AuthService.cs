@@ -7,11 +7,11 @@ namespace WinFormsApp1.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly AppDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public AuthService(AppDbContext context)
+        public AuthService(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<ApplicationUser?> LoginAsync(string username, string password)
@@ -19,27 +19,43 @@ namespace WinFormsApp1.Services
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
                 return null;
 
-            var user = await _context.ApplicationUsers
-                .FirstOrDefaultAsync(u => u.Username == username);
+            var user = await _unitOfWork.Repository<ApplicationUser>()
+                .FindAsync(u => u.Username == username);
 
-            if (user == null)
+            var matched = user.FirstOrDefault();
+            if (matched == null)
                 return null;
 
-            if (!PasswordHasher.VerifyPassword(password, user.PasswordHash))
+            if (!PasswordHasher.VerifyPassword(password, matched.PasswordHash))
                 return null;
 
-            return user;
+            await _unitOfWork.BeginTransactionAsync();
+            try
+            {
+                await _unitOfWork.Repository<AuditLog>().AddAsync(new AuditLog
+                {
+                    UserId = matched.Id,
+                    Action = "Login",
+                    EntityName = "ApplicationUser",
+                    EntityId = matched.Id,
+                    Details = $"User '{matched.Username}' logged in",
+                    Timestamp = DateTime.UtcNow
+                });
+
+                await _unitOfWork.SaveChangesAsync();
+                await _unitOfWork.CommitAsync();
+            }
+            catch
+            {
+                await _unitOfWork.RollbackAsync();
+            }
+
+            return matched;
         }
 
         public async Task<ApplicationUser?> GetUserByIdAsync(int userId)
         {
-            return await _context.ApplicationUsers.FindAsync(userId);
-        }
-
-        public async Task<bool> ValidateCredentialsAsync(string username, string password)
-        {
-            var user = await LoginAsync(username, password);
-            return user != null;
+            return await _unitOfWork.Repository<ApplicationUser>().GetByIdAsync(userId);
         }
 
         public async Task<(bool Success, string Message)> ChangePasswordAsync(int userId, string oldPassword, string newPassword)
@@ -47,13 +63,13 @@ namespace WinFormsApp1.Services
             if (string.IsNullOrWhiteSpace(oldPassword) || string.IsNullOrWhiteSpace(newPassword))
                 return (false, "Both current and new passwords are required.");
 
-            if (newPassword.Length < 4)
-                return (false, "New password must be at least 4 characters.");
+            if (newPassword.Length < 8)
+                return (false, "New password must be at least 8 characters.");
 
             if (oldPassword == newPassword)
                 return (false, "New password must be different from current password.");
 
-            var user = await _context.ApplicationUsers.FindAsync(userId);
+            var user = await _unitOfWork.Repository<ApplicationUser>().GetByIdAsync(userId);
             if (user == null)
                 return (false, "User not found.");
 
@@ -62,7 +78,7 @@ namespace WinFormsApp1.Services
 
             user.PasswordHash = PasswordHasher.HashPassword(newPassword);
             user.UpdatedAt = DateTime.UtcNow;
-            await _context.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
 
             return (true, "Password changed successfully.");
         }

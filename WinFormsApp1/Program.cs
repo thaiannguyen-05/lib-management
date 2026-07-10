@@ -10,8 +10,6 @@ namespace WinFormsApp1
 {
     internal static class Program
     {
-        public static IServiceProvider? ServiceProvider { get; private set; }
-
         [STAThread]
         static void Main()
         {
@@ -48,13 +46,13 @@ namespace WinFormsApp1
                 })
                 .Build();
 
-            ServiceProvider = host.Services;
-
             // ── Auto-migration ────────────────────────────────────
             using (var scope = host.Services.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+#if DEBUG
                 db.Database.EnsureDeleted();
+#endif
                 db.Database.EnsureCreated();
             }
 

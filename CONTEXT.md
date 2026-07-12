@@ -1,6 +1,6 @@
 # Library Management System
 
-Desktop application (.NET 8 WinForms + EF Core) for managing library operations — book catalog, members, borrowing/returning, and reporting. Single-machine, single-user at a time.
+Desktop application (.NET 10 WinForms + EF Core) for managing library operations — book catalog, members, borrowing/returning, and reporting. Single-machine, single-user at a time.
 
 ## Language
 
@@ -127,8 +127,8 @@ _Avoid_: StockAction
 
 ## Architecture
 
-- **UI**: WinForms (.NET 8)
-- **ORM**: Entity Framework Core 8 (SQLite)
+- **UI**: WinForms (.NET 10)
+- **ORM**: Entity Framework Core 10 (SQLite)
 - **Pattern**: Repository + Service layers
 - **Auth**: Simple username/password with salted hash
 - **Concurrency**: Single machine, one user at a time

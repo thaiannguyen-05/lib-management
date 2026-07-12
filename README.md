@@ -1,6 +1,6 @@
 # Library Management System
 
-Ứng dụng desktop quản lý thư viện — .NET 8 WinForms + EF Core SQLite.
+Ứng dụng desktop quản lý thư viện — .NET 10 WinForms + EF Core SQLite.
 
 ## Chức năng
 
@@ -22,8 +22,7 @@
 WinFormsApp1/
 ├── Models/              # Entity classes
 │   └── Enums/           # CopyStatus, BorrowStatus, MemberStatus, FeeStatus, UserRole
-├── Data/                # AppDbContext, schema.sql, diagrams
-├── Repositories/        # Repository interfaces + implementations
+├── Data/                # AppDbContext, Repository, UnitOfWork, schema.sql, diagrams
 ├── Services/            # Business logic services
 ├── Helpers/             # Password hashing, session management
 ├── Forms/               # WinForms UI
@@ -32,7 +31,7 @@ WinFormsApp1/
 
 ## Yêu cầu
 
-- .NET 8 SDK
+- .NET 10 SDK
 - SQLite (tự động tạo database khi chạy lần đầu)
 
 ## Cài đặt
@@ -87,8 +86,6 @@ erDiagram
     BookCopies {
         int Id PK
         int BookId FK
-        text Barcode
-        text ShelfLocation
         int Status
     }
 
@@ -122,9 +119,8 @@ erDiagram
         text Phone
         int Status
         int MemberType
-        text StudentId
         int DepartmentId FK
-        int ClassId FK
+        int StudentClassId FK
     }
 
     LibraryCards {
@@ -140,7 +136,6 @@ erDiagram
         text Username
         text PasswordHash
         int Role
-        int IsActive
     }
 
     BorrowRecords {
@@ -228,8 +223,8 @@ erDiagram
 
 ## Architecture
 
-- **UI**: WinForms (.NET 8)
-- **ORM**: Entity Framework Core 8 (SQLite)
+- **UI**: WinForms (.NET 10)
+- **ORM**: Entity Framework Core 10 (SQLite)
 - **Pattern**: Repository + Service layers
 - **Auth**: Username/password with salted hash
 - **Concurrency**: Single machine, single user

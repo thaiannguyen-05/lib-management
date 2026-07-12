@@ -24,6 +24,7 @@ namespace WinFormsApp1.Forms
             _serviceProvider = serviceProvider;
             InitializeComponent();
             UpdateUIForRole();
+            this.FormClosing += MainForm_FormClosing;
         }
 
         private void UpdateUIForRole()
@@ -79,7 +80,8 @@ namespace WinFormsApp1.Forms
 
         private void btnUsers_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("User management - Coming in Milestone 2 (extension)", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            var userForm = _serviceProvider.GetRequiredService<UserManageForm>();
+            userForm.ShowDialog(this);
         }
 
         private void btnReports_Click(object sender, EventArgs e)
@@ -103,6 +105,16 @@ namespace WinFormsApp1.Forms
         {
             var changePasswordForm = _serviceProvider.GetRequiredService<ChangePasswordForm>();
             changePasswordForm.ShowDialog(this);
+        }
+
+        private void MainForm_FormClosing(object? sender, FormClosingEventArgs e)
+        {
+            if (SessionManager.IsLoggedIn)
+            {
+                SessionManager.Logout();
+            }
+
+            Application.Exit();
         }
     }
 }

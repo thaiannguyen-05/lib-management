@@ -4,7 +4,7 @@ using WinFormsApp1.Models;
 
 namespace WinFormsApp1.Services
 {
-    public class UserService : IUserService
+    public class UserService
     {
         private readonly IUnitOfWork _unitOfWork;
 

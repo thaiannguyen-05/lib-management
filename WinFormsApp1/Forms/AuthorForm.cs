@@ -5,10 +5,10 @@ namespace WinFormsApp1.Forms
 {
     public partial class AuthorForm : Form
     {
-        private readonly IAuthorService _authorService;
+        private readonly AuthorService _authorService;
         private Author? _selectedAuthor;
 
-        public AuthorForm(IAuthorService authorService)
+        public AuthorForm(AuthorService authorService)
         {
             _authorService = authorService;
             InitializeComponent();

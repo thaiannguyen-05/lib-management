@@ -32,11 +32,11 @@ namespace WinFormsApp1
                     services.AddScoped<IUnitOfWork, UnitOfWork>();
 
                     // ── Services ───────────────────────────────────
-                    services.AddScoped<IAuthService, AuthService>();
-                    services.AddScoped<IAuditService, AuditService>();
-                    services.AddScoped<IAuthorService, AuthorService>();
-                    services.AddScoped<ICategoryService, CategoryService>();
-                    services.AddScoped<IUserService, UserService>();
+                    services.AddScoped<AuthService>();
+                    services.AddScoped<AuditService>();
+                    services.AddScoped<AuthorService>();
+                    services.AddScoped<CategoryService>();
+                    services.AddScoped<UserService>();
 
                     // ── Forms ──────────────────────────────────────
                     services.AddTransient<LoginForm>();

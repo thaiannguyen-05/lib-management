@@ -7,7 +7,7 @@ namespace WinFormsApp1.Forms
 {
     public partial class MainForm : Form
     {
-        private readonly IAuditService _auditService;
+        private readonly AuditService _auditService;
         private readonly IServiceProvider _serviceProvider;
         private LoginForm? _ownerLoginForm;
 
@@ -18,7 +18,7 @@ namespace WinFormsApp1.Forms
             set => _ownerLoginForm = value;
         }
 
-        public MainForm(IAuditService auditService, IServiceProvider serviceProvider)
+        public MainForm(AuditService auditService, IServiceProvider serviceProvider)
         {
             _auditService = auditService;
             _serviceProvider = serviceProvider;

@@ -5,10 +5,10 @@ namespace WinFormsApp1.Forms
 {
     public partial class CategoryForm : Form
     {
-        private readonly ICategoryService _categoryService;
+        private readonly CategoryService _categoryService;
         private Category? _selectedCategory;
 
-        public CategoryForm(ICategoryService categoryService)
+        public CategoryForm(CategoryService categoryService)
         {
             _categoryService = categoryService;
             InitializeComponent();

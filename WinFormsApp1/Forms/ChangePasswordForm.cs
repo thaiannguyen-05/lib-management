@@ -1,4 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
 using WinFormsApp1.Helpers;
 using WinFormsApp1.Services;
 
@@ -6,10 +5,10 @@ namespace WinFormsApp1.Forms
 {
     public partial class ChangePasswordForm : Form
     {
-        private readonly IAuthService _authService;
-        private readonly IAuditService _auditService;
+        private readonly AuthService _authService;
+        private readonly AuditService _auditService;
 
-        public ChangePasswordForm(IAuthService authService, IAuditService auditService)
+        public ChangePasswordForm(AuthService authService, AuditService auditService)
         {
             _authService = authService;
             _auditService = auditService;

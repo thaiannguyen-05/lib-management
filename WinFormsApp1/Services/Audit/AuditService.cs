@@ -3,7 +3,7 @@ using WinFormsApp1.Models;
 
 namespace WinFormsApp1.Services
 {
-    public class AuditService : IAuditService
+    public class AuditService
     {
         private readonly AppDbContext _context;
 

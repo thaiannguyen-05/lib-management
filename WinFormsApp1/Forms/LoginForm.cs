@@ -6,10 +6,10 @@ namespace WinFormsApp1.Forms
 {
     public partial class LoginForm : Form
     {
-        private readonly IAuthService _authService;
+        private readonly AuthService _authService;
         private readonly IServiceProvider _serviceProvider;
 
-        public LoginForm(IAuthService authService, IServiceProvider serviceProvider)
+        public LoginForm(AuthService authService, IServiceProvider serviceProvider)
         {
             _authService = authService;
             _serviceProvider = serviceProvider;

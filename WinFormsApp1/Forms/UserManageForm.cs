@@ -6,10 +6,10 @@ namespace WinFormsApp1.Forms
 {
     public partial class UserManageForm : Form
     {
-        private readonly IUserService _userService;
+        private readonly UserService _userService;
         private ApplicationUser? _selectedUser;
 
-        public UserManageForm(IUserService userService)
+        public UserManageForm(UserService userService)
         {
             _userService = userService;
             InitializeComponent();

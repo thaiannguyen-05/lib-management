@@ -4,14 +4,23 @@ using WinFormsApp1.Models;
 
 namespace WinFormsApp1.Services
 {
-    public class AuthorService : CatalogEntityService<Author>, IAuthorService
+    public class AuthorService
     {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly AppDbContext _context;
+
         public AuthorService(IUnitOfWork unitOfWork, AppDbContext context)
-            : base(unitOfWork, context)
         {
+            _unitOfWork = unitOfWork;
+            _context = context;
         }
 
-        public override async Task<IReadOnlyList<Author>> SearchByNameAsync(string name)
+        public async Task<IReadOnlyList<Author>> GetAllAsync()
+        {
+            return await _unitOfWork.Repository<Author>().GetAllAsync();
+        }
+
+        public async Task<IReadOnlyList<Author>> SearchByNameAsync(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
                 return await GetAllAsync();
@@ -20,7 +29,39 @@ namespace WinFormsApp1.Services
                 .FindAsync(s => s.FirstName.Contains(name) || s.LastName.Contains(name));
         }
 
-        public override async Task<bool> HasBooksAsync(int authorId)
+        public async Task<Author?> GetByIdAsync(int id)
+        {
+            return await _unitOfWork.Repository<Author>().GetByIdAsync(id);
+        }
+
+        public async Task<Author> CreateAsync(Author entity)
+        {
+            entity.CreatedAt = DateTime.UtcNow;
+            entity.UpdatedAt = DateTime.UtcNow;
+
+            await _unitOfWork.Repository<Author>().AddAsync(entity);
+            await _unitOfWork.SaveChangesAsync();
+            return entity;
+        }
+
+        public async Task UpdateAsync(Author entity)
+        {
+            entity.UpdatedAt = DateTime.UtcNow;
+            await _unitOfWork.Repository<Author>().UpdateAsync(entity);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            if (await HasBooksAsync(id))
+                return false;
+
+            await _unitOfWork.Repository<Author>().DeleteAsync(id);
+            await _unitOfWork.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> HasBooksAsync(int authorId)
         {
             return await _context.Authors
                 .Where(a => a.Id == authorId)

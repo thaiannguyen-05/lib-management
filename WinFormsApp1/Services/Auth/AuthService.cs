@@ -5,7 +5,7 @@ using WinFormsApp1.Models;
 
 namespace WinFormsApp1.Services
 {
-    public class AuthService : IAuthService
+    public class AuthService
     {
         private readonly IUnitOfWork _unitOfWork;
 

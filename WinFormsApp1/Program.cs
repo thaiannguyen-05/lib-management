@@ -50,9 +50,6 @@ namespace WinFormsApp1
             using (var scope = host.Services.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-#if DEBUG
-                db.Database.EnsureDeleted();
-#endif
                 db.Database.EnsureCreated();
             }
 

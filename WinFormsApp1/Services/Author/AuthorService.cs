@@ -16,10 +16,8 @@ namespace WinFormsApp1.Services
             if (string.IsNullOrWhiteSpace(name))
                 return await GetAllAsync();
 
-            var pattern = $"%{name}%";
             return await _unitOfWork.Repository<Author>()
-                .FindAsync(a => EF.Functions.Like(a.FirstName, pattern)
-                             || EF.Functions.Like(a.LastName, pattern));
+                .FindAsync(s => s.FirstName.Contains(name) || s.LastName.Contains(name));
         }
 
         public override async Task<bool> HasBooksAsync(int authorId)

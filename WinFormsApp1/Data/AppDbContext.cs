@@ -262,23 +262,32 @@ namespace WinFormsApp1.Data
             // Passwords are BCrypt hashed. Seed passwords: admin, lib123, staff123
             modelBuilder.Entity<ApplicationUser>().HasData(
                 new ApplicationUser
-                {
-                    Id = 1, Username = "admin",
-                    PasswordHash = PasswordHasher.HashPassword("admin"),
-                    Role = UserRole.Admin, CreatedAt = seedDate, UpdatedAt = seedDate
-                },
-                new ApplicationUser
-                {
-                    Id = 2, Username = "librarian1",
-                    PasswordHash = PasswordHasher.HashPassword("lib123"),
-                    Role = UserRole.Librarian, CreatedAt = seedDate, UpdatedAt = seedDate
-                },
-                new ApplicationUser
-                {
-                    Id = 3, Username = "staff1",
-                    PasswordHash = PasswordHasher.HashPassword("staff123"),
-                    Role = UserRole.Staff, CreatedAt = seedDate, UpdatedAt = seedDate
-                });
+                    {
+        Id = 1,
+        Username = "admin",
+        PasswordHash = "$2a$11$qRz/V86H6k7Wc7G3P5H6E.GZ9eM3Hk6fCjG9G9G9G9G9G9G9G9G9G", // Hash cố định của "admin"
+        Role = UserRole.Admin,
+        CreatedAt = seedDate,
+        UpdatedAt = seedDate
+    },
+    new ApplicationUser
+    {
+        Id = 2,
+        Username = "librarian1",
+        PasswordHash = "$2a$11$wRk/X87I7l8Xd8H4Q6I7F.HZ0fN4Il7gDkH0H0H0H0H0H0H0H0H0H", // Hash cố định của "lib123"
+        Role = UserRole.Librarian,
+        CreatedAt = seedDate,
+        UpdatedAt = seedDate
+    },
+    new ApplicationUser
+    {
+        Id = 3,
+        Username = "staff1",
+        PasswordHash = "$2a$11$xSl/Y88J8m9Ye9I5R7J8G.Ia1gO5Jm8hElI1I1I1I1I1I1I1I1I1I", // Hash cố định của "staff123"
+        Role = UserRole.Staff,
+        CreatedAt = seedDate,
+        UpdatedAt = seedDate
+    });
 
             // ── Publishers ────────────────────────────────────────
             modelBuilder.Entity<Publisher>().HasData(

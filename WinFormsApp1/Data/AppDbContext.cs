@@ -304,7 +304,7 @@ namespace WinFormsApp1.Data
                 new Author { Id = 1, FirstName = "Robert", LastName = "Martin", Bio = "Author of Clean Code", CreatedAt = seedDate, UpdatedAt = seedDate },
                 new Author { Id = 2, FirstName = "Thomas", LastName = "Cormen", Bio = "Co-author of CLRS", CreatedAt = seedDate, UpdatedAt = seedDate },
                 new Author { Id = 3, FirstName = "Erich", LastName = "Gamma", Bio = "Author of Design Patterns", CreatedAt = seedDate, UpdatedAt = seedDate },
-                new Author { Id = 4, FirstName = "Nguyen", LastName = " Viet", Bio = "Vietnamese author", CreatedAt = seedDate, UpdatedAt = seedDate });
+                new Author { Id = 4, FirstName = "Nguyen", LastName = "Viet", Bio = "Vietnamese author", CreatedAt = seedDate, UpdatedAt = seedDate });
 
             // ── Categories ────────────────────────────────────────
             modelBuilder.Entity<Category>().HasData(

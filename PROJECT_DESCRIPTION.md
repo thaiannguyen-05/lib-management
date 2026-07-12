@@ -245,10 +245,10 @@ LibraryManagementSystem/
 │  Author  │◄──────┤ BookAuthor   │───────►│  Book    │
 │──────────│  M:N  │──────────────│  M:N  │──────────│
 │ Id       │       │ BookId       │       │ Id       │
-│ Name     │       │ AuthorId     │       │ Title    │
-│ Bio      │       └──────────────┘       │ ISBN     │
-└──────────┘                              │ Publisher│
-                                          │ Year     │
+│ FirstName│       │ AuthorId     │       │ Title    │
+│ LastName │       └──────────────┘       │ ISBN     │
+│ Bio      │                              │ Publisher│
+└──────────┘                              │ Year     │
                                           │ Desc     │
 ┌──────────┐       ┌──────────────┐       │ Location │
 │ Category │───────│ BookCategory │       │ ReplCost │
@@ -269,40 +269,54 @@ LibraryManagementSystem/
                                                │
                                                │ N
 ┌──────────────┐                        ┌──────▼──────┐
-│ MembershipTier│                       │BorrowRecord │
-│──────────────│                        │─────────────│
-│ Id           │                        │ Id          │
-│ Name         │                        │ BookCopyId  │
-│ MaxBorrow    │◄───────────────────────│ MemberId    │
-└──────────────┘        1:N             │ BorrowDate  │
-      │                                 │ DueDate     │
-      │ 1                               │ ReturnDate  │
-      │                                 │ Status      │
-      │ N                               │ RenewalCount│
-┌─────▼──────┐                          └──────┬──────┘
-│   Member   │                                 │
-│────────────│                                 │ 1
-│ Id         │                                 │
-│ FirstName  │                                 │ N
-│ LastName   │                          ┌──────▼──────┐
-│ Email      │                          │  LateFee    │
-│ Phone      │                          │─────────────│
-│ Status     │                          │ Id          │
-│ TierId     │                          │ BorrowRecId │
-└────────────┘                          │ Amount      │
-                                        │ Status      │
-                                        └──────┬──────┘
-                                               │ 1
-                                               │
-                                               │ N
-                                        ┌──────▼──────┐
-                                        │ FeePayment  │
-                                        │─────────────│
-                                        │ Id          │
-                                        │ LateFeeId   │
-                                        │ Amount      │
-                                        │ PaymentDate │
-                                        └─────────────┘
+│              │                        │BorrowRecord │
+│              │                        │─────────────│
+│              │                        │ Id          │
+│              │                        │ BookCopyId  │
+│              │◄───────────────────────│ MemberId    │
+│              │        1:N             │ BorrowDate  │
+│              │                        │ DueDate     │
+│              │                        │ ReturnDate  │
+│              │                        │ Status      │
+│              │                        │ RenewalCount│
+│              │                        └──────┬──────┘
+│              │                               │
+│              │                               │ 1
+│              │                               │
+│              │                               │ N
+│              │                          ┌──────▼──────┐
+│              │                          │  LateFee    │
+│              │                          │─────────────│
+│              │                          │ Id          │
+│              │                          │ BorrowRecId │
+│              │                          │ Amount      │
+│              │                          │ Type        │
+│              │                          │ Status      │
+│              │                          └──────┬──────┘
+│              │                                 │ 1
+│              │                                 │
+│              │                                 │ N
+│              │                          ┌──────▼──────┐
+│              │                          │ FeePayment  │
+│              │                          │─────────────│
+│              │                          │ Id          │
+│              │                          │ LateFeeId   │
+│              │                          │ Amount      │
+│              │                          │ PaymentDate │
+│              │                          └─────────────┘
+│              │
+│  Member      │
+│──────────────│
+│ Id           │
+│ FirstName    │
+│ LastName     │
+│ Email        │
+│ Phone        │
+│ Status       │
+│ MemberType   │
+│ DepartmentId │
+│ StudentClassId│
+└──────────────┘
 
 ┌──────────────────┐
 │  ApplicationUser │
@@ -311,7 +325,6 @@ LibraryManagementSystem/
 │ Username         │
 │ PasswordHash     │
 │ Role             │
-│ IsActive         │
 └──────────────────┘
 ```
 
@@ -320,90 +333,70 @@ LibraryManagementSystem/
 #### Book
 
 ```csharp
-public class Book
+public class Book : BaseEntity
 {
-    public int Id { get; set; }
     public string Title { get; set; } = string.Empty;
     public string ISBN { get; set; } = string.Empty;
-    public string? Publisher { get; set; }
-    public int? PublishYear { get; set; }
+    public int? PublisherId { get; set; }
+    public Publisher? Publisher { get; set; }
+    public int? PublicationYear { get; set; }
     public string? Description { get; set; }
-    public string? Location { get; set; }        // Shelf location
-    public decimal ReplacementCost { get; set; } // Cost if lost
-    public DateTime DateAdded { get; set; }
-    public DateTime? DateModified { get; set; }
+    public string? ShelfLocation { get; set; }
+    public decimal ReplacementCost { get; set; }
 
     // Navigation
-    public ICollection<BookCopy> BookCopies { get; set; } = new List<BookCopy>();
-    public ICollection<BookAuthor> BookAuthors { get; set; } = new List<BookAuthor>();
-    public ICollection<BookCategory> BookCategories { get; set; } = new List<BookCategory>();
-
-    // Computed
-    public int CopiesAvailable => BookCopies.Count(c => c.Status == CopyStatus.Available);
-    public int CopiesTotal => BookCopies.Count;
+    public ICollection<BookCopy> Copies { get; set; } = new List<BookCopy>();
+    public ICollection<Author> Authors { get; set; } = new List<Author>();
+    public ICollection<Category> Categories { get; set; } = new List<Category>();
+    public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
 }
 ```
 
 #### BookCopy
 
 ```csharp
-public class BookCopy
+public class BookCopy : BaseEntity
 {
-    public int Id { get; set; }
     public int BookId { get; set; }
+    public Book Book { get; set; } = null!;
     public CopyStatus Status { get; set; } = CopyStatus.Available;
 
     // Navigation
-    public Book Book { get; set; } = null!;
     public ICollection<BorrowRecord> BorrowRecords { get; set; } = new List<BorrowRecord>();
+    public ICollection<InventoryLog> InventoryLogs { get; set; } = new List<InventoryLog>();
 }
 ```
 
 #### Member
 
 ```csharp
-public class Member
+public class Member : BaseEntity
 {
-    public int Id { get; set; }
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public string? Phone { get; set; }
-    public string? Address { get; set; }
-    public DateTime MembershipDate { get; set; }
     public MemberStatus Status { get; set; } = MemberStatus.Active;
-    public int MembershipTierId { get; set; }
+    public MemberType MemberType { get; set; } = MemberType.External;
+
+    public int? DepartmentId { get; set; }
+    public Department? Department { get; set; }
+    public int? StudentClassId { get; set; }
+    public StudentClass? StudentClass { get; set; }
 
     // Navigation
-    public MembershipTier MembershipTier { get; set; } = null!;
     public ICollection<BorrowRecord> BorrowRecords { get; set; } = new List<BorrowRecord>();
-
-    // Computed
-    public string FullName => $"{FirstName} {LastName}";
-    public int ActiveBorrowCount => BorrowRecords.Count(b => b.Status == BorrowStatus.Active);
-}
-```
-
-#### MembershipTier
-
-```csharp
-public class MembershipTier
-{
-    public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;   // "Basic", "Premium"
-    public int MaxBorrowLimit { get; set; } = 3;
-
-    // Navigation
-    public ICollection<Member> Members { get; set; } = new List<Member>();
+    public ICollection<LateFee> LateFees { get; set; } = new List<LateFee>();
+    public ICollection<Reservation> Reservations { get; set; } = new List<Reservation>();
+    public LibraryCard? LibraryCard { get; set; }
 }
 ```
 
 #### BorrowRecord
 
 ```csharp
-public class BorrowRecord
+public class BorrowRecord : BaseEntity
 {
-    public int Id { get; set; }
     public int BookCopyId { get; set; }
     public int MemberId { get; set; }
     public DateTime BorrowDate { get; set; }
@@ -412,9 +405,14 @@ public class BorrowRecord
     public BorrowStatus Status { get; set; } = BorrowStatus.Active;
     public int RenewalCount { get; set; } = 0;
 
+    public int CheckedOutByUserId { get; set; }
+    public int? ReturnedByUserId { get; set; }
+
     // Navigation
     public BookCopy BookCopy { get; set; } = null!;
     public Member Member { get; set; } = null!;
+    public ApplicationUser CheckedOutByUser { get; set; } = null!;
+    public ApplicationUser? ReturnedByUser { get; set; }
     public ICollection<LateFee> LateFees { get; set; } = new List<LateFee>();
 }
 ```
@@ -422,30 +420,27 @@ public class BorrowRecord
 #### LateFee
 
 ```csharp
-public class LateFee
+public class LateFee : BaseEntity
 {
-    public int Id { get; set; }
     public int BorrowRecordId { get; set; }
     public decimal Amount { get; set; }
     public DateTime DateIncurred { get; set; }
+    public FeeType Type { get; set; }
     public FeeStatus Status { get; set; } = FeeStatus.Unpaid;
+    public int? WaivedByUserId { get; set; }
 
     // Navigation
     public BorrowRecord BorrowRecord { get; set; } = null!;
+    public ApplicationUser? WaivedByUser { get; set; }
     public ICollection<FeePayment> Payments { get; set; } = new List<FeePayment>();
-
-    // Computed
-    public decimal AmountPaid => Payments.Sum(p => p.Amount);
-    public decimal AmountOwed => Amount - AmountPaid;
 }
 ```
 
 #### FeePayment
 
 ```csharp
-public class FeePayment
+public class FeePayment : BaseEntity
 {
-    public int Id { get; set; }
     public int LateFeeId { get; set; }
     public decimal Amount { get; set; }
     public DateTime PaymentDate { get; set; }
@@ -458,42 +453,45 @@ public class FeePayment
 #### Author
 
 ```csharp
-public class Author
+public class Author : BaseEntity
 {
-    public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string? Biography { get; set; }
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
+    public string? Bio { get; set; }
 
     // Navigation
-    public ICollection<BookAuthor> BookAuthors { get; set; } = new List<BookAuthor>();
+    public ICollection<Book> Books { get; set; } = new List<Book>();
 }
 ```
 
 #### Category
 
 ```csharp
-public class Category
+public class Category : BaseEntity
 {
-    public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string? Description { get; set; }
 
     // Navigation
-    public ICollection<BookCategory> BookCategories { get; set; } = new List<BookCategory>();
+    public ICollection<Book> Books { get; set; } = new List<Book>();
 }
 ```
 
 #### ApplicationUser
 
 ```csharp
-public class ApplicationUser
+public class ApplicationUser : BaseEntity
 {
-    public int Id { get; set; }
     public string Username { get; set; } = string.Empty;
-    public byte[] PasswordHash { get; set; } = Array.Empty<byte>();
-    public byte[] PasswordSalt { get; set; } = Array.Empty<byte>();
+    public string PasswordHash { get; set; } = string.Empty;
     public UserRole Role { get; set; } = UserRole.Staff;
-    public bool IsActive { get; set; } = true;
+
+    // Navigation
+    public ICollection<BorrowRecord> CheckedOutBorrows { get; set; } = new List<BorrowRecord>();
+    public ICollection<BorrowRecord> ReturnedBorrows { get; set; } = new List<BorrowRecord>();
+    public ICollection<LateFee> WaivedFees { get; set; } = new List<LateFee>();
+    public ICollection<AuditLog> AuditLogs { get; set; } = new List<AuditLog>();
+    public ICollection<InventoryLog> PerformedInventoryLogs { get; set; } = new List<InventoryLog>();
 }
 ```
 
@@ -611,12 +609,12 @@ public enum UserRole
 **Tasks**:
 - Member list view with DataGridView
 - Add/Edit Member form
-- MembershipTier management (admin config)
+- MembershipTier management (admin config) — removed, using MemberType instead
 - Member status management (active/suspended/expired)
 - Member detail view showing borrowing history
 - Search members by name, email, or phone
 
-**Deliverable**: Full CRUD for members with tier-based borrow limits.
+**Deliverable**: Full CRUD for members with type-based classification.
 
 ### Phase 4: Borrowing & Returning System
 
@@ -631,7 +629,7 @@ public enum UserRole
 - Renewal functionality (max 2 per borrow)
 - Fee payment tracking
 - Lost book workflow (mark copy Lost + charge replacement cost)
-- Enforce borrow limits per membership tier
+- Enforce borrow limits — no hard limit, members can borrow freely
 - Block borrowing for suspended members or members with unpaid fees
 
 **Deliverable**: Complete borrow/return/renew cycle with business rules.

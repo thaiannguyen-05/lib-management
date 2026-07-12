@@ -36,6 +36,7 @@ namespace WinFormsApp1
                     services.AddScoped<IAuditService, AuditService>();
                     services.AddScoped<IAuthorService, AuthorService>();
                     services.AddScoped<ICategoryService, CategoryService>();
+                    services.AddScoped<IUserService, UserService>();
 
                     // ── Forms ──────────────────────────────────────
                     services.AddTransient<LoginForm>();
@@ -43,6 +44,7 @@ namespace WinFormsApp1
                     services.AddTransient<ChangePasswordForm>();
                     services.AddTransient<AuthorForm>();
                     services.AddTransient<CategoryForm>();
+                    services.AddTransient<UserManageForm>();
                 })
                 .Build();
 
@@ -50,9 +52,6 @@ namespace WinFormsApp1
             using (var scope = host.Services.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-#if DEBUG
-                db.Database.EnsureDeleted();
-#endif
                 db.Database.EnsureCreated();
             }
 

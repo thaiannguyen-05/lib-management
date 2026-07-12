@@ -41,8 +41,6 @@ erDiagram
     BookCopies {
         int Id PK
         int BookId FK
-        text Barcode
-        text ShelfLocation
         int Status
         text CreatedAt
         text UpdatedAt
@@ -82,9 +80,8 @@ erDiagram
         text Phone
         int Status
         int MemberType
-        text StudentId
         int DepartmentId FK
-        int ClassId FK
+        int StudentClassId FK
         text CreatedAt
         text UpdatedAt
     }
@@ -104,8 +101,6 @@ erDiagram
         text Username
         text PasswordHash
         int Role
-        int IsActive
-        text LastLoginAt
         text CreatedAt
         text UpdatedAt
     }

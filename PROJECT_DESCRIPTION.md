@@ -2,7 +2,7 @@
 
 ## Project Description
 
-A desktop application for managing library operations including book inventory, member registrations, borrowing/returning workflows, and reporting. Built with .NET 8 WinForms + EF Core as a study/learning project to demonstrate modern .NET desktop development practices.
+A desktop application for managing library operations including book inventory, member registrations, borrowing/returning workflows, and reporting. Built with .NET 10 WinForms + EF Core as a study/learning project to demonstrate modern .NET desktop development practices.
 
 ---
 
@@ -105,9 +105,9 @@ This application provides a complete library management solution for small to me
 
 | Component | Choice | Rationale |
 |-----------|--------|-----------|
-| **UI Framework** | WinForms (.NET 8) | Simple, familiar, rapid development for data-driven desktop apps |
-| **Language** | C# 12+ / .NET 8+ | Latest LTS version with modern language features |
-| **ORM** | Entity Framework Core 8 | Industry standard, LINQ queries, code-first migrations, change tracking |
+| **UI Framework** | WinForms (.NET 10) | Simple, familiar, rapid development for data-driven desktop apps |
+| **Language** | C# 14+ / .NET 10+ | Latest version with modern language features |
+| **ORM** | Entity Framework Core 10 | Industry standard, LINQ queries, code-first migrations, change tracking |
 | **Database** | SQLite | Zero-config, file-based, no server needed, ideal for desktop apps |
 
 ### Project Structure
@@ -178,8 +178,8 @@ LibraryManagementSystem/
 ### NuGet Packages
 
 ```xml
-<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.*" />
-<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.*" />
+<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.*" />
+<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.*" />
 ```
 
 ---
@@ -581,7 +581,7 @@ public enum UserRole
 **Duration**: ~1 week
 
 **Tasks**:
-- Create .NET 8 WinForms project
+- Create .NET 10 WinForms project
 - Configure EF Core with SQLite, set up DbContext
 - Define all entity classes and relationships
 - Create initial EF migration
@@ -700,9 +700,9 @@ These features are out of scope for the initial implementation but represent log
 
 | Layer | Technology |
 |-------|------------|
-| **UI Framework** | WinForms with .NET 8 |
+| **UI Framework** | WinForms with .NET 10 |
 | **Database** | SQLite |
-| **ORM** | Entity Framework Core 8 |
+| **ORM** | Entity Framework Core 10 |
 | **Auth** | BCrypt password hashing |
 | **Build** | dotnet CLI / Visual Studio |
 

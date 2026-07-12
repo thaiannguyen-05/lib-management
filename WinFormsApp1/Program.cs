@@ -36,6 +36,7 @@ namespace WinFormsApp1
                     services.AddScoped<IAuditService, AuditService>();
                     services.AddScoped<IAuthorService, AuthorService>();
                     services.AddScoped<ICategoryService, CategoryService>();
+                    services.AddScoped<IUserService, UserService>();
 
                     // ── Forms ──────────────────────────────────────
                     services.AddTransient<LoginForm>();
@@ -43,6 +44,7 @@ namespace WinFormsApp1
                     services.AddTransient<ChangePasswordForm>();
                     services.AddTransient<AuthorForm>();
                     services.AddTransient<CategoryForm>();
+                    services.AddTransient<UserManageForm>();
                 })
                 .Build();
 

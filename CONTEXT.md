@@ -128,7 +128,7 @@ _Avoid_: StockAction
 ## Architecture
 
 - **UI**: WinForms (.NET 10)
-- **ORM**: Entity Framework Core 10 (SQLite)
+- **ORM**: Entity Framework Core 10 (SQL Server)
 - **Pattern**: Repository + Service layers
 - **Auth**: Simple username/password with salted hash
 - **Concurrency**: Single machine, one user at a time

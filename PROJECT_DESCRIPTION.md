@@ -108,7 +108,7 @@ This application provides a complete library management solution for small to me
 | **UI Framework** | WinForms (.NET 10) | Simple, familiar, rapid development for data-driven desktop apps |
 | **Language** | C# 14+ / .NET 10+ | Latest version with modern language features |
 | **ORM** | Entity Framework Core 10 | Industry standard, LINQ queries, code-first migrations, change tracking |
-| **Database** | SQLite | Zero-config, file-based, no server needed, ideal for desktop apps |
+| **Database** | SQL Server / LocalDB | Works with SSMS and EF Core migrations for desktop apps |
 
 ### Project Structure
 
@@ -178,7 +178,7 @@ LibraryManagementSystem/
 ### NuGet Packages
 
 ```xml
-<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.*" />
+<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.*" />
 <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.*" />
 ```
 
@@ -219,7 +219,7 @@ LibraryManagementSystem/
 ┌─────────────────────────▼───────────────────────────┐
 │                  DATABASE LAYER                      │
 │                                                     │
-│  SQLite (library.db)                                │
+│  SQL Server / LocalDB (LibraryManagementDb)          │
 │  - Single file, no server required                  │
 └─────────────────────────────────────────────────────┘
 ```
@@ -566,7 +566,7 @@ public enum UserRole
 
 ### Authentication
 
-- Simple username/password stored in SQLite with salted hash (BCrypt or similar)
+- Simple username/password stored in SQL Server with salted hash (BCrypt or similar)
 - No external identity provider needed for a desktop study project
 - Session persists until app is closed
 
@@ -580,7 +580,7 @@ public enum UserRole
 
 **Tasks**:
 - Create .NET 10 WinForms project
-- Configure EF Core with SQLite, set up DbContext
+- Configure EF Core with SQL Server, set up DbContext
 - Define all entity classes and relationships
 - Create initial EF migration
 - Set up seed data (sample books, members, admin user, default tiers)
@@ -699,7 +699,7 @@ These features are out of scope for the initial implementation but represent log
 | Layer | Technology |
 |-------|------------|
 | **UI Framework** | WinForms with .NET 10 |
-| **Database** | SQLite |
+| **Database** | SQL Server / LocalDB |
 | **ORM** | Entity Framework Core 10 |
 | **Auth** | BCrypt password hashing |
 | **Build** | dotnet CLI / Visual Studio |

@@ -6,7 +6,7 @@
 ┌─────────────────────────────────────────────────────────┐
 │                      Program.cs                         │
 │  - Configures DI (DbContext, Repositories, Services)    │
-│  - Auto-migration (EnsureCreated)                       │
+│  - Auto-migration (Database.Migrate)                    │
 │  - Starts LoginForm                                      │
 └──────────────────────┬──────────────────────────────────┘
                        │
@@ -86,7 +86,7 @@ Service (Business Logic)
 IRepository<T> / IUnitOfWork (Data Access)
   │
   ▼
-AppDbContext (EF Core) → SQLite DB
+AppDbContext (EF Core) → SQL Server DB
 ```
 
 **Example — Milestone 3 (Books):**
@@ -103,8 +103,7 @@ BookForm
 
 On first run, `Program.cs` calls:
 ```csharp
-db.Database.EnsureDeleted();  // ← for dev, remove later
-db.Database.EnsureCreated();  // ← creates DB + seeds data
+db.Database.Migrate();        // ← applies migrations
 ```
 
 `AppDbContext.OnModelCreating()` seeds:

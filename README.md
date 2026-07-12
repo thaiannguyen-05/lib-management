@@ -1,6 +1,6 @@
 # Library Management System
 
-Ứng dụng desktop quản lý thư viện — .NET 10 WinForms + EF Core SQLite.
+Ứng dụng desktop quản lý thư viện — .NET 10 WinForms + EF Core SQL Server.
 
 ## Chức năng
 
@@ -32,7 +32,7 @@ WinFormsApp1/
 ## Yêu cầu
 
 - .NET 10 SDK
-- SQLite (tự động tạo database khi chạy lần đầu)
+- SQL Server / LocalDB (database tạo qua migration)
 
 ## Cài đặt
 
@@ -224,7 +224,7 @@ erDiagram
 ## Architecture
 
 - **UI**: WinForms (.NET 10)
-- **ORM**: Entity Framework Core 10 (SQLite)
+- **ORM**: Entity Framework Core 10 (SQL Server)
 - **Pattern**: Repository + Service layers
 - **Auth**: Username/password with salted hash
 - **Concurrency**: Single machine, single user

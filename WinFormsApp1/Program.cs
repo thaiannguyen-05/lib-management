@@ -25,7 +25,7 @@ namespace WinFormsApp1
                 {
                     // ── DbContext ──────────────────────────────────
                     services.AddDbContext<AppDbContext>(options =>
-                        options.UseSqlite(context.Configuration.GetConnectionString("DefaultConnection")));
+                        options.UseSqlServer(context.Configuration.GetConnectionString("DefaultConnection")));
 
                     // ── Repositories (open generic) ────────────────
                     services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
@@ -48,11 +48,11 @@ namespace WinFormsApp1
                 })
                 .Build();
 
-            // ── Auto-migration ────────────────────────────────────
+            // ── Apply migrations ─────────────────────────────────
             using (var scope = host.Services.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                db.Database.EnsureCreated();
+                db.Database.Migrate();
             }
 
             // ── Resolve LoginForm and run ─────────────────────────

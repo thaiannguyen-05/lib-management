@@ -106,7 +106,7 @@ This application provides a complete library management solution for small to me
 | Component | Choice | Rationale |
 |-----------|--------|-----------|
 | **UI Framework** | WinForms (.NET 10) | Simple, familiar, rapid development for data-driven desktop apps |
-| **Language** | C# 12+ / .NET 10+ | Latest version with modern language features |
+| **Language** | C# 14+ / .NET 10+ | Latest version with modern language features |
 | **ORM** | Entity Framework Core 10 | Industry standard, LINQ queries, code-first migrations, change tracking |
 | **Database** | SQLite | Zero-config, file-based, no server needed, ideal for desktop apps |
 

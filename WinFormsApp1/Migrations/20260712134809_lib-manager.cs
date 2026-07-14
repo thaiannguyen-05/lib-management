@@ -474,9 +474,9 @@ namespace WinFormsApp1.Migrations
                 columns: new[] { "Id", "CreatedAt", "PasswordHash", "Role", "UpdatedAt", "Username" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "$2a$11$EGun6pHMDepcRfwvfFdiHOSTzc9ah3foJWPxkaSQfmXnCFQENgCva", 0, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "admin" },
-                    { 2, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "$2a$11$owap71wfxInYbPIVgGNt7O9iVrnlueO9p37CSWxj2ldBgXuFagsKK", 1, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "librarian1" },
-                    { 3, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "$2a$11$Q7ghBeG/EIKmYmIgKX1QTe8Nfvk50fxMCTDGBGswL6arXO81WHa1W", 2, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "staff1" }
+                    { 1, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "$2b$11$lhf1zGV3kq/9pE7ZIrdQ8eC.DAA/NDLETCdkCeftgPDLGizL8fMO2", 0, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "admin" },
+                    { 2, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "$2b$11$CHb9zP70T2g5ijeKUDXr3.FzZ5SOF0pp6WUnJ81qGeWsM4kEYmZsu", 1, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "librarian1" },
+                    { 3, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "$2b$11$Nh4YOgnZF5sD4.l//qmBpu5aH7sSP/1l/1JEv0A4fyWsgbBBuX5w.", 2, new DateTime(2025, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), "staff1" }
                 });
 
             migrationBuilder.InsertData(

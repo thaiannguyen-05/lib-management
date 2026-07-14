@@ -61,7 +61,8 @@ This application provides a complete library management solution for small to me
 |---------|-------------|
 | **Register Members** | Create member profiles with contact information |
 | **Edit Profiles** | Update member details and membership status |
-| **Membership Tiers** | Admin-configurable tiers (e.g. "Basic", "Premium") with varying borrow limits |
+| **Member Type** | Classify members as Student, Teacher, Staff, or External |
+| **Department** | Optional department string for organizational grouping |
 | **Member History** | View complete borrowing history for any member |
 | **Search Members** | Find members by name, ID, email, or phone |
 
@@ -75,7 +76,6 @@ This application provides a complete library management solution for small to me
 | **Overdue Alerts** | Flag overdue borrows and display on dashboard |
 | **Late Fee Calculation** | Auto-calculate fees based on configurable daily rate |
 | **Fee Tracking** | Full payment tracking — fees can be Paid, Unpaid, or Waived |
-| **Borrow Limits** | Enforce maximum active borrows per membership tier |
 | **Lost Books** | Mark copy as Lost + charge member replacement cost |
 
 ### 2.4 Search & Discovery
@@ -113,73 +113,80 @@ This application provides a complete library management solution for small to me
 ### Project Structure
 
 ```
-LibraryManagementSystem/
+WinFormsApp1/
 │
 ├── Models/                         # Domain Entities
+│   ├── BaseEntity.cs
 │   ├── Book.cs
 │   ├── BookCopy.cs
 │   ├── Member.cs
-│   ├── MembershipTier.cs
 │   ├── BorrowRecord.cs
 │   ├── LateFee.cs
 │   ├── FeePayment.cs
 │   ├── Author.cs
 │   ├── Category.cs
-│   ├── BookAuthor.cs               # M:N junction
-│   ├── BookCategory.cs             # M:N junction
-│   └── ApplicationUser.cs
+│   ├── Publisher.cs
+│   ├── LibraryCard.cs
+│   ├── Reservation.cs
+│   ├── InventoryLog.cs
+│   ├── AuditLog.cs
+│   ├── ApplicationUser.cs
+│   └── Enums/
+│       ├── CopyStatus.cs
+│       ├── BorrowStatus.cs
+│       ├── MemberStatus.cs
+│       ├── FeeStatus.cs
+│       ├── UserRole.cs
+│       ├── MemberType.cs
+│       ├── CardStatus.cs
+│       ├── FeeType.cs
+│       ├── ReservationStatus.cs
+│       └── InventoryAction.cs
 │
-├── Data/                           # EF Core DbContext & Configurations
-│   ├── LibraryDbContext.cs
-│   ├── Configurations/             # EF Fluent API Configurations
-│   ├── Migrations/                 # EF Core Migrations
-│   └── SeedData.cs
-│
-├── Repositories/                   # Data Access Layer
-│   ├── IRepository.cs              # Generic repository interface
-│   ├── Repository.cs               # Generic repository implementation
-│   ├── BookRepository.cs
-│   ├── MemberRepository.cs
-│   ├── BorrowRepository.cs
-│   └── ...
+├── Data/                           # EF Core DbContext & Repositories
+│   ├── AppDbContext.cs
+│   ├── IRepository.cs
+│   ├── Repository.cs
+│   ├── IUnitOfWork.cs
+│   └── UnitOfWork.cs
 │
 ├── Services/                       # Business Logic Layer
-│   ├── IBookService.cs
-│   ├── BookService.cs
-│   ├── IMemberService.cs
-│   ├── MemberService.cs
-│   ├── IBorrowService.cs
-│   ├── BorrowService.cs
-│   ├── IReportService.cs
-│   └── ReportService.cs
+│   ├── Auth/
+│   │   └── AuthService.cs
+│   ├── Author/
+│   │   └── AuthorService.cs
+│   ├── Category/
+│   │   └── CategoryService.cs
+│   ├── User/
+│   │   └── UserService.cs
+│   └── Audit/
+│       └── AuditService.cs
 │
 ├── Forms/                          # WinForms UI
-│   ├── MainForm.cs                 # Main navigation window
-│   ├── Books/
-│   │   ├── BookListForm.cs
-│   │   └── BookEditForm.cs
-│   ├── Members/
-│   │   ├── MemberListForm.cs
-│   │   └── MemberEditForm.cs
-│   ├── Borrowing/
-│   │   ├── CheckoutForm.cs
-│   │   ├── ReturnForm.cs
-│   │   └── BorrowHistoryForm.cs
-│   ├── Reports/
-│   │   └── DashboardForm.cs
-│   └── Auth/
-│       └── LoginForm.cs
+│   ├── MainForm.cs
+│   ├── LoginForm.cs
+│   ├── AuthorForm.cs
+│   ├── CategoryForm.cs
+│   ├── UserManageForm.cs
+│   └── ChangePasswordForm.cs
 │
-├── Utilities/                      # Helpers & Extensions
+├── Helpers/                        # Helpers & Extensions
+│   ├── PasswordHasher.cs
+│   └── SessionManager.cs
+│
 ├── Program.cs                      # Entry point
-└── LibraryManagementSystem.csproj
+├── appsettings.json
+└── WinFormsApp1.csproj
 ```
 
 ### NuGet Packages
 
 ```xml
-<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.*" />
-<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.*" />
+<PackageReference Include="BCrypt.Net-Next" Version="4.2.0" />
+<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.0" />
+<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.0" />
+<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.0" />
+<PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.0" />
 ```
 
 ---
@@ -189,39 +196,39 @@ LibraryManagementSystem/
 ### Layered Architecture
 
 ```
-┌─────────────────────────────────────────────────────┐
-│               PRESENTATION LAYER                     │
-│                                                     │
-│  WinForms (Forms + Controls)                        │
-│  - Data binding via DataSource/DataGridView         │
-│  - Event handlers call Service interfaces           │
-└─────────────────────────┬───────────────────────────┘
-                          │ (Service Interfaces)
-┌─────────────────────────▼───────────────────────────┐
-│              BUSINESS LOGIC LAYER                    │
-│                                                     │
-│  Services (BookService, MemberService, etc.)        │
-│  - Business rules validation                        │
-│  - Borrowing/return logic                           │
-│  - Late fee calculations                            │
-│  - Report generation                                │
-└─────────────────────────┬───────────────────────────┘
-                          │ (Repository Pattern)
-┌─────────────────────────▼───────────────────────────┐
-│               DATA ACCESS LAYER                      │
-│                                                     │
-│  EF Core DbContext + Repositories                   │
-│  - CRUD operations                                  │
-│  - LINQ queries                                     │
-│  - Migrations management                            │
-└─────────────────────────┬───────────────────────────┘
-                          │
-┌─────────────────────────▼───────────────────────────┐
-│                  DATABASE LAYER                      │
-│                                                     │
-│  SQLite (library.db)                                │
-│  - Single file, no server required                  │
-└─────────────────────────────────────────────────────┘
++-----------------------------------------------------+
+|               PRESENTATION LAYER                     |
+|                                                     |
+|  WinForms (Forms + Controls)                        |
+|  - Data binding via DataSource/DataGridView         |
+|  - Event handlers call Service interfaces           |
++-------------------------+---------------------------+
+                          | (Service Interfaces)
++-------------------------v---------------------------+
+|              BUSINESS LOGIC LAYER                    |
+|                                                     |
+|  Services (BookService, MemberService, etc.)        |
+|  - Business rules validation                        |
+|  - Borrowing/return logic                           |
+|  - Late fee calculations                            |
+|  - Report generation                                |
++-------------------------+---------------------------+
+                          | (Repository Pattern)
++-------------------------v---------------------------+
+|               DATA ACCESS LAYER                      |
+|                                                     |
+|  EF Core DbContext + Repositories                   |
+|  - CRUD operations                                  |
+|  - LINQ queries                                     |
+|  - Migrations management                            |
++-------------------------+---------------------------+
+                          |
++-------------------------v---------------------------+
+|                  DATABASE LAYER                      |
+|                                                     |
+|  SQLite (library.db)                                |
+|  - Single file, no server required                  |
++-----------------------------------------------------+
 ```
 
 ### Key Architectural Decisions
@@ -241,94 +248,148 @@ LibraryManagementSystem/
 ### Entity Relationship Diagram
 
 ```
-┌──────────┐       ┌──────────────┐       ┌──────────┐
-│  Author  │◄──────┤ BookAuthor   │───────►│  Book    │
-│──────────│  M:N  │──────────────│  M:N  │──────────│
-│ Id       │       │ BookId       │       │ Id       │
-│ FirstName│       │ AuthorId     │       │ Title    │
-│ LastName │       └──────────────┘       │ ISBN     │
-│ Bio      │                              │ Publisher│
-└──────────┘                              │ Year     │
-                                          │ Desc     │
-┌──────────┐       ┌──────────────┐       │ Location │
-│ Category │───────│ BookCategory │       │ ReplCost │
-│──────────│  M:N  │──────────────│       └────┬─────┘
-│ Id       │       │ BookId       │            │
-│ Name     │       │ CategoryId   │            │ 1
-│ Desc     │       └──────────────┘            │
-└──────────┘                                  │ N
-                                          ┌────▼─────┐
-                                          │ BookCopy │
-                                          │──────────│
-                                          │ Id       │
-                                          │ BookId   │
-                                          │ Status   │
-                                          └────┬─────┘
-                                               │
-                                               │ 1
-                                               │
-                                               │ N
-┌──────────────┐                        ┌──────▼──────┐
-│              │                        │BorrowRecord │
-│              │                        │─────────────│
-│              │                        │ Id          │
-│              │                        │ BookCopyId  │
-│              │◄───────────────────────│ MemberId    │
-│              │        1:N             │ BorrowDate  │
-│              │                        │ DueDate     │
-│              │                        │ ReturnDate  │
-│              │                        │ Status      │
-│              │                        │ RenewalCount│
-│              │                        └──────┬──────┘
-│              │                               │
-│              │                               │ 1
-│              │                               │
-│              │                               │ N
-│              │                          ┌──────▼──────┐
-│              │                          │  LateFee    │
-│              │                          │─────────────│
-│              │                          │ Id          │
-│              │                          │ BorrowRecId │
-│              │                          │ Amount      │
-│              │                          │ Type        │
-│              │                          │ Status      │
-│              │                          └──────┬──────┘
-│              │                                 │ 1
-│              │                                 │
-│              │                                 │ N
-│              │                          ┌──────▼──────┐
-│              │                          │ FeePayment  │
-│              │                          │─────────────│
-│              │                          │ Id          │
-│              │                          │ LateFeeId   │
-│              │                          │ Amount      │
-│              │                          │ PaymentDate │
-│              │                          └─────────────┘
-│              │
-│  Member      │
-│──────────────│
-│ Id           │
-│ FirstName    │
-│ LastName     │
-│ Email        │
-│ Phone        │
-│ Status       │
-│ MemberType   │
-│ DepartmentId │
-│ StudentClassId│
-└──────────────┘
-
-┌──────────────────┐
-│  ApplicationUser │
-│──────────────────│
-│ Id               │
-│ Username         │
-│ PasswordHash     │
-│ Role             │
-└──────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                          CATALOG                                                    │
+│                                                                                                     │
+│   ┌──────────────┐       ┌──────────────┐       ┌──────────────┐       ┌──────────────┐            │
+│   │   Author     │       │  BookAuthor  │       │    Book      │       │BookCategory  │            │
+│   ├──────────────┤       ├──────────────┤       ├──────────────┤       ├──────────────┤            │
+│   │ PK Id        │◄──M:N─│ FK BookId    │──M:N─►│ PK Id        │◄──M:N─│ FK BookId    │──M:N──►   │
+│   │    FirstName │       │ FK AuthorId  │       │    Title     │       │ FK CategoryId│            │
+│   │    LastName  │       └──────────────┘       │    ISBN      │       └──────────────┘            │
+│   │    Bio       │                              │    Year      │                                   │
+│   └──────────────┘                              │    Desc      │       ┌──────────────┐            │
+│                                                 │    Location  │◄──N:1─│  Publisher   │            │
+│                                                 │    ReplCost  │       ├──────────────┤            │
+│                                                 └──────┬───────┘       │ PK Id        │            │
+│                                                        │               │    Name      │            │
+│                                                        │ 1             │    Address   │            │
+│                                                        │               │    Phone     │            │
+│                                                        │ N             └──────────────┘            │
+│                                                   ┌────▼──────┐                                    │
+│                                                   │ BookCopy  │                                    │
+│                                                   ├───────────┤                                    │
+│                                                   │ PK Id     │                                    │
+│                                                   │ FK BookId │                                    │
+│                                                   │    Status │                                    │
+│                                                   └─────┬─────┘                                    │
+│                                                         │                                          │
+└─────────────────────────────────────────────────────────┼──────────────────────────────────────────┘
+                                                           │ 1
+                                                           │
+                                                           │ N
+┌─────────────────────────────────────────────────────────┼──────────────────────────────────────────┐
+│                                       OPERATIONS        │                                          │
+│                                                         │                                          │
+│  ┌──────────────┐                                 ┌─────▼──────┐                                   │
+│  │ BorrowRecord │                                 │            │                                   │
+│  ├──────────────┤         1:N                     │            │                                   │
+│  │ PK Id        │                                 │            │                                   │
+│  │ FK BookCopyId├────────────────────────────────►│            │                                   │
+│  │ FK MemberId  ├──────┐                          │            │                                   │
+│  │    BorrowDate│      │                          │   Member   │                                   │
+│  │    DueDate   │      │                          ├────────────┤                                   │
+│  │    ReturnDate│      │                          │ PK Id      │                                   │
+│  │    Status    │      │                          │ FirstName  │                                   │
+│  │ RenewalCount │      │                          │ LastName   │                                   │
+│  │ FK ChkOutUid ├──┐   │                          │ Email      │                                   │
+│  │ FK RtrnUid  ├──┼───┼──────────────────────────►│ Phone      │                                   │
+│  └──────┬───────┘  │   │                          │ Status     │                                   │
+│         │ 1        │   │                          │ MemberType │                                   │
+│         │          │   │                          │ Department │                                   │
+│         │ N        │   │                          └──────┬─────┘                                   │
+│  ┌──────▼──────┐   │   │                                 │ 1                                       │
+│  │  LateFee    │   │   │                                 │                                         │
+│  ├─────────────┤   │   │                                 │ N                                       │
+│  │ PK Id       │   │   │                          ┌──────▼────┐                                   │
+│  │ FK BorrowRec│   │   │                          │Reservation│                                   │
+│  │    Amount   │   │   │                          ├───────────┤                                   │
+│  │ DateIncurred│   │   │                          │ PK Id     │                                   │
+│  │    Type     │   │   │                          │ FK BookId │                                   │
+│  │    Status   │   │   │                          │ FK MemberId│                                  │
+│  │ FK WvdUid ──┼──┐│   │                          │ RsvDate   │                                   │
+│  └──────┬──────┘  ││   │                          │ ExpiryDate│                                   │
+│         │ 1       ││   │                          │ Status    │                                   │
+│         │         ││   │                          └───────────┘                                   │
+│         │ N       ││   │                                                                         │
+│  ┌──────▼──────┐  ││   │                                                                         │
+│  │ FeePayment  │  ││   │                                                                         │
+│  ├─────────────┤  ││   │                                                                         │
+│  │ PK Id       │  ││   │                                                                         │
+│  │ FK LateFeeId│  ││   │                                                                         │
+│  │    Amount   │  ││   │                                                                         │
+│  │ PaymentDate │  ││   │                                                                         │
+│  └─────────────┘  ││   │                                                                         │
+└───────────────────┼┼───┼─────────────────────────────────────────────────────────────────────────┘
+                    ││   │
+┌───────────────────┼┼───┼───────────────────────────────────────────────────────────────────────┐
+│   INVENTORY       ││   │         AUDIT & USER                                                  │
+│                   ││   │                                                                       │
+│  ┌──────────────┐ ││   │  ┌──────────────┐         ┌──────────────────┐                       │
+│  │ InventoryLog │ ││   │  │   AuditLog   │         │  ApplicationUser │                       │
+│  ├──────────────┤ ││   │  ├──────────────┤         ├──────────────────┤                       │
+│  │ PK Id        │ ││   │  │ PK Id        │         │ PK Id            │                       │
+│  │ FK BookCopyId├─┼┼───┼─┼─►│ FK UserId    │────►    │    Username      │                       │
+│  │    Action    │ ││   │  │    Action    │         │    PasswordHash  │                       │
+│  │    Quantity  │ ││   │  │    EntityName│         │    Role          │                       │
+│  │    Note      │ ││   │  │    EntityId  │         └────────┬─────────┘                       │
+│  │ FK Performed ├─┼┼───┼─┼─►│    Details   │                  │                                  │
+│  └──────────────┘ ││   │  │    Timestamp │                  │                                  │
+│                   ││   │  └──────────────┘                  │                                  │
+│                   ││   │                                     │                                  │
+│                   ││   │  ApplicationUser navigations:      │                                  │
+│                   ││   │  ├─ CheckedOutBorrows ◄────────────┼─ BorrowRecord                   │
+│                   ││   │  ├─ ReturnedBorrows   ◄────────────┼─ BorrowRecord                   │
+│                   ││   │  ├─ WaivedFees         ◄────────────┼─ LateFee                        │
+│                   ││   │  ├─ PerformedInventoryLogs ◄───────┼─ InventoryLog                    │
+│                   ││   │  └─ AuditLogs           ◄────────────┼─ AuditLog                       │
+│                   ││   │                                     │                                  │
+│                   ▼▼ ▼ ▼                                     ▼                                  │
+│            ┌──────────────────┐                                                                │
+│            │  ApplicationUser │                                                                │
+│            ├──────────────────┤                                                                │
+│            │ PK Id            │                                                                │
+│            │    Username      │                                                                │
+│            │    PasswordHash  │                                                                │
+│            │    Role          │                                                                │
+│            └──────────────────┘                                                                │
+└───────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
+### Foreign Key Reference Table
+
+| FK | From | To | Delete Behavior | Notes |
+|----|------|----|-----------------|-------|
+| `BookCopy.BookId` | BookCopy | Book | Restrict | |
+| `BookAuthor.BookId/AuthorId` | join table | Book/Author | M:N | |
+| `BookCategory.BookId/CategoryId` | join table | Book/Category | M:N | |
+| `Book.PublisherId` | Book | Publisher | | Nullable |
+| `LibraryCard.MemberId` | LibraryCard | Member | Cascade | 1:1 (unique) |
+| `BorrowRecord.BookCopyId` | BorrowRecord | BookCopy | Restrict | |
+| `BorrowRecord.MemberId` | BorrowRecord | Member | Restrict | |
+| `BorrowRecord.CheckedOutByUserId` | BorrowRecord | ApplicationUser | Restrict | |
+| `BorrowRecord.ReturnedByUserId` | BorrowRecord | ApplicationUser | SetNull | |
+| `LateFee.BorrowRecordId` | LateFee | BorrowRecord | Restrict | |
+| `LateFee.WaivedByUserId` | LateFee | ApplicationUser | SetNull | |
+| `FeePayment.LateFeeId` | FeePayment | LateFee | Restrict | |
+| `Reservation.BookId` | Reservation | Book | Restrict | |
+| `Reservation.MemberId` | Reservation | Member | Restrict | |
+| `InventoryLog.BookCopyId` | InventoryLog | BookCopy | Restrict | |
+| `InventoryLog.PerformedByUserId` | InventoryLog | ApplicationUser | Restrict | |
+| `AuditLog.UserId` | AuditLog | ApplicationUser | Restrict | |
+
 ### Entity Definitions
+
+#### BaseEntity
+
+```csharp
+public abstract class BaseEntity
+{
+    public int Id { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
+}
+```
 
 #### Book
 
@@ -378,11 +439,7 @@ public class Member : BaseEntity
     public string? Phone { get; set; }
     public MemberStatus Status { get; set; } = MemberStatus.Active;
     public MemberType MemberType { get; set; } = MemberType.External;
-
-    public int? DepartmentId { get; set; }
-    public Department? Department { get; set; }
-    public int? StudentClassId { get; set; }
-    public StudentClass? StudentClass { get; set; }
+    public string? Department { get; set; }
 
     // Navigation
     public ICollection<BorrowRecord> BorrowRecords { get; set; } = new List<BorrowRecord>();
@@ -398,21 +455,23 @@ public class Member : BaseEntity
 public class BorrowRecord : BaseEntity
 {
     public int BookCopyId { get; set; }
+    public BookCopy BookCopy { get; set; } = null!;
+
     public int MemberId { get; set; }
+    public Member Member { get; set; } = null!;
+
     public DateTime BorrowDate { get; set; }
     public DateTime DueDate { get; set; }
     public DateTime? ReturnDate { get; set; }
     public BorrowStatus Status { get; set; } = BorrowStatus.Active;
-    public int RenewalCount { get; set; } = 0;
+    public int RenewalCount { get; set; }
 
     public int CheckedOutByUserId { get; set; }
-    public int? ReturnedByUserId { get; set; }
-
-    // Navigation
-    public BookCopy BookCopy { get; set; } = null!;
-    public Member Member { get; set; } = null!;
     public ApplicationUser CheckedOutByUser { get; set; } = null!;
+
+    public int? ReturnedByUserId { get; set; }
     public ApplicationUser? ReturnedByUser { get; set; }
+
     public ICollection<LateFee> LateFees { get; set; } = new List<LateFee>();
 }
 ```
@@ -423,15 +482,16 @@ public class BorrowRecord : BaseEntity
 public class LateFee : BaseEntity
 {
     public int BorrowRecordId { get; set; }
+    public BorrowRecord BorrowRecord { get; set; } = null!;
+
     public decimal Amount { get; set; }
     public DateTime DateIncurred { get; set; }
     public FeeType Type { get; set; }
     public FeeStatus Status { get; set; } = FeeStatus.Unpaid;
-    public int? WaivedByUserId { get; set; }
 
-    // Navigation
-    public BorrowRecord BorrowRecord { get; set; } = null!;
+    public int? WaivedByUserId { get; set; }
     public ApplicationUser? WaivedByUser { get; set; }
+
     public ICollection<FeePayment> Payments { get; set; } = new List<FeePayment>();
 }
 ```
@@ -442,11 +502,10 @@ public class LateFee : BaseEntity
 public class FeePayment : BaseEntity
 {
     public int LateFeeId { get; set; }
+    public LateFee LateFee { get; set; } = null!;
+
     public decimal Amount { get; set; }
     public DateTime PaymentDate { get; set; }
-
-    // Navigation
-    public LateFee LateFee { get; set; } = null!;
 }
 ```
 
@@ -474,6 +533,84 @@ public class Category : BaseEntity
 
     // Navigation
     public ICollection<Book> Books { get; set; } = new List<Book>();
+}
+```
+
+#### Publisher
+
+```csharp
+public class Publisher : BaseEntity
+{
+    public string Name { get; set; } = string.Empty;
+    public string? Address { get; set; }
+    public string? Phone { get; set; }
+
+    // Navigation
+    public ICollection<Book> Books { get; set; } = new List<Book>();
+}
+```
+
+#### LibraryCard
+
+```csharp
+public class LibraryCard : BaseEntity
+{
+    public int MemberId { get; set; }
+    public Member Member { get; set; } = null!;
+
+    public string CardNumber { get; set; } = string.Empty;
+    public DateTime ExpiryDate { get; set; }
+    public CardStatus Status { get; set; } = CardStatus.Active;
+}
+```
+
+#### Reservation
+
+```csharp
+public class Reservation : BaseEntity
+{
+    public int BookId { get; set; }
+    public Book Book { get; set; } = null!;
+
+    public int MemberId { get; set; }
+    public Member Member { get; set; } = null!;
+
+    public DateTime ReservationDate { get; set; }
+    public DateTime ExpiryDate { get; set; }
+    public ReservationStatus Status { get; set; } = ReservationStatus.Pending;
+}
+```
+
+#### InventoryLog
+
+```csharp
+public class InventoryLog : BaseEntity
+{
+    public int BookCopyId { get; set; }
+    public BookCopy BookCopy { get; set; } = null!;
+
+    public InventoryAction Action { get; set; }
+    public int Quantity { get; set; }
+    public string? Note { get; set; }
+
+    public int PerformedByUserId { get; set; }
+    public ApplicationUser PerformedByUser { get; set; } = null!;
+}
+```
+
+#### AuditLog
+
+```csharp
+public class AuditLog : BaseEntity
+{
+    public int UserId { get; set; }
+    public ApplicationUser User { get; set; } = null!;
+
+    public string Action { get; set; } = string.Empty;
+    public string EntityName { get; set; } = string.Empty;
+    public int EntityId { get; set; }
+    public string? Details { get; set; }
+    public DateTime Timestamp { get; set; }
 }
 ```
 
@@ -533,6 +670,46 @@ public enum UserRole
     Admin,
     Librarian,
     Staff
+}
+
+public enum MemberType
+{
+    Student,
+    Teacher,
+    Staff,
+    External
+}
+
+public enum CardStatus
+{
+    Active,
+    Expired,
+    Locked
+}
+
+public enum FeeType
+{
+    Late,
+    Lost,
+    Damaged
+}
+
+public enum ReservationStatus
+{
+    Pending,
+    Ready,
+    Cancelled,
+    Expired
+}
+
+public enum InventoryAction
+{
+    Import,
+    Dispose,
+    Transfer,
+    Count,
+    Lost,
+    Damaged
 }
 ```
 
@@ -608,8 +785,8 @@ public enum UserRole
 
 **Tasks**:
 - Member list view with DataGridView
-- Add/Edit Member form
-- MembershipTier management (admin config) — removed, using MemberType instead
+- Add/Edit Member form with MemberType selection (Student/Teacher/Staff/External)
+- Department assignment (string field)
 - Member status management (active/suspended/expired)
 - Member detail view showing borrowing history
 - Search members by name, email, or phone
@@ -701,7 +878,8 @@ These features are out of scope for the initial implementation but represent log
 | **UI Framework** | WinForms with .NET 10 |
 | **Database** | SQLite |
 | **ORM** | Entity Framework Core 10 |
-| **Auth** | BCrypt password hashing |
+| **Auth** | BCrypt.Net-Next password hashing |
+| **DI** | Microsoft.Extensions.Hosting |
 | **Build** | dotnet CLI / Visual Studio |
 
 ---
@@ -711,16 +889,16 @@ These features are out of scope for the initial implementation but represent log
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd lib-managerment
+cd lib-management
 
 # Restore dependencies
 dotnet restore
 
 # Apply database migrations
-dotnet ef database update --project src/LibraryManagementSystem
+dotnet ef database update --project WinFormsApp1
 
 # Run the application
-dotnet run --project src/LibraryManagementSystem
+dotnet run --project WinFormsApp1
 ```
 
 ---

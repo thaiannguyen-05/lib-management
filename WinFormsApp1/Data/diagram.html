@@ -65,7 +65,7 @@
 </head>
 <body>
     <h1>Library Management System</h1>
-    <p class="subtitle">Entity Relationship Diagram — SQLite Schema (18 Tables)</p>
+    <p class="subtitle">Entity Relationship Diagram — SQLite Schema (16 Tables)</p>
 
     <div class="diagram-container">
         <pre class="mermaid">
@@ -119,18 +119,6 @@ erDiagram
         int CategoryId FK
     }
 
-    Departments {
-        int Id PK
-        text Name
-        text Code
-    }
-
-    StudentClasses {
-        int Id PK
-        text Name
-        int DepartmentId FK
-    }
-
     Members {
         int Id PK
         text FirstName
@@ -139,9 +127,7 @@ erDiagram
         text Phone
         int Status
         int MemberType
-        text StudentId
-        int DepartmentId FK
-        int ClassId FK
+        text Department
     }
 
     LibraryCards {
@@ -224,9 +210,6 @@ erDiagram
     Authors ||--o{ BookAuthors : "authored"
     Books ||--o{ BookCategories : "categorized in"
     Categories ||--o{ BookCategories : "contains"
-    Departments ||--o{ StudentClasses : "has"
-    Departments ||--o{ Members : "belongs to"
-    StudentClasses ||--o{ Members : "has"
     Members ||--o{ LibraryCards : "has"
     Members ||--o{ BorrowRecords : "borrows"
     Members ||--o{ LateFees : "incurs"
@@ -290,14 +273,6 @@ erDiagram
             Publishers
         </div>
         <div class="legend-item">
-            <div class="legend-color" style="background: #dcedc8;"></div>
-            Departments
-        </div>
-        <div class="legend-item">
-            <div class="legend-color" style="background: #e1bee7;"></div>
-            StudentClasses
-        </div>
-        <div class="legend-item">
             <div class="legend-color" style="background: #fff3e0;"></div>
             LibraryCards
         </div>
@@ -315,7 +290,7 @@ erDiagram
         </div>
     </div>
 
-    <p class="table-count">18 Tables | 5 Enums | 16 Relationships</p>
+    <p class="table-count">16 Tables | 5 Enums | 16 Relationships</p>
 
     <script>
         mermaid.initialize({

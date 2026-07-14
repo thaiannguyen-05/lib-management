@@ -88,23 +88,6 @@ CREATE TABLE IF NOT EXISTS BookCopies (
     FOREIGN KEY (BookId) REFERENCES Books(Id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS Departments (
-    Id        INTEGER PRIMARY KEY AUTOINCREMENT,
-    Name      TEXT NOT NULL,
-    Code      TEXT NOT NULL UNIQUE,
-    CreatedAt TEXT NOT NULL DEFAULT (datetime('now')),
-    UpdatedAt TEXT NOT NULL DEFAULT (datetime('now'))
-);
-
-CREATE TABLE IF NOT EXISTS StudentClasses (
-    Id           INTEGER PRIMARY KEY AUTOINCREMENT,
-    Name         TEXT    NOT NULL,
-    DepartmentId INTEGER NOT NULL,
-    CreatedAt    TEXT    NOT NULL DEFAULT (datetime('now')),
-    UpdatedAt    TEXT    NOT NULL DEFAULT (datetime('now')),
-    FOREIGN KEY (DepartmentId) REFERENCES Departments(Id) ON DELETE RESTRICT
-);
-
 CREATE TABLE IF NOT EXISTS Members (
     Id             INTEGER PRIMARY KEY AUTOINCREMENT,
     FirstName      TEXT    NOT NULL,
@@ -113,12 +96,9 @@ CREATE TABLE IF NOT EXISTS Members (
     Phone          TEXT,
     Status         INTEGER NOT NULL DEFAULT 0,  -- MemberStatus.Active
     MemberType     INTEGER NOT NULL DEFAULT 3,  -- MemberType.External
-    DepartmentId   INTEGER,
-    StudentClassId INTEGER,
+    Department     TEXT,
     CreatedAt      TEXT    NOT NULL DEFAULT (datetime('now')),
-    UpdatedAt      TEXT    NOT NULL DEFAULT (datetime('now')),
-    FOREIGN KEY (DepartmentId)   REFERENCES Departments(Id)   ON DELETE SET NULL,
-    FOREIGN KEY (StudentClassId) REFERENCES StudentClasses(Id) ON DELETE SET NULL
+    UpdatedAt      TEXT    NOT NULL DEFAULT (datetime('now'))
 );
 
 CREATE TABLE IF NOT EXISTS LibraryCards (
@@ -231,12 +211,8 @@ CREATE INDEX IF NOT EXISTS IX_Books_ISBN ON Books(ISBN);
 CREATE INDEX IF NOT EXISTS IX_Books_PublisherId ON Books(PublisherId);
 CREATE INDEX IF NOT EXISTS IX_BookCopies_BookId ON BookCopies(BookId);
 CREATE INDEX IF NOT EXISTS IX_BookCopies_Status ON BookCopies(Status);
-CREATE INDEX IF NOT EXISTS IX_Departments_Code ON Departments(Code);
-CREATE INDEX IF NOT EXISTS IX_StudentClasses_DepartmentId ON StudentClasses(DepartmentId);
 CREATE INDEX IF NOT EXISTS IX_Members_Email ON Members(Email);
 CREATE INDEX IF NOT EXISTS IX_Members_Status ON Members(Status);
-CREATE INDEX IF NOT EXISTS IX_Members_DepartmentId ON Members(DepartmentId);
-CREATE INDEX IF NOT EXISTS IX_Members_StudentClassId ON Members(StudentClassId);
 CREATE INDEX IF NOT EXISTS IX_LibraryCards_MemberId ON LibraryCards(MemberId);
 CREATE INDEX IF NOT EXISTS IX_LibraryCards_CardNumber ON LibraryCards(CardNumber);
 CREATE INDEX IF NOT EXISTS IX_BorrowRecords_BookCopyId ON BorrowRecords(BookCopyId);

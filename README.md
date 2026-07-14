@@ -99,18 +99,6 @@ erDiagram
         int CategoryId FK
     }
 
-    Departments {
-        int Id PK
-        text Name
-        text Code
-    }
-
-    StudentClasses {
-        int Id PK
-        text Name
-        int DepartmentId FK
-    }
-
     Members {
         int Id PK
         text FirstName
@@ -119,8 +107,7 @@ erDiagram
         text Phone
         int Status
         int MemberType
-        int DepartmentId FK
-        int StudentClassId FK
+        text Department
     }
 
     LibraryCards {
@@ -202,9 +189,6 @@ erDiagram
     Authors ||--o{ BookAuthors : "authored"
     Books ||--o{ BookCategories : "categorized in"
     Categories ||--o{ BookCategories : "contains"
-    Departments ||--o{ StudentClasses : "has"
-    Departments ||--o{ Members : "belongs to"
-    StudentClasses ||--o{ Members : "has"
     Members ||--o{ LibraryCards : "has"
     Members ||--o{ BorrowRecords : "borrows"
     Members ||--o{ LateFees : "incurs"

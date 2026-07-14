@@ -29,7 +29,10 @@ namespace WinFormsApp1.Services
             if (!PasswordHasher.VerifyPassword(password, matched.PasswordHash))
                 return null;
 
+            /// start the transaction
             await _unitOfWork.BeginTransactionAsync();
+
+            // audit log
             try
             {
                 await _unitOfWork.Repository<AuditLog>().AddAsync(new AuditLog

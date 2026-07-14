@@ -5,6 +5,7 @@ namespace WinFormsApp1.Models
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public string? Bio { get; set; }
+        public string FullName => $"{FirstName} {LastName}";
 
         public ICollection<Book> Books { get; set; } = new List<Book>();
     }

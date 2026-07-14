@@ -108,7 +108,7 @@ namespace WinFormsApp1.Forms
             _selectedUser.Username = txtUsername.Text.Trim();
             _selectedUser.Role = (UserRole)cmbRole.SelectedItem!;
 
-            var (success, message) = await _userService.UpdateAsync(_selectedUser, null);
+            var (success, message) = await _userService.UpdateAsync(_selectedUser, txtPassword.Text);
             MessageBox.Show(message, success ? "Success" : "Error", MessageBoxButtons.OK, success ? MessageBoxIcon.Information : MessageBoxIcon.Error);
 
             if (success)

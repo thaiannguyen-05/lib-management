@@ -35,6 +35,7 @@ namespace WinFormsApp1.Forms
             lblWelcome.Text = $"Welcome, {user.Username} ({user.Role})";
 
             btnUsers.Visible = SessionManager.IsAdmin;
+            btnBooks.Visible = SessionManager.IsAdmin || SessionManager.IsLibrarian;
             btnAuthors.Visible = SessionManager.IsAdmin || SessionManager.IsLibrarian;
             btnCategories.Visible = SessionManager.IsAdmin || SessionManager.IsLibrarian;
             btnReports.Visible = SessionManager.IsAdmin || SessionManager.IsLibrarian;
@@ -65,7 +66,8 @@ namespace WinFormsApp1.Forms
 
         private void btnBooks_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Books module - Coming in Milestone 3", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            var bookForm = _serviceProvider.GetRequiredService<BookForm>();
+            bookForm.ShowDialog(this);
         }
 
         private void btnMembers_Click(object sender, EventArgs e)

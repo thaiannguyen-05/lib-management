@@ -21,8 +21,6 @@ namespace WinFormsApp1.Data
         public DbSet<Category> Categories => Set<Category>();
         public DbSet<ApplicationUser> ApplicationUsers => Set<ApplicationUser>();
         public DbSet<Publisher> Publishers => Set<Publisher>();
-        public DbSet<Department> Departments => Set<Department>();
-        public DbSet<StudentClass> StudentClasses => Set<StudentClass>();
         public DbSet<LibraryCard> LibraryCards => Set<LibraryCard>();
         public DbSet<Reservation> Reservations => Set<Reservation>();
         public DbSet<InventoryLog> InventoryLogs => Set<InventoryLog>();
@@ -97,39 +95,11 @@ namespace WinFormsApp1.Data
                 e.HasIndex(p => p.Name);
             });
 
-            // ── Department ────────────────────────────────────────
-            modelBuilder.Entity<Department>(e =>
-            {
-                e.HasIndex(d => d.Code).IsUnique();
-            });
-
-            // ── StudentClass ──────────────────────────────────────
-            modelBuilder.Entity<StudentClass>(e =>
-            {
-                e.HasIndex(sc => sc.DepartmentId);
-                e.HasOne(sc => sc.Department)
-                    .WithMany(d => d.StudentClasses)
-                    .HasForeignKey(sc => sc.DepartmentId)
-                    .OnDelete(DeleteBehavior.Restrict);
-            });
-
             // ── Member ────────────────────────────────────────────
             modelBuilder.Entity<Member>(e =>
             {
                 e.HasIndex(m => m.Email).IsUnique();
                 e.HasIndex(m => m.Status);
-                e.HasIndex(m => m.DepartmentId);
-                e.HasIndex(m => m.StudentClassId);
-
-                e.HasOne(m => m.Department)
-                    .WithMany(d => d.Members)
-                    .HasForeignKey(m => m.DepartmentId)
-                    .OnDelete(DeleteBehavior.SetNull);
-
-                e.HasOne(m => m.StudentClass)
-                    .WithMany(sc => sc.Members)
-                    .HasForeignKey(m => m.StudentClassId)
-                    .OnDelete(DeleteBehavior.SetNull);
             });
 
             // ── LibraryCard (1:1 with Member) ─────────────────────
@@ -296,18 +266,6 @@ namespace WinFormsApp1.Data
                 new Publisher { Id = 3, Name = "Springer", Address = "Tiergartenstr. 17, 69121 Heidelberg, DE", Phone = "+49-6221-487-0", CreatedAt = seedDate, UpdatedAt = seedDate },
                 new Publisher { Id = 4, Name = "NXB Tre", Address = "51 Nguyen Du, Ha Noi, VN", Phone = "024-3943-4630", CreatedAt = seedDate, UpdatedAt = seedDate });
 
-            // ── Departments ───────────────────────────────────────
-            modelBuilder.Entity<Department>().HasData(
-                new Department { Id = 1, Name = "Computer Science", Code = "CS", CreatedAt = seedDate, UpdatedAt = seedDate },
-                new Department { Id = 2, Name = "Mathematics", Code = "MATH", CreatedAt = seedDate, UpdatedAt = seedDate },
-                new Department { Id = 3, Name = "Physics", Code = "PHYS", CreatedAt = seedDate, UpdatedAt = seedDate });
-
-            // ── StudentClasses ────────────────────────────────────
-            modelBuilder.Entity<StudentClass>().HasData(
-                new StudentClass { Id = 1, Name = "CS2023A", DepartmentId = 1, CreatedAt = seedDate, UpdatedAt = seedDate },
-                new StudentClass { Id = 2, Name = "CS2023B", DepartmentId = 1, CreatedAt = seedDate, UpdatedAt = seedDate },
-                new StudentClass { Id = 3, Name = "MATH2024A", DepartmentId = 2, CreatedAt = seedDate, UpdatedAt = seedDate });
-
             // ── Authors ───────────────────────────────────────────
             modelBuilder.Entity<Author>().HasData(
                 new Author { Id = 1, FirstName = "Robert", LastName = "Martin", Bio = "Author of Clean Code", CreatedAt = seedDate, UpdatedAt = seedDate },
@@ -342,9 +300,9 @@ namespace WinFormsApp1.Data
 
             // ── Members ───────────────────────────────────────────
             modelBuilder.Entity<Member>().HasData(
-                new Member { Id = 1, FirstName = "Nguyen Van", LastName = "A", Email = "nguyenvana@example.com", Phone = "0901234567", Status = MemberStatus.Active, MemberType = MemberType.Student, DepartmentId = 1, StudentClassId = 1, CreatedAt = seedDate, UpdatedAt = seedDate },
-                new Member { Id = 2, FirstName = "Tran Thi", LastName = "B", Email = "tranthib@example.com", Phone = "0912345678", Status = MemberStatus.Active, MemberType = MemberType.Student, DepartmentId = 1, StudentClassId = 2, CreatedAt = seedDate, UpdatedAt = seedDate },
-                new Member { Id = 3, FirstName = "Le Van", LastName = "C", Email = "levanc@example.com", Phone = "0923456789", Status = MemberStatus.Active, MemberType = MemberType.Teacher, DepartmentId = 2, CreatedAt = seedDate, UpdatedAt = seedDate },
+                new Member { Id = 1, FirstName = "Nguyen Van", LastName = "A", Email = "nguyenvana@example.com", Phone = "0901234567", Status = MemberStatus.Active, MemberType = MemberType.Student, Department = "Computer Science", CreatedAt = seedDate, UpdatedAt = seedDate },
+                new Member { Id = 2, FirstName = "Tran Thi", LastName = "B", Email = "tranthib@example.com", Phone = "0912345678", Status = MemberStatus.Active, MemberType = MemberType.Student, Department = "Computer Science", CreatedAt = seedDate, UpdatedAt = seedDate },
+                new Member { Id = 3, FirstName = "Le Van", LastName = "C", Email = "levanc@example.com", Phone = "0923456789", Status = MemberStatus.Active, MemberType = MemberType.Teacher, Department = "Mathematics", CreatedAt = seedDate, UpdatedAt = seedDate },
                 new Member { Id = 4, FirstName = "Pham Minh", LastName = "D", Email = "phamminhd@example.com", Phone = "0934567890", Status = MemberStatus.Active, MemberType = MemberType.External, CreatedAt = seedDate, UpdatedAt = seedDate });
 
             // ── LibraryCards ───────────────────────────────────────

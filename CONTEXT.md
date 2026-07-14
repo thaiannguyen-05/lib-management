@@ -13,7 +13,7 @@ A physical copy of a Book. Has its own ID and status (Available, Borrowed, Damag
 _Avoid_: Copy, Instance
 
 **Member**:
-A person registered with the library. Has contact info and membership status. No borrow limit — can borrow as many books as available.
+A person registered with the library. Has contact info, membership status, and optional department string. No borrow limit — can borrow as many books as available.
 _Avoid_: User, Patron, Account
 
 **BorrowRecord**:
@@ -43,14 +43,6 @@ _Avoid_: User, Account, Staff (use Member or ApplicationUser)
 **Publisher**:
 A publishing house. Separate entity with full CRUD. A Book optionally belongs to one Publisher (nullable FK). A Publisher has many Books.
 _Avoid_: Press, PublishingHouse
-
-**Department**:
-An organizational unit (e.g. department in a university). Has a name and unique code. A Department has many StudentClasses and many Members.
-_Avoid_: Division, Unit
-
-**StudentClass**:
-A class/cohort within a Department. Has a name and belongs to one Department. A StudentClass has many Members.
-_Avoid_: Class, Group, Cohort
 
 **LibraryCard**:
 A physical or digital card issued to a Member. One-to-one with Member. Tracks card number (unique), expiry date, and status.
@@ -124,6 +116,181 @@ _Avoid_: StockAction
 - LateFee tracks which ApplicationUser waived the fee
 - Members can reserve Book titles (not specific copies). Reserved books go to the first pending reservation when returned.
 - FeeType (Late/Lost/Damaged) classifies the fee; FeeStatus (Unpaid/Paid/Waived) tracks payment state
+
+## Entity Relationship Diagram
+
+```
+                            ┌─────────────┐
+                            │   Publisher  │
+                            │─────────────│
+                            │ Id           │
+                            │ Name         │
+                            │ Address      │
+                            │ Phone        │
+                            └──────┬──────┘
+                                   │ 1
+                                   │
+                                   │ N
+┌──────────────┐  N:N  ┌──────────┴──────────┐  1:N  ┌──────────────┐
+│    Author     │──────│        Book          │──────│   BookCopy    │
+│──────────────│       │──────────────────────│       │──────────────│
+│ Id            │       │ Id                   │       │ Id            │
+│ FirstName     │       │ Title                │       │ BookId (FK)   │
+│ LastName      │       │ ISBN (unique)        │       │ Status        │
+│ Bio           │       │ PublisherId (FK?)    │       └──────┬───────┘
+└──────────────┘       │ PublicationYear      │              │ 1
+       ▲               │ Description          │              │
+       │               │ ShelfLocation        │              │ N
+       │               │ ReplacementCost      │              │
+       │               └──────────┬──────────┘              │
+       │                          │ 1                        │
+       │                          │                          │
+       │                          │ N:N                      │
+       │               ┌──────────┴──────────┐              │
+       │               │    Category          │              │
+       │               │──────────────────────│              │
+       │               │ Id                   │              │
+       │               │ Name (unique)        │              │
+       │               │ Description          │              │
+       │               └─────────────────────┘              │
+       │                                                    │
+       │               ┌──────────────────────┐              │
+       │               │    Reservation        │              │
+       │               │──────────────────────│              │
+       │               │ Id                   │              │
+       │               │ BookId (FK)          │              │
+       │               │ MemberId (FK)        │              │
+       │               │ ReservationDate      │              │
+       │               │ ExpiryDate           │              │
+       │               │ Status               │              │
+       │               └──────────┬───────────┘              │
+       │                          │ N                        │
+       │                          │                          │
+       │                          │ 1                        │
+       │               ┌──────────┴──────────┐              │
+       │               │      Member          │              │
+       │               │──────────────────────│              │
+       │               │ Id                   │              │
+       │               │ FirstName            │              │
+       │               │ LastName             │              │
+       │               │ Email (unique)       │              │
+       │               │ Phone                │              │
+       │               │ Status               │              │
+       │               │ MemberType           │              │
+       │               │ Department           │              │
+       │               └──┬────────┬──────────┘              │
+       │                  │ 1      │ 1                       │
+       │                  │        │                         │
+       │                  │ N      │ 1:1                     │
+       │                  │        │                         │
+       │    ┌─────────────┴─┐  ┌──┴──────────────┐          │
+       │    │ BorrowRecord   │  │  LibraryCard     │          │
+       │    │────────────────│  │─────────────────│          │
+       │    │ Id             │  │ Id               │          │
+       │    │ BookCopyId(FK) │◄─┤ MemberId (FK)   │          │
+       │    │ MemberId (FK)  │  │ CardNumber       │          │
+       │    │ BorrowDate     │  │ ExpiryDate       │          │
+       │    │ DueDate        │  │ Status           │          │
+       │    │ ReturnDate?    │  └─────────────────┘          │
+       │    │ Status         │                               │
+       │    │ RenewalCount   │                               │
+       │    │ CheckedOutBy   │                               │
+       │    │ ReturnedBy?    │                               │
+       │    └───┬────────────┘                               │
+       │        │ 1                                          │
+       │        │                                            │
+       │        │ N                                          │
+       │    ┌───┴────────────┐                               │
+       │    │   LateFee       │                               │
+       │    │────────────────│                               │
+       │    │ Id             │                               │
+       │    │ BorrowRecordId │                               │
+       │    │ Amount         │                               │
+       │    │ DateIncurred   │                               │
+       │    │ Type           │                               │
+       │    │ Status         │                               │
+       │    │ WaivedBy? (FK) │                               │
+       │    └───┬────────────┘                               │
+       │        │ 1                                          │
+       │        │                                            │
+       │        │ N                                          │
+       │    ┌───┴────────────┐                               │
+       │    │  FeePayment     │                               │
+       │    │────────────────│                               │
+       │    │ Id             │                               │
+       │    │ LateFeeId (FK) │                               │
+       │    │ Amount         │                               │
+       │    │ PaymentDate    │                               │
+       │    └────────────────┘                               │
+       │                                                     │
+       │               ┌──────────────────────┐              │
+       │               │   InventoryLog        │              │
+       │               │──────────────────────│              │
+       │               │ Id                   │              │
+       │               │ BookCopyId (FK)      │◄─────────────┘
+       │               │ Action               │
+       │               │ Quantity             │
+       │               │ Note                 │
+       │               │ PerformedByUserId(FK)│
+       │               └──────────┬───────────┘
+       │                          │ N
+       │                          │
+       │                          │ 1
+       │               ┌──────────┴──────────┐
+       └──────────────►│   ApplicationUser    │
+                       │──────────────────────│
+                       │ Id                   │
+                       │ Username (unique)    │
+                       │ PasswordHash         │
+                       │ Role                 │
+                       └──────────┬───────────┘
+                                  │ 1
+                                  │
+                                  │ N
+                       ┌──────────┴──────────┐
+                       │     AuditLog         │
+                       │──────────────────────│
+                       │ Id                   │
+                       │ UserId (FK)          │
+                       │ Action               │
+                       │ EntityName           │
+                       │ EntityId             │
+                       │ Details              │
+                       │ Timestamp            │
+                       └─────────────────────┘
+```
+
+### Cardinality Summary
+
+| Relationship | Cardinality | FK Column | Delete Behavior |
+|---|---|---|---|
+| Publisher → Book | 1 : N | Book.PublisherId | SetNull |
+| Book → BookCopy | 1 : N | BookCopy.BookId | Cascade |
+| Book ↔ Author | N : N | BookAuthors join table | Cascade/Cascade |
+| Book ↔ Category | N : N | BookCategories join table | Cascade/Cascade |
+| Book → Reservation | 1 : N | Reservation.BookId | Restrict |
+| Member → BorrowRecord | 1 : N | BorrowRecord.MemberId | Restrict |
+| Member → Reservation | 1 : N | Reservation.MemberId | Restrict |
+| Member ↔ LibraryCard | 1 : 1 | LibraryCard.MemberId | Cascade |
+| BookCopy → BorrowRecord | 1 : N | BorrowRecord.BookCopyId | Restrict |
+| BookCopy → InventoryLog | 1 : N | InventoryLog.BookCopyId | Restrict |
+| BorrowRecord → LateFee | 1 : N | LateFee.BorrowRecordId | Restrict |
+| LateFee → FeePayment | 1 : N | FeePayment.LateFeeId | Restrict |
+| ApplicationUser → BorrowRecord (checkout) | 1 : N | BorrowRecord.CheckedOutByUserId | Restrict |
+| ApplicationUser → BorrowRecord (return) | 1 : N | BorrowRecord.ReturnedByUserId | SetNull |
+| ApplicationUser → LateFee (waive) | 1 : N | LateFee.WaivedByUserId | SetNull |
+| ApplicationUser → InventoryLog | 1 : N | InventoryLog.PerformedByUserId | Restrict |
+| ApplicationUser → AuditLog | 1 : N | AuditLog.UserId | Restrict |
+
+### Unique Constraints
+
+| Entity | Column(s) |
+|---|---|
+| Book | ISBN |
+| Category | Name |
+| Member | Email |
+| LibraryCard | MemberId, CardNumber |
+| ApplicationUser | Username |
 
 ## Architecture
 

@@ -101,6 +101,12 @@ namespace WinFormsApp1.Forms
             categoryForm.ShowDialog(this);
         }
 
+        private void btnLibraryCards_Click(object sender, EventArgs e)
+        {
+            var libraryCardForm = _serviceProvider.GetRequiredService<LibraryCardForm>();
+            libraryCardForm.ShowDialog(this);
+        }
+
         private void btnChangePassword_Click(object sender, EventArgs e)
         {
             var changePasswordForm = _serviceProvider.GetRequiredService<ChangePasswordForm>();

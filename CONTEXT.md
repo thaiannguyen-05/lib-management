@@ -13,7 +13,7 @@ A physical copy of a Book. Has its own ID and status (Available, Borrowed, Damag
 _Avoid_: Copy, Instance
 
 **Member**:
-A person registered with the library. Has contact info, membership status, and optional department string. No borrow limit — can borrow as many books as available.
+A person registered with the library. Has contact info, membership status, optional department string, and optional student ID. No borrow limit — can borrow as many books as available.
 _Avoid_: User, Patron, Account
 
 **BorrowRecord**:
@@ -60,6 +60,15 @@ _Avoid_: StockLog, InventoryEntry
 A system-wide log of entity mutations. Records which ApplicationUser performed what action on which entity, with optional details and timestamp. Separate from domain-specific audit trails on BorrowRecord/LateFee.
 _Avoid_: ActivityLog, ChangeLog
 
+### BaseEntity Convention
+
+All entities inherit from `BaseEntity`, which provides two universal audit fields:
+
+- **CreatedAt** (`DateTime`): When the entity was first persisted.
+- **UpdatedAt** (`DateTime`): When the entity was last modified.
+
+These are domain-meaningful timestamps, not mere implementation scaffolding.
+
 ## Enums
 
 **CopyStatus**:
@@ -101,6 +110,10 @@ _Avoid_: HoldStatus
 **InventoryAction**:
 Type of inventory action on a BookCopy: Import, Dispose, Transfer, Count, Lost, Damaged.
 _Avoid_: StockAction
+
+**RenewalPeriod**:
+Duration for renewing a LibraryCard: OneMonth, ThreeMonths, SixMonths, TwelveMonths.
+_Avoid_: RenewalDuration
 
 ## Business Rules
 
@@ -178,6 +191,7 @@ _Avoid_: StockAction
        │               │ Status               │              │
        │               │ MemberType           │              │
        │               │ Department           │              │
+       │               │ StudentId            │              │
        │               └──┬────────┬──────────┘              │
        │                  │ 1      │ 1                       │
        │                  │        │                         │
@@ -289,7 +303,7 @@ _Avoid_: StockAction
 | Book | ISBN |
 | Category | Name |
 | Member | Email |
-| LibraryCard | MemberId, CardNumber |
+| LibraryCard | MemberId, CardNumber (separate unique indexes) |
 | ApplicationUser | Username |
 
 ## Architecture

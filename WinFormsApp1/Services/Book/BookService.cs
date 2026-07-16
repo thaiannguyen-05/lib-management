@@ -62,11 +62,11 @@ public class BookService
             .Include(b => b.Categories)
             .Include(b => b.Copies)
             .Where(b =>
-                b.Title.Contains(term) ||
+                b.Title.ToLower().Trim().Contains(term) ||
                 b.ISBN.Contains(term) ||
-                b.Authors.Any(a => a.FirstName.Contains(term) || a.LastName.Contains(term)) ||
-                b.Categories.Any(c => c.Name.Contains(term)) ||
-                (b.Publisher != null && b.Publisher.Name.Contains(term)))
+                b.Authors.Any(a => a.FirstName.ToLower().Trim().Contains(term) || a.LastName.ToLower().Trim().Contains(term)) ||
+                b.Categories.Any(c => c.Name.ToLower().Trim().Contains(term)) ||
+                (b.Publisher != null && b.Publisher.Name.ToLower().Trim().Contains(term)))
             .ToListAsync();
     }
 

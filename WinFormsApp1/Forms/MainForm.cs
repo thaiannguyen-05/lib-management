@@ -37,6 +37,7 @@ namespace WinFormsApp1.Forms
             btnUsers.Visible = SessionManager.IsAdmin;
             btnAuthors.Visible = SessionManager.IsAdmin || SessionManager.IsLibrarian;
             btnCategories.Visible = SessionManager.IsAdmin || SessionManager.IsLibrarian;
+            btnPublishers.Visible = SessionManager.IsAdmin || SessionManager.IsLibrarian;
             btnReports.Visible = SessionManager.IsAdmin || SessionManager.IsLibrarian;
         }
 
@@ -102,10 +103,10 @@ namespace WinFormsApp1.Forms
             categoryForm.ShowDialog(this);
         }
 
-        private void btnLibraryCards_Click(object sender, EventArgs e)
+        private void btnPublishers_Click(object sender, EventArgs e)
         {
-            var libraryCardForm = _serviceProvider.GetRequiredService<LibraryCardForm>();
-            libraryCardForm.ShowDialog(this);
+            var publisherForm = _serviceProvider.GetRequiredService<PublisherForm>();
+            publisherForm.ShowDialog(this);
         }
 
         private void btnChangePassword_Click(object sender, EventArgs e)

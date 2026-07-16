@@ -11,6 +11,7 @@ namespace WinFormsApp1.Models
         public MemberStatus Status { get; set; } = MemberStatus.Active;
         public MemberType MemberType { get; set; } = MemberType.External;
         public string? Department { get; set; }
+        public string? StudentId { get; set; }
 
         public ICollection<BorrowRecord> BorrowRecords { get; set; } = new List<BorrowRecord>();
         public ICollection<LateFee> LateFees { get; set; } = new List<LateFee>();

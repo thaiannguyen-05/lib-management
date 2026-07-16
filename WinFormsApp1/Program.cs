@@ -38,6 +38,8 @@ namespace WinFormsApp1
                     services.AddScoped<CategoryService>();
                     services.AddScoped<PublisherService>();
                     services.AddScoped<UserService>();
+                    services.AddScoped<LibraryCardService>();
+                    services.AddScoped<MemberService>();
 
                     // ── Forms ──────────────────────────────────────
                     services.AddTransient<LoginForm>();
@@ -47,6 +49,9 @@ namespace WinFormsApp1
                     services.AddTransient<CategoryForm>();
                     services.AddTransient<PublisherForm>();
                     services.AddTransient<UserManageForm>();
+                    services.AddTransient<LibraryCardForm>();
+                    services.AddTransient<MemberListForm>();
+                    services.AddTransient<MemberDetailForm>();
                 })
                 .Build();
 

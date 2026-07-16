@@ -71,7 +71,8 @@ namespace WinFormsApp1.Forms
 
         private void btnMembers_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Members module - Coming in Milestone 4", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            var memberListForm = _serviceProvider.GetRequiredService<MemberListForm>();
+            memberListForm.ShowDialog(this);
         }
 
         private void btnBorrowing_Click(object sender, EventArgs e)

@@ -40,6 +40,7 @@ namespace WinFormsApp1
                     services.AddScoped<LibraryCardService>();
                     services.AddScoped<MemberService>();
                     services.AddScoped<BookService>();
+                    services.AddScoped<BookCopyService>();
 
                     // ── Forms ──────────────────────────────────────
                     services.AddTransient<LoginForm>();

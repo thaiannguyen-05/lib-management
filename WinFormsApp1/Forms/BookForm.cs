@@ -6,12 +6,14 @@ namespace WinFormsApp1.Forms;
 public partial class BookForm : Form
 {
     private readonly BookService _bookService;
+    private readonly BookCopyService _bookCopyService;
     private Book? _selectedBook;
     private bool _isEditing;
 
-    public BookForm(BookService bookService)
+    public BookForm(BookService bookService, BookCopyService bookCopyService)
     {
         _bookService = bookService;
+        _bookCopyService = bookCopyService;
         InitializeComponent();
         Load += BookForm_Load;
     }
@@ -275,7 +277,7 @@ public partial class BookForm : Form
             return;
         }
 
-        using var copyForm = new BookCopyForm(_bookService, _selectedBook.Id, _selectedBook.Title);
+        using var copyForm = new BookCopyForm(_bookCopyService, _selectedBook.Id, _selectedBook.Title);
         copyForm.ShowDialog(this);
         if (_selectedBook != null)
         {

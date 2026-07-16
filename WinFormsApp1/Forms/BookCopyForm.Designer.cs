@@ -19,24 +19,27 @@ namespace WinFormsApp1.Forms
         {
             lblBookTitle = new Label();
             dgvCopies = new DataGridView();
+            lblDeck = new Label();
+            cmbDeck = new ComboBox();
+            lblRow = new Label();
+            cmbRow = new ComboBox();
+            lblFloor = new Label();
+            cmbFloor = new ComboBox();
             lblStatus = new Label();
             cmbStatus = new ComboBox();
-            btnAdd = new Button();
-            btnEdit = new Button();
+            btnAddCopy = new Button();
+            btnChangeStatus = new Button();
             btnDelete = new Button();
-            btnSave = new Button();
-            btnCancel = new Button();
             btnBack = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvCopies).BeginInit();
             SuspendLayout();
-
             // 
             // lblBookTitle
             // 
             lblBookTitle.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             lblBookTitle.Location = new Point(20, 10);
             lblBookTitle.Name = "lblBookTitle";
-            lblBookTitle.Size = new Size(500, 30);
+            lblBookTitle.Size = new Size(550, 30);
             lblBookTitle.TabIndex = 0;
             lblBookTitle.Text = "Book Copies";
             // 
@@ -52,53 +55,104 @@ namespace WinFormsApp1.Forms
             dgvCopies.ReadOnly = true;
             dgvCopies.RowHeadersWidth = 51;
             dgvCopies.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvCopies.Size = new Size(300, 200);
+            dgvCopies.Size = new Size(550, 250);
             dgvCopies.TabIndex = 1;
             dgvCopies.SelectionChanged += dgvCopies_SelectionChanged;
+            // 
+            // lblDeck
+            // 
+            lblDeck.AutoSize = true;
+            lblDeck.Location = new Point(20, 320);
+            lblDeck.Name = "lblDeck";
+            lblDeck.Size = new Size(40, 20);
+            lblDeck.TabIndex = 2;
+            lblDeck.Text = "Deck:";
+            // 
+            // cmbDeck
+            // 
+            cmbDeck.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbDeck.Location = new Point(70, 317);
+            cmbDeck.Name = "cmbDeck";
+            cmbDeck.Size = new Size(60, 28);
+            cmbDeck.TabIndex = 3;
+            // 
+            // lblRow
+            // 
+            lblRow.AutoSize = true;
+            lblRow.Location = new Point(145, 320);
+            lblRow.Name = "lblRow";
+            lblRow.Size = new Size(38, 20);
+            lblRow.TabIndex = 4;
+            lblRow.Text = "Row:";
+            // 
+            // cmbRow
+            // 
+            cmbRow.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbRow.Location = new Point(190, 317);
+            cmbRow.Name = "cmbRow";
+            cmbRow.Size = new Size(60, 28);
+            cmbRow.TabIndex = 5;
+            // 
+            // lblFloor
+            // 
+            lblFloor.AutoSize = true;
+            lblFloor.Location = new Point(265, 320);
+            lblFloor.Name = "lblFloor";
+            lblFloor.Size = new Size(42, 20);
+            lblFloor.TabIndex = 6;
+            lblFloor.Text = "Floor:";
+            // 
+            // cmbFloor
+            // 
+            cmbFloor.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbFloor.Location = new Point(315, 317);
+            cmbFloor.Name = "cmbFloor";
+            cmbFloor.Size = new Size(60, 28);
+            cmbFloor.TabIndex = 7;
             // 
             // lblStatus
             // 
             lblStatus.AutoSize = true;
-            lblStatus.Location = new Point(20, 270);
+            lblStatus.Location = new Point(20, 360);
             lblStatus.Name = "lblStatus";
             lblStatus.Size = new Size(49, 20);
-            lblStatus.TabIndex = 2;
+            lblStatus.TabIndex = 8;
             lblStatus.Text = "Status:";
             // 
             // cmbStatus
             // 
             cmbStatus.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbStatus.Location = new Point(80, 267);
+            cmbStatus.Location = new Point(70, 357);
             cmbStatus.Name = "cmbStatus";
             cmbStatus.Size = new Size(150, 28);
-            cmbStatus.TabIndex = 3;
+            cmbStatus.TabIndex = 9;
             // 
-            // btnAdd
+            // btnAddCopy
             // 
-            btnAdd.BackColor = Color.FromArgb(40, 167, 69);
-            btnAdd.FlatStyle = FlatStyle.Flat;
-            btnAdd.ForeColor = Color.White;
-            btnAdd.Location = new Point(340, 50);
-            btnAdd.Name = "btnAdd";
-            btnAdd.Size = new Size(130, 38);
-            btnAdd.TabIndex = 4;
-            btnAdd.Text = "Add New Copy";
-            btnAdd.UseVisualStyleBackColor = false;
-            btnAdd.Click += btnAdd_Click;
+            btnAddCopy.BackColor = Color.FromArgb(40, 167, 69);
+            btnAddCopy.FlatStyle = FlatStyle.Flat;
+            btnAddCopy.ForeColor = Color.White;
+            btnAddCopy.Location = new Point(310, 355);
+            btnAddCopy.Name = "btnAddCopy";
+            btnAddCopy.Size = new Size(120, 38);
+            btnAddCopy.TabIndex = 10;
+            btnAddCopy.Text = "Add Copy";
+            btnAddCopy.UseVisualStyleBackColor = false;
+            btnAddCopy.Click += btnAddCopy_Click;
             // 
-            // btnEdit
+            // btnChangeStatus
             // 
-            btnEdit.BackColor = Color.FromArgb(0, 122, 204);
-            btnEdit.Enabled = false;
-            btnEdit.FlatStyle = FlatStyle.Flat;
-            btnEdit.ForeColor = Color.White;
-            btnEdit.Location = new Point(340, 100);
-            btnEdit.Name = "btnEdit";
-            btnEdit.Size = new Size(130, 38);
-            btnEdit.TabIndex = 5;
-            btnEdit.Text = "Edit";
-            btnEdit.UseVisualStyleBackColor = false;
-            btnEdit.Click += btnEdit_Click;
+            btnChangeStatus.BackColor = Color.FromArgb(0, 122, 204);
+            btnChangeStatus.Enabled = false;
+            btnChangeStatus.FlatStyle = FlatStyle.Flat;
+            btnChangeStatus.ForeColor = Color.White;
+            btnChangeStatus.Location = new Point(440, 355);
+            btnChangeStatus.Name = "btnChangeStatus";
+            btnChangeStatus.Size = new Size(130, 38);
+            btnChangeStatus.TabIndex = 11;
+            btnChangeStatus.Text = "Change Status";
+            btnChangeStatus.UseVisualStyleBackColor = false;
+            btnChangeStatus.Click += btnChangeStatus_Click;
             // 
             // btnDelete
             // 
@@ -106,50 +160,23 @@ namespace WinFormsApp1.Forms
             btnDelete.Enabled = false;
             btnDelete.FlatStyle = FlatStyle.Flat;
             btnDelete.ForeColor = Color.White;
-            btnDelete.Location = new Point(340, 150);
+            btnDelete.Location = new Point(310, 400);
             btnDelete.Name = "btnDelete";
-            btnDelete.Size = new Size(130, 38);
-            btnDelete.TabIndex = 6;
+            btnDelete.Size = new Size(120, 38);
+            btnDelete.TabIndex = 12;
             btnDelete.Text = "Delete";
             btnDelete.UseVisualStyleBackColor = false;
             btnDelete.Click += btnDelete_Click;
-            // 
-            // btnSave
-            // 
-            btnSave.BackColor = Color.FromArgb(40, 167, 69);
-            btnSave.Enabled = false;
-            btnSave.FlatStyle = FlatStyle.Flat;
-            btnSave.ForeColor = Color.White;
-            btnSave.Location = new Point(340, 200);
-            btnSave.Name = "btnSave";
-            btnSave.Size = new Size(130, 38);
-            btnSave.TabIndex = 7;
-            btnSave.Text = "Save Changes";
-            btnSave.UseVisualStyleBackColor = false;
-            btnSave.Click += btnSave_Click;
-            // 
-            // btnCancel
-            // 
-            btnCancel.BackColor = Color.FromArgb(108, 117, 125);
-            btnCancel.FlatStyle = FlatStyle.Flat;
-            btnCancel.ForeColor = Color.White;
-            btnCancel.Location = new Point(340, 250);
-            btnCancel.Name = "btnCancel";
-            btnCancel.Size = new Size(130, 38);
-            btnCancel.TabIndex = 8;
-            btnCancel.Text = "Cancel";
-            btnCancel.UseVisualStyleBackColor = false;
-            btnCancel.Click += btnCancel_Click;
             // 
             // btnBack
             // 
             btnBack.BackColor = Color.FromArgb(108, 117, 125);
             btnBack.FlatStyle = FlatStyle.Flat;
             btnBack.ForeColor = Color.White;
-            btnBack.Location = new Point(340, 300);
+            btnBack.Location = new Point(440, 400);
             btnBack.Name = "btnBack";
             btnBack.Size = new Size(130, 38);
-            btnBack.TabIndex = 9;
+            btnBack.TabIndex = 13;
             btnBack.Text = "Back";
             btnBack.UseVisualStyleBackColor = false;
             btnBack.Click += btnBack_Click;
@@ -158,16 +185,20 @@ namespace WinFormsApp1.Forms
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(490, 360);
+            ClientSize = new Size(590, 460);
             Controls.Add(lblBookTitle);
             Controls.Add(dgvCopies);
+            Controls.Add(lblDeck);
+            Controls.Add(cmbDeck);
+            Controls.Add(lblRow);
+            Controls.Add(cmbRow);
+            Controls.Add(lblFloor);
+            Controls.Add(cmbFloor);
             Controls.Add(lblStatus);
             Controls.Add(cmbStatus);
-            Controls.Add(btnAdd);
-            Controls.Add(btnEdit);
+            Controls.Add(btnAddCopy);
+            Controls.Add(btnChangeStatus);
             Controls.Add(btnDelete);
-            Controls.Add(btnSave);
-            Controls.Add(btnCancel);
             Controls.Add(btnBack);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
@@ -183,13 +214,17 @@ namespace WinFormsApp1.Forms
 
         private Label lblBookTitle;
         private DataGridView dgvCopies;
+        private Label lblDeck;
+        private ComboBox cmbDeck;
+        private Label lblRow;
+        private ComboBox cmbRow;
+        private Label lblFloor;
+        private ComboBox cmbFloor;
         private Label lblStatus;
         private ComboBox cmbStatus;
-        private Button btnAdd;
-        private Button btnEdit;
+        private Button btnAddCopy;
+        private Button btnChangeStatus;
         private Button btnDelete;
-        private Button btnSave;
-        private Button btnCancel;
         private Button btnBack;
     }
 }

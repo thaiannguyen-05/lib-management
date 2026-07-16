@@ -30,14 +30,18 @@ namespace WinFormsApp1.Forms
         private async Task LoadMembersAsync()
         {
             var members = await _unitOfWork.Repository<Member>().GetAllAsync();
-            cboMembers.DataSource = members.Select(m => new
-            {
-                m.Id,
-                DisplayName = $"{m.FirstName} {m.LastName}"
-            }).ToList();
-            cboMembers.DisplayMember = "DisplayName";
-            cboMembers.ValueMember = "Id";
+            var items = members.Select(m => new MemberComboItem(m.Id, $"{m.FirstName} {m.LastName}")).ToList();
+            cboMembers.DataSource = items;
+            cboMembers.DisplayMember = nameof(MemberComboItem.DisplayName);
+            cboMembers.ValueMember = nameof(MemberComboItem.Id);
             cboMembers.SelectedIndex = -1;
+        }
+
+        private int GetSelectedMemberId()
+        {
+            if (cboMembers.SelectedItem is MemberComboItem item)
+                return item.Id;
+            return -1;
         }
 
         private void ApplyRolePermissions()
@@ -64,7 +68,7 @@ namespace WinFormsApp1.Forms
                 return;
             }
 
-            int memberId = (int)cboMembers.SelectedValue;
+            int memberId = GetSelectedMemberId();
             _currentCard = await _libraryCardService.GetByMemberIdAsync(memberId);
             UpdateCardDisplay();
         }
@@ -148,7 +152,7 @@ namespace WinFormsApp1.Forms
                 return;
             }
 
-            int memberId = (int)cboMembers.SelectedValue;
+            int memberId = GetSelectedMemberId();
             var result = await _libraryCardService.IssueCardAsync(memberId);
 
             if (result.Success)
@@ -173,7 +177,7 @@ namespace WinFormsApp1.Forms
 
             if (cboMembers.SelectedIndex >= 0)
             {
-                int memberId = (int)cboMembers.SelectedValue;
+                int memberId = GetSelectedMemberId();
                 _currentCard = await _libraryCardService.GetByMemberIdAsync(memberId);
                 UpdateCardDisplay();
             }
@@ -207,7 +211,7 @@ namespace WinFormsApp1.Forms
 
             if (cboMembers.SelectedIndex >= 0)
             {
-                int memberId = (int)cboMembers.SelectedValue;
+                int memberId = GetSelectedMemberId();
                 _currentCard = await _libraryCardService.GetByMemberIdAsync(memberId);
                 UpdateCardDisplay();
             }
@@ -218,4 +222,6 @@ namespace WinFormsApp1.Forms
             this.Close();
         }
     }
+
+    public record MemberComboItem(int Id, string DisplayName);
 }

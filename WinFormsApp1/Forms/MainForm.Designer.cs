@@ -27,6 +27,7 @@ namespace WinFormsApp1.Forms
             btnChangePassword = new Button();
             btnAuthors = new Button();
             btnCategories = new Button();
+            btnLibraryCards = new Button();
             SuspendLayout();
             // 
             // lblWelcome
@@ -156,11 +157,24 @@ namespace WinFormsApp1.Forms
             btnCategories.UseVisualStyleBackColor = false;
             btnCategories.Click += btnCategories_Click;
             // 
+            // btnLibraryCards
+            // 
+            btnLibraryCards.BackColor = Color.FromArgb(0, 123, 167);
+            btnLibraryCards.FlatStyle = FlatStyle.Flat;
+            btnLibraryCards.ForeColor = Color.White;
+            btnLibraryCards.Location = new Point(20, 310);
+            btnLibraryCards.Name = "btnLibraryCards";
+            btnLibraryCards.Size = new Size(180, 50);
+            btnLibraryCards.TabIndex = 10;
+            btnLibraryCards.Text = "Library Cards";
+            btnLibraryCards.UseVisualStyleBackColor = false;
+            btnLibraryCards.Click += btnLibraryCards_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(600, 310);
+            ClientSize = new Size(600, 380);
             Controls.Add(lblWelcome);
             Controls.Add(btnBooks);
             Controls.Add(btnMembers);
@@ -171,6 +185,7 @@ namespace WinFormsApp1.Forms
             Controls.Add(btnChangePassword);
             Controls.Add(btnAuthors);
             Controls.Add(btnCategories);
+            Controls.Add(btnLibraryCards);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Name = "MainForm";
@@ -191,5 +206,6 @@ namespace WinFormsApp1.Forms
         private Button btnChangePassword;
         private Button btnAuthors;
         private Button btnCategories;
+        private Button btnLibraryCards;
     }
 }

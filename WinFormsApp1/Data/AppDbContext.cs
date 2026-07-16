@@ -43,6 +43,7 @@ namespace WinFormsApp1.Data
             // ── BookCopy ─────────────────────────────────────────
             modelBuilder.Entity<BookCopy>(e =>
             {
+                e.HasIndex(bc => bc.Barcode).IsUnique();
                 e.HasIndex(bc => bc.BookId);
                 e.HasIndex(bc => bc.Status);
                 e.HasOne(bc => bc.Book)
@@ -291,12 +292,12 @@ namespace WinFormsApp1.Data
 
             // ── BookCopies ────────────────────────────────────────
             modelBuilder.Entity<BookCopy>().HasData(
-                new BookCopy { Id = 1, BookId = 1, Status = CopyStatus.Available, CreatedAt = seedDate, UpdatedAt = seedDate },
-                new BookCopy { Id = 2, BookId = 1, Status = CopyStatus.Available, CreatedAt = seedDate, UpdatedAt = seedDate },
-                new BookCopy { Id = 3, BookId = 2, Status = CopyStatus.Available, CreatedAt = seedDate, UpdatedAt = seedDate },
-                new BookCopy { Id = 4, BookId = 3, Status = CopyStatus.Available, CreatedAt = seedDate, UpdatedAt = seedDate },
-                new BookCopy { Id = 5, BookId = 4, Status = CopyStatus.Available, CreatedAt = seedDate, UpdatedAt = seedDate },
-                new BookCopy { Id = 6, BookId = 5, Status = CopyStatus.Available, CreatedAt = seedDate, UpdatedAt = seedDate });
+                new BookCopy { Id = 1, BookId = 1, Barcode = "BC-20260101-001", Status = CopyStatus.Available, CreatedAt = seedDate, UpdatedAt = seedDate },
+                new BookCopy { Id = 2, BookId = 1, Barcode = "BC-20260101-002", Status = CopyStatus.Available, CreatedAt = seedDate, UpdatedAt = seedDate },
+                new BookCopy { Id = 3, BookId = 2, Barcode = "BC-20260101-003", Status = CopyStatus.Available, CreatedAt = seedDate, UpdatedAt = seedDate },
+                new BookCopy { Id = 4, BookId = 3, Barcode = "BC-20260101-004", Status = CopyStatus.Available, CreatedAt = seedDate, UpdatedAt = seedDate },
+                new BookCopy { Id = 5, BookId = 4, Barcode = "BC-20260101-005", Status = CopyStatus.Available, CreatedAt = seedDate, UpdatedAt = seedDate },
+                new BookCopy { Id = 6, BookId = 5, Barcode = "BC-20260101-006", Status = CopyStatus.Available, CreatedAt = seedDate, UpdatedAt = seedDate });
 
             // ── Members ───────────────────────────────────────────
             modelBuilder.Entity<Member>().HasData(

@@ -27,6 +27,7 @@ namespace WinFormsApp1.Forms
             btnChangePassword = new Button();
             btnAuthors = new Button();
             btnCategories = new Button();
+            btnLibraryCards = new Button();
             btnPublishers = new Button();
             SuspendLayout();
             // 
@@ -167,6 +168,20 @@ namespace WinFormsApp1.Forms
             btnCategories.UseVisualStyleBackColor = false;
             btnCategories.Click += btnCategories_Click;
             // 
+            // btnLibraryCards
+            // 
+            btnLibraryCards.BackColor = Color.FromArgb(0, 123, 167);
+            btnLibraryCards.FlatStyle = FlatStyle.Flat;
+            btnLibraryCards.ForeColor = Color.White;
+            btnLibraryCards.Location = new Point(600, 360);
+            btnLibraryCards.Margin = new Padding(4, 4, 4, 4);
+            btnLibraryCards.Name = "btnLibraryCards";
+            btnLibraryCards.Size = new Size(270, 75);
+            btnLibraryCards.TabIndex = 10;
+            btnLibraryCards.Text = "Library Cards";
+            btnLibraryCards.UseVisualStyleBackColor = false;
+            btnLibraryCards.Click += btnLibraryCards_Click;
+            // 
             // btnPublishers
             // 
             btnPublishers.BackColor = Color.FromArgb(102, 16, 242);
@@ -176,7 +191,7 @@ namespace WinFormsApp1.Forms
             btnPublishers.Margin = new Padding(4, 4, 4, 4);
             btnPublishers.Name = "btnPublishers";
             btnPublishers.Size = new Size(270, 75);
-            btnPublishers.TabIndex = 10;
+            btnPublishers.TabIndex = 11;
             btnPublishers.Text = "Publishers";
             btnPublishers.UseVisualStyleBackColor = false;
             btnPublishers.Click += btnPublishers_Click;
@@ -196,6 +211,7 @@ namespace WinFormsApp1.Forms
             Controls.Add(btnChangePassword);
             Controls.Add(btnAuthors);
             Controls.Add(btnCategories);
+            Controls.Add(btnLibraryCards);
             Controls.Add(btnPublishers);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Margin = new Padding(4, 4, 4, 4);
@@ -218,6 +234,7 @@ namespace WinFormsApp1.Forms
         private Button btnChangePassword;
         private Button btnAuthors;
         private Button btnCategories;
+        private Button btnLibraryCards;
         private Button btnPublishers;
     }
 }

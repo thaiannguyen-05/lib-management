@@ -301,10 +301,10 @@ namespace WinFormsApp1.Data
 
             // ── Members ───────────────────────────────────────────
             modelBuilder.Entity<Member>().HasData(
-                new Member { Id = 1, FirstName = "Nguyen Van", LastName = "A", Email = "nguyenvana@example.com", Phone = "0901234567", Status = MemberStatus.Active, MemberType = MemberType.Student, Department = "Computer Science", CreatedAt = seedDate, UpdatedAt = seedDate },
-                new Member { Id = 2, FirstName = "Tran Thi", LastName = "B", Email = "tranthib@example.com", Phone = "0912345678", Status = MemberStatus.Active, MemberType = MemberType.Student, Department = "Computer Science", CreatedAt = seedDate, UpdatedAt = seedDate },
-                new Member { Id = 3, FirstName = "Le Van", LastName = "C", Email = "levanc@example.com", Phone = "0923456789", Status = MemberStatus.Active, MemberType = MemberType.Teacher, Department = "Mathematics", CreatedAt = seedDate, UpdatedAt = seedDate },
-                new Member { Id = 4, FirstName = "Pham Minh", LastName = "D", Email = "phamminhd@example.com", Phone = "0934567890", Status = MemberStatus.Active, MemberType = MemberType.External, CreatedAt = seedDate, UpdatedAt = seedDate });
+                new Member { Id = 1, FirstName = "Nguyen Van", LastName = "A", Email = "nguyenvana@example.com", Phone = "0901234567", Status = MemberStatus.Active, MemberType = MemberType.Student, Department = "Computer Science", StudentId = "SV001", CreatedAt = seedDate, UpdatedAt = seedDate },
+                new Member { Id = 2, FirstName = "Tran Thi", LastName = "B", Email = "tranthib@example.com", Phone = "0912345678", Status = MemberStatus.Active, MemberType = MemberType.Student, Department = "Computer Science", StudentId = "SV002", CreatedAt = seedDate, UpdatedAt = seedDate },
+                new Member { Id = 3, FirstName = "Le Van", LastName = "C", Email = "levanc@example.com", Phone = "0923456789", Status = MemberStatus.Active, MemberType = MemberType.Teacher, Department = "Mathematics", StudentId = "GV001", CreatedAt = seedDate, UpdatedAt = seedDate },
+                new Member { Id = 4, FirstName = "Pham Minh", LastName = "D", Email = "phamminhd@example.com", Phone = "0934567890", Status = MemberStatus.Active, MemberType = MemberType.External, Department = null, StudentId = null, CreatedAt = seedDate, UpdatedAt = seedDate });
 
             // ── LibraryCards ───────────────────────────────────────
             modelBuilder.Entity<LibraryCard>().HasData(

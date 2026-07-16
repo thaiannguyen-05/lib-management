@@ -39,6 +39,7 @@ namespace WinFormsApp1.Forms
             btnAuthors.Visible = SessionManager.IsAdmin || SessionManager.IsLibrarian;
             btnCategories.Visible = SessionManager.IsAdmin || SessionManager.IsLibrarian;
             btnLibraryCards.Visible = SessionManager.IsAdmin || SessionManager.IsLibrarian;
+            btnPublishers.Visible = SessionManager.IsAdmin || SessionManager.IsLibrarian;
             btnReports.Visible = SessionManager.IsAdmin || SessionManager.IsLibrarian;
         }
 
@@ -73,7 +74,8 @@ namespace WinFormsApp1.Forms
 
         private void btnMembers_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Members module - Coming in Milestone 4", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            var memberListForm = _serviceProvider.GetRequiredService<MemberListForm>();
+            memberListForm.ShowDialog(this);
         }
 
         private void btnBorrowing_Click(object sender, EventArgs e)
@@ -108,6 +110,12 @@ namespace WinFormsApp1.Forms
         {
             var libraryCardForm = _serviceProvider.GetRequiredService<LibraryCardForm>();
             libraryCardForm.ShowDialog(this);
+        }
+
+        private void btnPublishers_Click(object sender, EventArgs e)
+        {
+            var publisherForm = _serviceProvider.GetRequiredService<PublisherForm>();
+            publisherForm.ShowDialog(this);
         }
 
         private void btnChangePassword_Click(object sender, EventArgs e)

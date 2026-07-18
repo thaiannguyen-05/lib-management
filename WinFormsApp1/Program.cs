@@ -43,6 +43,7 @@ namespace WinFormsApp1
                     services.AddScoped<BookService>();
                     services.AddScoped<BookCopyService>();
                     services.AddScoped<ReservationService>();
+                    services.AddHostedService<ReservationFulfillmentService>();
 
                     // ── Forms ──────────────────────────────────────
                     services.AddTransient<LoginForm>();
@@ -58,6 +59,8 @@ namespace WinFormsApp1
                     services.AddTransient<BookForm>();
                 })
                 .Build();
+
+            host.Start();
 
             // ── Auto-migration ────────────────────────────────────
             using (var scope = host.Services.CreateScope())

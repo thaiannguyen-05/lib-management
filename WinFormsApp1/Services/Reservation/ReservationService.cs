@@ -51,6 +51,10 @@ namespace WinFormsApp1.Services
 
         public async Task<(bool Success, string Message)> CreateAsync(int bookId, int memberId)
         {
+            var member = await _context.Members.FindAsync(memberId);
+            if (member == null)
+                return (false, "Member not found.");
+
             var hasAvailableCopy = await _context.BookCopies
                 .AnyAsync(c => c.BookId == bookId && c.Status == CopyStatus.Available);
 
@@ -63,10 +67,15 @@ namespace WinFormsApp1.Services
             if (hasUnpaidFees)
                 return (false, "Member has unpaid fees. Please clear dues before reserving.");
 
+            if (member.ActiveReservationCount >= member.ReservationQuota)
+                return (false, $"Member has reached the maximum of {member.ReservationQuota} active reservations. Return or cancel a reservation first.");
+
             var hasExisting = await _context.Reservations
                 .AnyAsync(r => r.BookId == bookId
                     && r.MemberId == memberId
-                    && (r.Status == ReservationStatus.Pending || r.Status == ReservationStatus.Ready));
+                    && (r.Status == ReservationStatus.Pending
+                        || r.Status == ReservationStatus.Ready
+                        || r.Status == ReservationStatus.Collected));
 
             if (hasExisting)
                 return (false, "Member already has an active reservation for this book.");
@@ -81,6 +90,9 @@ namespace WinFormsApp1.Services
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };
+
+            member.ActiveReservationCount--;
+            member.UpdatedAt = DateTime.UtcNow;
 
             _context.Reservations.Add(reservation);
             await _context.SaveChangesAsync();
@@ -97,8 +109,16 @@ namespace WinFormsApp1.Services
             if (reservation.Status != ReservationStatus.Pending && reservation.Status != ReservationStatus.Ready)
                 return (false, $"Cannot cancel a reservation with status '{reservation.Status}'.");
 
+            var member = await _context.Members.FindAsync(reservation.MemberId);
+            if (member == null)
+                return (false, "Member not found.");
+
             reservation.Status = ReservationStatus.Cancelled;
             reservation.UpdatedAt = DateTime.UtcNow;
+
+            member.ActiveReservationCount++;
+            member.UpdatedAt = DateTime.UtcNow;
+
             await _context.SaveChangesAsync();
 
             return (true, "Reservation cancelled successfully.");
@@ -131,12 +151,57 @@ namespace WinFormsApp1.Services
 
             foreach (var reservation in expiredReservations)
             {
-                reservation.Status = ReservationStatus.Expired;
+                reservation.Status = ReservationStatus.NoShow;
                 reservation.UpdatedAt = DateTime.UtcNow;
+
+                var member = await _context.Members.FindAsync(reservation.MemberId);
+                if (member != null)
+                {
+                    member.ActiveReservationCount++;
+                    member.UpdatedAt = DateTime.UtcNow;
+                }
             }
 
             await _context.SaveChangesAsync();
             return expiredReservations.Count;
+        }
+
+        public async Task<int> AutoFulfillAllAsync()
+        {
+            var booksWithPendingReservations = await _context.Reservations
+                .Where(r => r.Status == ReservationStatus.Pending)
+                .Select(r => r.BookId)
+                .Distinct()
+                .ToListAsync();
+
+            int totalFulfilled = 0;
+
+            foreach (var bookId in booksWithPendingReservations)
+            {
+                var availableCopies = await _context.BookCopies
+                    .CountAsync(c => c.BookId == bookId && c.Status == CopyStatus.Available);
+
+                if (availableCopies <= 0) continue;
+
+                var pendingReservations = await _context.Reservations
+                    .Where(r => r.BookId == bookId && r.Status == ReservationStatus.Pending)
+                    .OrderBy(r => r.Id)
+                    .Take(availableCopies)
+                    .ToListAsync();
+
+                foreach (var reservation in pendingReservations)
+                {
+                    reservation.Status = ReservationStatus.Ready;
+                    reservation.ExpiryDate = DateTime.UtcNow.AddDays(7);
+                    reservation.UpdatedAt = DateTime.UtcNow;
+                    totalFulfilled++;
+                }
+            }
+
+            if (totalFulfilled > 0)
+                await _context.SaveChangesAsync();
+
+            return totalFulfilled;
         }
 
         public async Task<(bool Success, string Message)> NotifyBookAvailableAsync(int bookId)
@@ -155,6 +220,47 @@ namespace WinFormsApp1.Services
             await _context.SaveChangesAsync();
 
             return (true, $"Reservation #{reservation.Id} is ready. Member has 7 days to collect.");
+        }
+
+        public async Task<(bool Success, string Message)> CollectAsync(int reservationId)
+        {
+            var reservation = await _context.Reservations.FindAsync(reservationId);
+            if (reservation == null)
+                return (false, "Reservation not found.");
+
+            if (reservation.Status != ReservationStatus.Ready)
+                return (false, $"Cannot collect a reservation with status '{reservation.Status}'. Only Ready reservations can be collected.");
+
+            reservation.Status = ReservationStatus.Collected;
+            reservation.ExpiryDate = null;
+            reservation.UpdatedAt = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+
+            return (true, "Book collected. Reservation marked as Collected.");
+        }
+
+        public async Task<(bool Success, string Message)> CompleteAsync(int reservationId)
+        {
+            var reservation = await _context.Reservations.FindAsync(reservationId);
+            if (reservation == null)
+                return (false, "Reservation not found.");
+
+            if (reservation.Status != ReservationStatus.Collected)
+                return (false, $"Cannot complete a reservation with status '{reservation.Status}'. Only Collected reservations can be completed.");
+
+            var member = await _context.Members.FindAsync(reservation.MemberId);
+            if (member == null)
+                return (false, "Member not found.");
+
+            reservation.Status = ReservationStatus.Completed;
+            reservation.UpdatedAt = DateTime.UtcNow;
+
+            member.ActiveReservationCount++;
+            member.UpdatedAt = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
+
+            return (true, "Reservation completed. Book has been returned.");
         }
     }
 }

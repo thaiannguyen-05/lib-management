@@ -57,6 +57,7 @@ namespace WinFormsApp1
                     services.AddTransient<MemberListForm>();
                     services.AddTransient<MemberDetailForm>();
                     services.AddTransient<BookForm>();
+                    services.AddTransient<ReservationForm>();
                 })
                 .Build();
 

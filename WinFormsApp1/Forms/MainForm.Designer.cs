@@ -29,6 +29,7 @@ namespace WinFormsApp1.Forms
             btnCategories = new Button();
             btnLibraryCards = new Button();
             btnPublishers = new Button();
+            btnReservations = new Button();
             SuspendLayout();
             // 
             // lblWelcome
@@ -195,7 +196,21 @@ namespace WinFormsApp1.Forms
             btnPublishers.Text = "Publishers";
             btnPublishers.UseVisualStyleBackColor = false;
             btnPublishers.Click += btnPublishers_Click;
-            // 
+            //
+            // btnReservations
+            //
+            btnReservations.BackColor = Color.FromArgb(253, 126, 20);
+            btnReservations.FlatStyle = FlatStyle.Flat;
+            btnReservations.ForeColor = Color.White;
+            btnReservations.Location = new Point(30, 445);
+            btnReservations.Margin = new Padding(4, 4, 4, 4);
+            btnReservations.Name = "btnReservations";
+            btnReservations.Size = new Size(270, 60);
+            btnReservations.TabIndex = 12;
+            btnReservations.Text = "Reservations";
+            btnReservations.UseVisualStyleBackColor = false;
+            btnReservations.Click += btnReservations_Click;
+            //
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(12F, 30F);
@@ -213,6 +228,7 @@ namespace WinFormsApp1.Forms
             Controls.Add(btnCategories);
             Controls.Add(btnLibraryCards);
             Controls.Add(btnPublishers);
+            Controls.Add(btnReservations);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Margin = new Padding(4, 4, 4, 4);
             MaximizeBox = false;
@@ -236,5 +252,6 @@ namespace WinFormsApp1.Forms
         private Button btnCategories;
         private Button btnLibraryCards;
         private Button btnPublishers;
+        private Button btnReservations;
     }
 }

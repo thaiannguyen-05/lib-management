@@ -118,6 +118,12 @@ namespace WinFormsApp1.Forms
             publisherForm.ShowDialog(this);
         }
 
+        private void btnReservations_Click(object sender, EventArgs e)
+        {
+            var reservationForm = _serviceProvider.GetRequiredService<ReservationForm>();
+            reservationForm.ShowDialog(this);
+        }
+
         private void btnChangePassword_Click(object sender, EventArgs e)
         {
             var changePasswordForm = _serviceProvider.GetRequiredService<ChangePasswordForm>();

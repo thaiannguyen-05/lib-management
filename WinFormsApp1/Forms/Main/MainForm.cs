@@ -1,9 +1,17 @@
 using System.ComponentModel;
 using Microsoft.Extensions.DependencyInjection;
+using WinFormsApp1.Forms.Auth;
+using WinFormsApp1.Forms.Book;
+using WinFormsApp1.Forms.Author;
+using WinFormsApp1.Forms.Category;
+using WinFormsApp1.Forms.Publisher;
+using WinFormsApp1.Forms.Member;
+using WinFormsApp1.Forms.Reservation;
+using WinFormsApp1.Forms.User;
 using WinFormsApp1.Helpers;
 using WinFormsApp1.Services;
 
-namespace WinFormsApp1.Forms
+namespace WinFormsApp1.Forms.Main
 {
     public partial class MainForm : Form
     {

@@ -1,7 +1,7 @@
 using WinFormsApp1.Helpers;
 using WinFormsApp1.Services;
 
-namespace WinFormsApp1.Forms
+namespace WinFormsApp1.Forms.Auth
 {
     public partial class ChangePasswordForm : Form
     {

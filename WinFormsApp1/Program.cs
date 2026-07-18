@@ -3,7 +3,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WinFormsApp1.Data;
-using WinFormsApp1.Forms;
+using WinFormsApp1.Forms.Auth;
+using WinFormsApp1.Forms.Main;
+using WinFormsApp1.Forms.Book;
+using WinFormsApp1.Forms.Author;
+using WinFormsApp1.Forms.Category;
+using WinFormsApp1.Forms.Publisher;
+using WinFormsApp1.Forms.Member;
+using WinFormsApp1.Forms.Reservation;
+using WinFormsApp1.Forms.User;
 using WinFormsApp1.Services;
 
 namespace WinFormsApp1

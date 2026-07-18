@@ -2,7 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using WinFormsApp1.Models;
 using WinFormsApp1.Services;
 
-namespace WinFormsApp1.Forms
+namespace WinFormsApp1.Forms.Member
 {
     public partial class MemberListForm : Form
     {

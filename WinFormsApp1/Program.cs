@@ -13,6 +13,7 @@ using WinFormsApp1.Forms.Member;
 using WinFormsApp1.Forms.Reservation;
 using WinFormsApp1.Forms.User;
 using WinFormsApp1.Forms.Inventory;
+using WinFormsApp1.Forms.Report;
 using WinFormsApp1.Services;
 
 namespace WinFormsApp1
@@ -53,6 +54,7 @@ namespace WinFormsApp1
                     services.AddScoped<BookCopyService>();
                     services.AddScoped<ReservationService>();
                     services.AddScoped<InventoryService>();
+                    services.AddScoped<ReportService>();
                     services.AddHostedService<ReservationFulfillmentService>();
 
                     // ── Forms ──────────────────────────────────────
@@ -69,6 +71,7 @@ namespace WinFormsApp1
                     services.AddTransient<BookForm>();
                     services.AddTransient<ReservationForm>();
                     services.AddTransient<InventoryForm>();
+                    services.AddTransient<ReportForm>();
                 })
                 .Build();
 

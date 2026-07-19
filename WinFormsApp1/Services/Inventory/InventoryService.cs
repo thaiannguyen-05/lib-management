@@ -8,37 +8,46 @@ namespace WinFormsApp1.Services
     public class InventoryService
     {
         private readonly AppDbContext _context;
-        private readonly BookCopyService _bookCopyService;
 
-        public InventoryService(AppDbContext context, BookCopyService bookCopyService)
+        public InventoryService(AppDbContext context)
         {
             _context = context;
-            _bookCopyService = bookCopyService;
         }
 
         public async Task<List<BookCopy>> ImportBooksAsync(int bookId, int quantity, int userId)
         {
             var copies = new List<BookCopy>();
+            string today = DateTime.Now.ToString("yyyyMMdd");
+            int startNum = await _context.BookCopies
+                .Where(c => c.Barcode.StartsWith($"BC-{today}-"))
+                .CountAsync() + 1;
 
             for (int i = 0; i < quantity; i++)
             {
                 var copy = new BookCopy
                 {
                     BookId = bookId,
-                    Status = CopyStatus.Available
+                    Barcode = $"BC-{today}-{(startNum + i):D3}",
+                    Status = CopyStatus.Available,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
                 };
 
-                var created = await _bookCopyService.CreateAsync(copy);
+                _context.BookCopies.Add(copy);
+                copies.Add(copy);
+            }
 
+            await _context.SaveChangesAsync();
+
+            foreach (var copy in copies)
+            {
                 _context.InventoryLogs.Add(new InventoryLog
                 {
-                    BookCopyId = created.Id,
+                    BookCopyId = copy.Id,
                     Action = InventoryAction.Import,
                     Quantity = 1,
                     PerformedByUserId = userId
                 });
-
-                copies.Add(created);
             }
 
             await _context.SaveChangesAsync();
@@ -50,8 +59,6 @@ namespace WinFormsApp1.Services
             var copy = await _context.BookCopies.FindAsync(bookCopyId);
             if (copy == null) return false;
 
-            await _bookCopyService.UpdateStatusAsync(bookCopyId, CopyStatus.Lost);
-
             _context.InventoryLogs.Add(new InventoryLog
             {
                 BookCopyId = bookCopyId,
@@ -61,6 +68,7 @@ namespace WinFormsApp1.Services
                 PerformedByUserId = userId
             });
 
+            _context.BookCopies.Remove(copy);
             await _context.SaveChangesAsync();
             return true;
         }
@@ -70,7 +78,8 @@ namespace WinFormsApp1.Services
             var copy = await _context.BookCopies.FindAsync(bookCopyId);
             if (copy == null) return false;
 
-            await _bookCopyService.UpdateShelfLocationAsync(bookCopyId, newShelf);
+            copy.ShelfLocation = newShelf;
+            copy.UpdatedAt = DateTime.UtcNow;
 
             _context.InventoryLogs.Add(new InventoryLog
             {
@@ -97,7 +106,8 @@ namespace WinFormsApp1.Services
             var copy = await _context.BookCopies.FindAsync(bookCopyId);
             if (copy == null) return false;
 
-            await _bookCopyService.UpdateStatusAsync(bookCopyId, CopyStatus.Lost);
+            copy.Status = CopyStatus.Lost;
+            copy.UpdatedAt = DateTime.UtcNow;
 
             _context.InventoryLogs.Add(new InventoryLog
             {
@@ -116,7 +126,8 @@ namespace WinFormsApp1.Services
             var copy = await _context.BookCopies.FindAsync(bookCopyId);
             if (copy == null) return false;
 
-            await _bookCopyService.UpdateStatusAsync(bookCopyId, CopyStatus.Damaged);
+            copy.Status = CopyStatus.Damaged;
+            copy.UpdatedAt = DateTime.UtcNow;
 
             _context.InventoryLogs.Add(new InventoryLog
             {

@@ -34,6 +34,8 @@ namespace WinFormsApp1.Forms.Inventory
             txtBarcode = new TextBox();
             lblNewShelf = new Label();
             txtNewShelf = new TextBox();
+            lblReason = new Label();
+            txtReason = new TextBox();
             btnTransfer = new Button();
             btnDispose = new Button();
             btnReportLost = new Button();
@@ -177,13 +179,15 @@ namespace WinFormsApp1.Forms.Inventory
             grpActions.Controls.Add(txtBarcode);
             grpActions.Controls.Add(lblNewShelf);
             grpActions.Controls.Add(txtNewShelf);
+            grpActions.Controls.Add(lblReason);
+            grpActions.Controls.Add(txtReason);
             grpActions.Controls.Add(btnTransfer);
             grpActions.Controls.Add(btnDispose);
             grpActions.Controls.Add(btnReportLost);
             grpActions.Controls.Add(btnReportDamaged);
             grpActions.Location = new Point(400, 85);
             grpActions.Name = "grpActions";
-            grpActions.Size = new Size(370, 90);
+            grpActions.Size = new Size(370, 120);
             grpActions.TabIndex = 7;
             grpActions.TabStop = false;
             grpActions.Text = "Copy Actions (by Barcode)";
@@ -219,6 +223,22 @@ namespace WinFormsApp1.Forms.Inventory
             txtNewShelf.Name = "txtNewShelf";
             txtNewShelf.Size = new Size(80, 27);
             txtNewShelf.TabIndex = 3;
+            // 
+            // lblReason
+            // 
+            lblReason.AutoSize = true;
+            lblReason.Location = new Point(10, 58);
+            lblReason.Name = "lblReason";
+            lblReason.Size = new Size(52, 20);
+            lblReason.TabIndex = 8;
+            lblReason.Text = "Reason:";
+            // 
+            // txtReason
+            // 
+            txtReason.Location = new Point(70, 55);
+            txtReason.Name = "txtReason";
+            txtReason.Size = new Size(140, 27);
+            txtReason.TabIndex = 9;
             // 
             // btnTransfer
             // 
@@ -383,6 +403,8 @@ namespace WinFormsApp1.Forms.Inventory
         private TextBox txtBarcode;
         private Label lblNewShelf;
         private TextBox txtNewShelf;
+        private Label lblReason;
+        private TextBox txtReason;
         private Button btnTransfer;
         private Button btnDispose;
         private Button btnReportLost;

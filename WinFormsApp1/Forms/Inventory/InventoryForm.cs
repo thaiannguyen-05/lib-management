@@ -145,17 +145,22 @@ namespace WinFormsApp1.Forms.Inventory
                 return;
             }
 
+            var reason = string.IsNullOrWhiteSpace(txtReason.Text)
+                ? "Disposed by user"
+                : txtReason.Text.Trim();
+
             var confirm = MessageBox.Show(
-                $"Dispose copy '{copy.Barcode}'?",
+                $"Dispose copy '{copy.Barcode}'?\nReason: {reason}",
                 "Confirm Dispose", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (confirm != DialogResult.Yes) return;
 
-            var success = await _inventoryService.DisposeBookAsync(copy.Id, "Disposed by user", SessionManager.GetCurrentUserId());
+            var success = await _inventoryService.DisposeBookAsync(copy.Id, reason, SessionManager.GetCurrentUserId());
             if (success)
             {
                 MessageBox.Show("Copy disposed.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 txtBarcode.Clear();
+                txtReason.Clear();
                 await LoadSummaryAsync();
                 await LoadLogsAsync();
             }
@@ -224,6 +229,7 @@ namespace WinFormsApp1.Forms.Inventory
         {
             txtBarcode.Clear();
             txtNewShelf.Clear();
+            txtReason.Clear();
             txtQuantity.Clear();
             cmbBook.SelectedIndex = -1;
             cmbFilterAction.SelectedIndex = 0;

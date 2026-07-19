@@ -8,6 +8,7 @@ using WinFormsApp1.Forms.Publisher;
 using WinFormsApp1.Forms.Member;
 using WinFormsApp1.Forms.Reservation;
 using WinFormsApp1.Forms.Inventory;
+using WinFormsApp1.Forms.Report;
 using WinFormsApp1.Forms.User;
 using WinFormsApp1.Helpers;
 using WinFormsApp1.Services;
@@ -101,7 +102,8 @@ namespace WinFormsApp1.Forms.Main
 
         private void btnReports_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Reports module - Coming in Milestone 7", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            var reportForm = _serviceProvider.GetRequiredService<ReportForm>();
+            reportForm.ShowDialog(this);
         }
 
         private void btnAuthors_Click(object sender, EventArgs e)

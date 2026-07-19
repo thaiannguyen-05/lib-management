@@ -7,6 +7,7 @@ using WinFormsApp1.Forms.Category;
 using WinFormsApp1.Forms.Publisher;
 using WinFormsApp1.Forms.Member;
 using WinFormsApp1.Forms.Reservation;
+using WinFormsApp1.Forms.Inventory;
 using WinFormsApp1.Forms.User;
 using WinFormsApp1.Helpers;
 using WinFormsApp1.Services;
@@ -48,6 +49,7 @@ namespace WinFormsApp1.Forms.Main
             btnCategories.Visible = SessionManager.IsAdmin || SessionManager.IsLibrarian;
             btnLibraryCards.Visible = SessionManager.IsAdmin || SessionManager.IsLibrarian;
             btnPublishers.Visible = SessionManager.IsAdmin || SessionManager.IsLibrarian;
+            btnInventory.Visible = SessionManager.IsAdmin || SessionManager.IsLibrarian;
             btnReports.Visible = SessionManager.IsAdmin || SessionManager.IsLibrarian;
         }
 
@@ -136,6 +138,12 @@ namespace WinFormsApp1.Forms.Main
         {
             var changePasswordForm = _serviceProvider.GetRequiredService<ChangePasswordForm>();
             changePasswordForm.ShowDialog(this);
+        }
+
+        private void btnInventory_Click(object sender, EventArgs e)
+        {
+            var inventoryForm = _serviceProvider.GetRequiredService<InventoryForm>();
+            inventoryForm.ShowDialog(this);
         }
 
         private void MainForm_FormClosing(object? sender, FormClosingEventArgs e)

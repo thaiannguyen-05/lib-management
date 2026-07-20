@@ -12,6 +12,8 @@ namespace WinFormsApp1.Models
         public MemberType MemberType { get; set; } = MemberType.External;
         public string? Department { get; set; }
         public string? StudentId { get; set; }
+        public int ReservationQuota { get; set; } = 20;
+        public int ActiveReservationCount { get; set; } = 0;
 
         public ICollection<BorrowRecord> BorrowRecords { get; set; } = new List<BorrowRecord>();
         public ICollection<LateFee> LateFees { get; set; } = new List<LateFee>();

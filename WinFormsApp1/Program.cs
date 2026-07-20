@@ -3,7 +3,18 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WinFormsApp1.Data;
-using WinFormsApp1.Forms;
+using WinFormsApp1.Forms.Auth;
+using WinFormsApp1.Forms.Main;
+using WinFormsApp1.Forms.Books;
+using WinFormsApp1.Forms.Authors;
+using WinFormsApp1.Forms.Categories;
+using WinFormsApp1.Forms.Publishers;
+using WinFormsApp1.Forms.Members;
+using WinFormsApp1.Forms.Reservations;
+using WinFormsApp1.Forms.User;
+using WinFormsApp1.Forms.Inventory;
+using WinFormsApp1.Forms.Report;
+using WinFormsApp1.Forms.Borrow;
 using WinFormsApp1.Services;
 
 namespace WinFormsApp1
@@ -43,6 +54,10 @@ namespace WinFormsApp1
                     services.AddScoped<BookService>();
                     services.AddScoped<BookCopyService>();
                     services.AddScoped<BorrowService>();
+                    services.AddScoped<ReservationService>();
+                    services.AddScoped<InventoryService>();
+                    services.AddScoped<ReportService>();
+                    services.AddHostedService<ReservationFulfillmentService>();
 
                     // ── Forms ──────────────────────────────────────
                     services.AddTransient<LoginForm>();
@@ -57,8 +72,13 @@ namespace WinFormsApp1
                     services.AddTransient<MemberDetailForm>();
                     services.AddTransient<BookForm>();
                     services.AddTransient<BorrowForm>();
+                    services.AddTransient<ReservationForm>();
+                    services.AddTransient<InventoryForm>();
+                    services.AddTransient<ReportForm>();
                 })
                 .Build();
+
+            host.Start();
 
             // ── Auto-migration ────────────────────────────────────
             using (var scope = host.Services.CreateScope())

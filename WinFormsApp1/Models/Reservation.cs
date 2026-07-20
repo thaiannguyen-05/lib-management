@@ -11,7 +11,7 @@ namespace WinFormsApp1.Models
         public Member Member { get; set; } = null!;
 
         public DateTime ReservationDate { get; set; }
-        public DateTime ExpiryDate { get; set; }
+        public DateTime? ExpiryDate { get; set; }
         public ReservationStatus Status { get; set; } = ReservationStatus.Pending;
     }
 }

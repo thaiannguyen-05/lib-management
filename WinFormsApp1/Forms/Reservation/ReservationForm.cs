@@ -1,7 +1,7 @@
 using WinFormsApp1.Models;
 using WinFormsApp1.Services;
 
-namespace WinFormsApp1.Forms.Reservation
+namespace WinFormsApp1.Forms.Reservations
 {
     public partial class ReservationForm : Form
     {

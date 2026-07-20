@@ -1,7 +1,7 @@
 using WinFormsApp1.Models;
 using WinFormsApp1.Services;
 
-namespace WinFormsApp1.Forms.Publisher
+namespace WinFormsApp1.Forms.Publishers
 {
     public partial class PublisherForm : Form
     {

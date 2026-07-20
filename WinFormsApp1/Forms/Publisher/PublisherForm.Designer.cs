@@ -1,4 +1,4 @@
-namespace WinFormsApp1.Forms.Publisher
+namespace WinFormsApp1.Forms.Publishers
 {
     partial class PublisherForm
     {

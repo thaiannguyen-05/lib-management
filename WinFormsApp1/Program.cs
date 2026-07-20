@@ -5,15 +5,16 @@ using Microsoft.Extensions.Hosting;
 using WinFormsApp1.Data;
 using WinFormsApp1.Forms.Auth;
 using WinFormsApp1.Forms.Main;
-using WinFormsApp1.Forms.Book;
-using WinFormsApp1.Forms.Author;
-using WinFormsApp1.Forms.Category;
-using WinFormsApp1.Forms.Publisher;
-using WinFormsApp1.Forms.Member;
-using WinFormsApp1.Forms.Reservation;
+using WinFormsApp1.Forms.Books;
+using WinFormsApp1.Forms.Authors;
+using WinFormsApp1.Forms.Categories;
+using WinFormsApp1.Forms.Publishers;
+using WinFormsApp1.Forms.Members;
+using WinFormsApp1.Forms.Reservations;
 using WinFormsApp1.Forms.User;
 using WinFormsApp1.Forms.Inventory;
 using WinFormsApp1.Forms.Report;
+using WinFormsApp1.Forms.Borrow;
 using WinFormsApp1.Services;
 
 namespace WinFormsApp1
@@ -52,6 +53,7 @@ namespace WinFormsApp1
                     services.AddScoped<MemberService>();
                     services.AddScoped<BookService>();
                     services.AddScoped<BookCopyService>();
+                    services.AddScoped<BorrowService>();
                     services.AddScoped<ReservationService>();
                     services.AddScoped<InventoryService>();
                     services.AddScoped<ReportService>();
@@ -69,6 +71,7 @@ namespace WinFormsApp1
                     services.AddTransient<MemberListForm>();
                     services.AddTransient<MemberDetailForm>();
                     services.AddTransient<BookForm>();
+                    services.AddTransient<BorrowForm>();
                     services.AddTransient<ReservationForm>();
                     services.AddTransient<InventoryForm>();
                     services.AddTransient<ReportForm>();

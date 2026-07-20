@@ -4,7 +4,7 @@ using WinFormsApp1.Models;
 using WinFormsApp1.Models.Enums;
 using WinFormsApp1.Services;
 
-namespace WinFormsApp1.Forms.Member
+namespace WinFormsApp1.Forms.Members
 {
     public partial class LibraryCardForm : Form
     {

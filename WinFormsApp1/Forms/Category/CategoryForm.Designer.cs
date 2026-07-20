@@ -1,4 +1,4 @@
-namespace WinFormsApp1.Forms.Category
+namespace WinFormsApp1.Forms.Categories
 {
     partial class CategoryForm
     {

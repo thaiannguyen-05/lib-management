@@ -1,4 +1,4 @@
-namespace WinFormsApp1.Forms.Reservation
+namespace WinFormsApp1.Forms.Reservations
 {
     partial class ReservationForm
     {

@@ -1,4 +1,4 @@
-namespace WinFormsApp1.Forms.Member
+namespace WinFormsApp1.Forms.Members
 {
     partial class MemberDetailForm
     {

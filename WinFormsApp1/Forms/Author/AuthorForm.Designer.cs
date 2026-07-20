@@ -1,4 +1,4 @@
-namespace WinFormsApp1.Forms.Author
+namespace WinFormsApp1.Forms.Authors
 {
     partial class AuthorForm
     {

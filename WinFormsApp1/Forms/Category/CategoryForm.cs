@@ -1,7 +1,7 @@
 using WinFormsApp1.Models;
 using WinFormsApp1.Services;
 
-namespace WinFormsApp1.Forms.Category
+namespace WinFormsApp1.Forms.Categories
 {
     public partial class CategoryForm : Form
     {

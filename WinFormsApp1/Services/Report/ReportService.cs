@@ -62,7 +62,7 @@ namespace WinFormsApp1.Services
                     Barcode = b.BookCopy.Barcode,
                     MemberName = b.Member.FirstName + " " + b.Member.LastName,
                     DueDate = b.DueDate,
-                    DaysOverdue = EF.Functions.DateDiffDay(b.DueDate, DateTime.UtcNow)
+                    DaysOverdue = (int)(DateTime.UtcNow - b.DueDate).TotalDays
                 })
                 .ToListAsync<object>();
         }

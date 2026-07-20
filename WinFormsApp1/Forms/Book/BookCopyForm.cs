@@ -2,7 +2,7 @@ using WinFormsApp1.Models;
 using WinFormsApp1.Models.Enums;
 using WinFormsApp1.Services;
 
-namespace WinFormsApp1.Forms.Book;
+namespace WinFormsApp1.Forms.Books;
 
 public partial class BookCopyForm : Form
 {

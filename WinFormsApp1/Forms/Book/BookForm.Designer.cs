@@ -1,4 +1,4 @@
-namespace WinFormsApp1.Forms.Book
+namespace WinFormsApp1.Forms.Books
 {
     partial class BookForm
     {

@@ -1,7 +1,7 @@
 using WinFormsApp1.Models;
 using WinFormsApp1.Services;
 
-namespace WinFormsApp1.Forms.Author
+namespace WinFormsApp1.Forms.Authors
 {
     public partial class AuthorForm : Form
     {

@@ -117,7 +117,7 @@ namespace WinFormsApp1.Forms
             btnLogout.BackColor = Color.FromArgb(108, 117, 125);
             btnLogout.FlatStyle = FlatStyle.Flat;
             btnLogout.ForeColor = Color.White;
-            btnLogout.Location = new Point(600, 375);
+            btnLogout.Location = new Point(600, 475);
             btnLogout.Margin = new Padding(4, 4, 4, 4);
             btnLogout.Name = "btnLogout";
             btnLogout.Size = new Size(270, 60);
@@ -131,7 +131,7 @@ namespace WinFormsApp1.Forms
             btnChangePassword.BackColor = Color.FromArgb(23, 162, 184);
             btnChangePassword.FlatStyle = FlatStyle.Flat;
             btnChangePassword.ForeColor = Color.White;
-            btnChangePassword.Location = new Point(315, 445);
+            btnChangePassword.Location = new Point(315, 475);
             btnChangePassword.Margin = new Padding(4, 4, 4, 4);
             btnChangePassword.Name = "btnChangePassword";
             btnChangePassword.Size = new Size(270, 60);
@@ -200,7 +200,7 @@ namespace WinFormsApp1.Forms
             // 
             AutoScaleDimensions = new SizeF(12F, 30F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(900, 518);
+            ClientSize = new Size(900, 558);
             Controls.Add(lblWelcome);
             Controls.Add(btnBooks);
             Controls.Add(btnMembers);

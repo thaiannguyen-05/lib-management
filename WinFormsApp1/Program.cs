@@ -42,6 +42,7 @@ namespace WinFormsApp1
                     services.AddScoped<MemberService>();
                     services.AddScoped<BookService>();
                     services.AddScoped<BookCopyService>();
+                    services.AddScoped<BorrowService>();
 
                     // ── Forms ──────────────────────────────────────
                     services.AddTransient<LoginForm>();
@@ -55,6 +56,7 @@ namespace WinFormsApp1
                     services.AddTransient<MemberListForm>();
                     services.AddTransient<MemberDetailForm>();
                     services.AddTransient<BookForm>();
+                    services.AddTransient<BorrowForm>();
                 })
                 .Build();
 

@@ -36,6 +36,7 @@ namespace WinFormsApp1.Forms
 
             btnUsers.Visible = SessionManager.IsAdmin;
             btnBooks.Visible = SessionManager.IsAdmin || SessionManager.IsLibrarian;
+            btnMembers.Visible = SessionManager.IsAdmin || SessionManager.IsLibrarian;
             btnAuthors.Visible = SessionManager.IsAdmin || SessionManager.IsLibrarian;
             btnCategories.Visible = SessionManager.IsAdmin || SessionManager.IsLibrarian;
             btnLibraryCards.Visible = SessionManager.IsAdmin || SessionManager.IsLibrarian;
@@ -80,7 +81,8 @@ namespace WinFormsApp1.Forms
 
         private void btnBorrowing_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Borrowing module - Coming in Milestone 5", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            var borrowForm = _serviceProvider.GetRequiredService<BorrowForm>();
+            borrowForm.ShowDialog(this);
         }
 
         private void btnUsers_Click(object sender, EventArgs e)

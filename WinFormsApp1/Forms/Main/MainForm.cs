@@ -11,6 +11,7 @@ using WinFormsApp1.Forms.Inventory;
 using WinFormsApp1.Forms.Report;
 using WinFormsApp1.Forms.User;
 using WinFormsApp1.Forms.Borrow;
+using WinFormsApp1.Forms.Return;
 using WinFormsApp1.Helpers;
 using WinFormsApp1.Services;
 
@@ -149,6 +150,12 @@ namespace WinFormsApp1.Forms.Main
         {
             var inventoryForm = _serviceProvider.GetRequiredService<InventoryForm>();
             inventoryForm.ShowDialog(this);
+        }
+
+        private void btnReturn_Click(object sender, EventArgs e)
+        {
+            var returnForm = _serviceProvider.GetRequiredService<ReturnForm>();
+            returnForm.ShowDialog(this);
         }
 
         private void MainForm_FormClosing(object? sender, FormClosingEventArgs e)

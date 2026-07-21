@@ -101,7 +101,7 @@ public partial class BorrowForm : Form
         lblBookTitle.Text = $"Title: {_selectedBookCopy.Book.Title}";
         lblBookBarcode.Text = $"Barcode: {_selectedBookCopy.Barcode} (Status: {_selectedBookCopy.Status})";
         lblBookAuthors.Text = $"Authors: {(string.IsNullOrEmpty(authors) ? "N/A" : authors)}";
-        lblBookShelf.Text = $"Shelf: {_selectedBookCopy.ShelfLocation ?? "N/A"}";
+        lblBookShelf.Text = $"Shelf: {_selectedBookCopy.Book.ShelfLocation ?? "N/A"}";
 
         ValidateForm();
     }

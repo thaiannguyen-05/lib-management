@@ -9,6 +9,7 @@ namespace WinFormsApp1.Forms.Auth
     {
         private readonly AuthService _authService;
         private readonly IServiceProvider _serviceProvider;
+        private IServiceScope? _mainFormScope;
 
         public LoginForm(AuthService authService, IServiceProvider serviceProvider)
         {
@@ -47,7 +48,8 @@ namespace WinFormsApp1.Forms.Auth
 
                 SessionManager.Login(user);
 
-                var mainForm = _serviceProvider.GetRequiredService<MainForm>();
+                _mainFormScope = _serviceProvider.CreateScope();
+                var mainForm = _mainFormScope.ServiceProvider.GetRequiredService<MainForm>();
                 mainForm.OwnerLoginForm = this;
                 mainForm.Show();
                 this.Hide();
@@ -86,6 +88,7 @@ namespace WinFormsApp1.Forms.Auth
                 SessionManager.Logout();
             }
 
+            _mainFormScope?.Dispose();
             Application.Exit();
         }
     }

@@ -31,6 +31,8 @@ namespace WinFormsApp1.Forms.Main
             btnPublishers = new Button();
             btnReservations = new Button();
             btnInventory = new Button();
+            btnReturn = new Button();
+            btnHidden2 = new Button();
             SuspendLayout();
             // 
             // lblWelcome
@@ -52,7 +54,7 @@ namespace WinFormsApp1.Forms.Main
             btnBooks.Location = new Point(30, 120);
             btnBooks.Margin = new Padding(4, 4, 4, 4);
             btnBooks.Name = "btnBooks";
-            btnBooks.Size = new Size(270, 90);
+            btnBooks.Size = new Size(270, 80);
             btnBooks.TabIndex = 1;
             btnBooks.Text = "Books";
             btnBooks.UseVisualStyleBackColor = false;
@@ -66,7 +68,7 @@ namespace WinFormsApp1.Forms.Main
             btnMembers.Location = new Point(315, 120);
             btnMembers.Margin = new Padding(4, 4, 4, 4);
             btnMembers.Name = "btnMembers";
-            btnMembers.Size = new Size(270, 90);
+            btnMembers.Size = new Size(270, 80);
             btnMembers.TabIndex = 2;
             btnMembers.Text = "Members";
             btnMembers.UseVisualStyleBackColor = false;
@@ -80,7 +82,7 @@ namespace WinFormsApp1.Forms.Main
             btnBorrowing.Location = new Point(600, 120);
             btnBorrowing.Margin = new Padding(4, 4, 4, 4);
             btnBorrowing.Name = "btnBorrowing";
-            btnBorrowing.Size = new Size(270, 90);
+            btnBorrowing.Size = new Size(270, 80);
             btnBorrowing.TabIndex = 3;
             btnBorrowing.Text = "Borrowing";
             btnBorrowing.UseVisualStyleBackColor = false;
@@ -91,10 +93,10 @@ namespace WinFormsApp1.Forms.Main
             btnUsers.BackColor = Color.FromArgb(220, 53, 69);
             btnUsers.FlatStyle = FlatStyle.Flat;
             btnUsers.ForeColor = Color.White;
-            btnUsers.Location = new Point(30, 240);
+            btnUsers.Location = new Point(30, 210);
             btnUsers.Margin = new Padding(4, 4, 4, 4);
             btnUsers.Name = "btnUsers";
-            btnUsers.Size = new Size(270, 90);
+            btnUsers.Size = new Size(270, 80);
             btnUsers.TabIndex = 4;
             btnUsers.Text = "User Management";
             btnUsers.UseVisualStyleBackColor = false;
@@ -105,10 +107,10 @@ namespace WinFormsApp1.Forms.Main
             btnReports.BackColor = Color.FromArgb(111, 66, 193);
             btnReports.FlatStyle = FlatStyle.Flat;
             btnReports.ForeColor = Color.White;
-            btnReports.Location = new Point(315, 240);
+            btnReports.Location = new Point(315, 210);
             btnReports.Margin = new Padding(4, 4, 4, 4);
             btnReports.Name = "btnReports";
-            btnReports.Size = new Size(270, 90);
+            btnReports.Size = new Size(270, 80);
             btnReports.TabIndex = 5;
             btnReports.Text = "Reports";
             btnReports.UseVisualStyleBackColor = false;
@@ -119,10 +121,10 @@ namespace WinFormsApp1.Forms.Main
             btnLogout.BackColor = Color.FromArgb(108, 117, 125);
             btnLogout.FlatStyle = FlatStyle.Flat;
             btnLogout.ForeColor = Color.White;
-            btnLogout.Location = new Point(600, 475);
+            btnLogout.Location = new Point(600, 480);
             btnLogout.Margin = new Padding(4, 4, 4, 4);
             btnLogout.Name = "btnLogout";
-            btnLogout.Size = new Size(270, 60);
+            btnLogout.Size = new Size(270, 80);
             btnLogout.TabIndex = 6;
             btnLogout.Text = "Logout";
             btnLogout.UseVisualStyleBackColor = false;
@@ -133,10 +135,10 @@ namespace WinFormsApp1.Forms.Main
             btnChangePassword.BackColor = Color.FromArgb(23, 162, 184);
             btnChangePassword.FlatStyle = FlatStyle.Flat;
             btnChangePassword.ForeColor = Color.White;
-            btnChangePassword.Location = new Point(315, 475);
+            btnChangePassword.Location = new Point(315, 390);
             btnChangePassword.Margin = new Padding(4, 4, 4, 4);
             btnChangePassword.Name = "btnChangePassword";
-            btnChangePassword.Size = new Size(270, 60);
+            btnChangePassword.Size = new Size(270, 80);
             btnChangePassword.TabIndex = 7;
             btnChangePassword.Text = "Change Password";
             btnChangePassword.UseVisualStyleBackColor = false;
@@ -147,10 +149,10 @@ namespace WinFormsApp1.Forms.Main
             btnAuthors.BackColor = Color.FromArgb(52, 58, 64);
             btnAuthors.FlatStyle = FlatStyle.Flat;
             btnAuthors.ForeColor = Color.White;
-            btnAuthors.Location = new Point(600, 240);
+            btnAuthors.Location = new Point(600, 210);
             btnAuthors.Margin = new Padding(4, 4, 4, 4);
             btnAuthors.Name = "btnAuthors";
-            btnAuthors.Size = new Size(270, 90);
+            btnAuthors.Size = new Size(270, 80);
             btnAuthors.TabIndex = 8;
             btnAuthors.Text = "Authors";
             btnAuthors.UseVisualStyleBackColor = false;
@@ -161,10 +163,10 @@ namespace WinFormsApp1.Forms.Main
             btnCategories.BackColor = Color.FromArgb(73, 80, 87);
             btnCategories.FlatStyle = FlatStyle.Flat;
             btnCategories.ForeColor = Color.White;
-            btnCategories.Location = new Point(30, 360);
+            btnCategories.Location = new Point(30, 300);
             btnCategories.Margin = new Padding(4, 4, 4, 4);
             btnCategories.Name = "btnCategories";
-            btnCategories.Size = new Size(270, 75);
+            btnCategories.Size = new Size(270, 80);
             btnCategories.TabIndex = 9;
             btnCategories.Text = "Categories";
             btnCategories.UseVisualStyleBackColor = false;
@@ -175,10 +177,10 @@ namespace WinFormsApp1.Forms.Main
             btnLibraryCards.BackColor = Color.FromArgb(0, 123, 167);
             btnLibraryCards.FlatStyle = FlatStyle.Flat;
             btnLibraryCards.ForeColor = Color.White;
-            btnLibraryCards.Location = new Point(600, 360);
+            btnLibraryCards.Location = new Point(600, 300);
             btnLibraryCards.Margin = new Padding(4, 4, 4, 4);
             btnLibraryCards.Name = "btnLibraryCards";
-            btnLibraryCards.Size = new Size(270, 75);
+            btnLibraryCards.Size = new Size(270, 80);
             btnLibraryCards.TabIndex = 10;
             btnLibraryCards.Text = "Library Cards";
             btnLibraryCards.UseVisualStyleBackColor = false;
@@ -189,24 +191,24 @@ namespace WinFormsApp1.Forms.Main
             btnPublishers.BackColor = Color.FromArgb(102, 16, 242);
             btnPublishers.FlatStyle = FlatStyle.Flat;
             btnPublishers.ForeColor = Color.White;
-            btnPublishers.Location = new Point(315, 360);
+            btnPublishers.Location = new Point(315, 300);
             btnPublishers.Margin = new Padding(4, 4, 4, 4);
             btnPublishers.Name = "btnPublishers";
-            btnPublishers.Size = new Size(270, 75);
+            btnPublishers.Size = new Size(270, 80);
             btnPublishers.TabIndex = 11;
             btnPublishers.Text = "Publishers";
             btnPublishers.UseVisualStyleBackColor = false;
             btnPublishers.Click += btnPublishers_Click;
-            //
+            // 
             // btnReservations
-            //
+            // 
             btnReservations.BackColor = Color.FromArgb(253, 126, 20);
             btnReservations.FlatStyle = FlatStyle.Flat;
             btnReservations.ForeColor = Color.White;
-            btnReservations.Location = new Point(30, 445);
+            btnReservations.Location = new Point(30, 390);
             btnReservations.Margin = new Padding(4, 4, 4, 4);
             btnReservations.Name = "btnReservations";
-            btnReservations.Size = new Size(270, 60);
+            btnReservations.Size = new Size(270, 80);
             btnReservations.TabIndex = 12;
             btnReservations.Text = "Reservations";
             btnReservations.UseVisualStyleBackColor = false;
@@ -217,20 +219,48 @@ namespace WinFormsApp1.Forms.Main
             btnInventory.BackColor = Color.FromArgb(23, 162, 184);
             btnInventory.FlatStyle = FlatStyle.Flat;
             btnInventory.ForeColor = Color.White;
-            btnInventory.Location = new Point(600, 445);
+            btnInventory.Location = new Point(600, 390);
             btnInventory.Margin = new Padding(4, 4, 4, 4);
             btnInventory.Name = "btnInventory";
-            btnInventory.Size = new Size(270, 60);
+            btnInventory.Size = new Size(270, 80);
             btnInventory.TabIndex = 13;
             btnInventory.Text = "Inventory";
             btnInventory.UseVisualStyleBackColor = false;
             btnInventory.Click += btnInventory_Click;
+            // 
+            // btnReturn
+            // 
+            btnReturn.BackColor = Color.FromArgb(23, 162, 184);
+            btnReturn.FlatStyle = FlatStyle.Flat;
+            btnReturn.ForeColor = Color.White;
+            btnReturn.Location = new Point(30, 480);
+            btnReturn.Margin = new Padding(4, 4, 4, 4);
+            btnReturn.Name = "btnReturn";
+            btnReturn.Size = new Size(270, 80);
+            btnReturn.TabIndex = 14;
+            btnReturn.Text = "Return Book";
+            btnReturn.UseVisualStyleBackColor = false;
+            btnReturn.Click += btnReturn_Click;
+            // 
+            // btnHidden2
+            // 
+            btnHidden2.BackColor = Color.FromArgb(108, 117, 125);
+            btnHidden2.FlatStyle = FlatStyle.Flat;
+            btnHidden2.ForeColor = Color.White;
+            btnHidden2.Location = new Point(315, 480);
+            btnHidden2.Margin = new Padding(4, 4, 4, 4);
+            btnHidden2.Name = "btnHidden2";
+            btnHidden2.Size = new Size(270, 80);
+            btnHidden2.TabIndex = 15;
+            btnHidden2.Text = "Hidden 2";
+            btnHidden2.UseVisualStyleBackColor = false;
+            btnHidden2.Visible = false;
             //
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(12F, 30F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(900, 558);
+            ClientSize = new Size(900, 580);
             Controls.Add(lblWelcome);
             Controls.Add(btnBooks);
             Controls.Add(btnMembers);
@@ -245,6 +275,8 @@ namespace WinFormsApp1.Forms.Main
             Controls.Add(btnPublishers);
             Controls.Add(btnReservations);
             Controls.Add(btnInventory);
+            Controls.Add(btnReturn);
+            Controls.Add(btnHidden2);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Margin = new Padding(4, 4, 4, 4);
             MaximizeBox = false;
@@ -270,5 +302,7 @@ namespace WinFormsApp1.Forms.Main
         private Button btnPublishers;
         private Button btnReservations;
         private Button btnInventory;
+        private Button btnReturn;
+        private Button btnHidden2;
     }
 }

@@ -15,6 +15,7 @@ using WinFormsApp1.Forms.User;
 using WinFormsApp1.Forms.Inventory;
 using WinFormsApp1.Forms.Report;
 using WinFormsApp1.Forms.Borrow;
+using WinFormsApp1.Forms.Return;
 using WinFormsApp1.Services;
 
 namespace WinFormsApp1
@@ -54,6 +55,7 @@ namespace WinFormsApp1
                     services.AddScoped<BookService>();
                     services.AddScoped<BookCopyService>();
                     services.AddScoped<BorrowService>();
+                    services.AddScoped<ReturnService>();
                     services.AddScoped<ReservationService>();
                     services.AddScoped<InventoryService>();
                     services.AddScoped<ReportService>();
@@ -72,6 +74,7 @@ namespace WinFormsApp1
                     services.AddTransient<MemberDetailForm>();
                     services.AddTransient<BookForm>();
                     services.AddTransient<BorrowForm>();
+                    services.AddTransient<ReturnForm>();
                     services.AddTransient<ReservationForm>();
                     services.AddTransient<InventoryForm>();
                     services.AddTransient<ReportForm>();

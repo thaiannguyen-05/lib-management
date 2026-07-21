@@ -82,79 +82,92 @@ namespace WinFormsApp1.Forms.Main
 
         private void btnBooks_Click(object sender, EventArgs e)
         {
-            var bookForm = _serviceProvider.GetRequiredService<BookForm>();
+            using var scope = _serviceProvider.CreateScope();
+            var bookForm = scope.ServiceProvider.GetRequiredService<BookForm>();
             bookForm.ShowDialog(this);
         }
 
         private void btnMembers_Click(object sender, EventArgs e)
         {
-            var memberListForm = _serviceProvider.GetRequiredService<MemberListForm>();
+            using var scope = _serviceProvider.CreateScope();
+            var memberListForm = scope.ServiceProvider.GetRequiredService<MemberListForm>();
             memberListForm.ShowDialog(this);
         }
 
         private void btnBorrowing_Click(object sender, EventArgs e)
         {
-            var borrowForm = _serviceProvider.GetRequiredService<BorrowForm>();
+            using var scope = _serviceProvider.CreateScope();
+            var borrowForm = scope.ServiceProvider.GetRequiredService<BorrowForm>();
             borrowForm.ShowDialog(this);
         }
 
         private void btnUsers_Click(object sender, EventArgs e)
         {
-            var userForm = _serviceProvider.GetRequiredService<UserManageForm>();
+            using var scope = _serviceProvider.CreateScope();
+            var userForm = scope.ServiceProvider.GetRequiredService<UserManageForm>();
             userForm.ShowDialog(this);
         }
 
         private void btnReports_Click(object sender, EventArgs e)
         {
-            var reportForm = _serviceProvider.GetRequiredService<ReportForm>();
+            using var scope = _serviceProvider.CreateScope();
+            var reportForm = scope.ServiceProvider.GetRequiredService<ReportForm>();
             reportForm.ShowDialog(this);
         }
 
         private void btnAuthors_Click(object sender, EventArgs e)
         {
-            var authorForm = _serviceProvider.GetRequiredService<AuthorForm>();
+            using var scope = _serviceProvider.CreateScope();
+            var authorForm = scope.ServiceProvider.GetRequiredService<AuthorForm>();
             authorForm.ShowDialog(this);
         }
 
         private void btnCategories_Click(object sender, EventArgs e)
         {
-            var categoryForm = _serviceProvider.GetRequiredService<CategoryForm>();
+            using var scope = _serviceProvider.CreateScope();
+            var categoryForm = scope.ServiceProvider.GetRequiredService<CategoryForm>();
             categoryForm.ShowDialog(this);
         }
 
         private void btnLibraryCards_Click(object sender, EventArgs e)
         {
-            var libraryCardForm = _serviceProvider.GetRequiredService<LibraryCardForm>();
+            using var scope = _serviceProvider.CreateScope();
+            var libraryCardForm = scope.ServiceProvider.GetRequiredService<LibraryCardForm>();
             libraryCardForm.ShowDialog(this);
         }
 
         private void btnPublishers_Click(object sender, EventArgs e)
         {
-            var publisherForm = _serviceProvider.GetRequiredService<PublisherForm>();
+            using var scope = _serviceProvider.CreateScope();
+            var publisherForm = scope.ServiceProvider.GetRequiredService<PublisherForm>();
             publisherForm.ShowDialog(this);
         }
 
         private void btnReservations_Click(object sender, EventArgs e)
         {
-            var reservationForm = _serviceProvider.GetRequiredService<ReservationForm>();
+            using var scope = _serviceProvider.CreateScope();
+            var reservationForm = scope.ServiceProvider.GetRequiredService<ReservationForm>();
             reservationForm.ShowDialog(this);
         }
 
         private void btnChangePassword_Click(object sender, EventArgs e)
         {
-            var changePasswordForm = _serviceProvider.GetRequiredService<ChangePasswordForm>();
+            using var scope = _serviceProvider.CreateScope();
+            var changePasswordForm = scope.ServiceProvider.GetRequiredService<ChangePasswordForm>();
             changePasswordForm.ShowDialog(this);
         }
 
         private void btnInventory_Click(object sender, EventArgs e)
         {
-            var inventoryForm = _serviceProvider.GetRequiredService<InventoryForm>();
+            using var scope = _serviceProvider.CreateScope();
+            var inventoryForm = scope.ServiceProvider.GetRequiredService<InventoryForm>();
             inventoryForm.ShowDialog(this);
         }
 
         private void btnReturn_Click(object sender, EventArgs e)
         {
-            var returnForm = _serviceProvider.GetRequiredService<ReturnForm>();
+            using var scope = _serviceProvider.CreateScope();
+            var returnForm = scope.ServiceProvider.GetRequiredService<ReturnForm>();
             returnForm.ShowDialog(this);
         }
 

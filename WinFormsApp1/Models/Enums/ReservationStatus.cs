@@ -4,7 +4,9 @@ namespace WinFormsApp1.Models.Enums
     {
         Pending,
         Ready,
+        Collected,
+        Completed,
         Cancelled,
-        Expired
+        NoShow
     }
 }

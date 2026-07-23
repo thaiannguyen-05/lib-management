@@ -25,18 +25,6 @@ namespace WinFormsApp1.Services
 
         public async Task<(bool Success, string Message)> CreateAsync(ApplicationUser user, string password)
         {
-            if (string.IsNullOrEmpty(user.Username))
-            {
-                return (false, "Username need fill !");
-            }
-            if (string.IsNullOrWhiteSpace(password))
-            {
-                return (false, "Password is empty !");
-            }
-            if (password.Length < 8)
-            {
-                return (false, "Password need more 8 characters !");
-            }
             var existing = await _unitOfWork.Repository<ApplicationUser>()
                 .FindAsync(s => s.Username == user.Username);
             if (existing.Any())

@@ -101,6 +101,12 @@ namespace WinFormsApp1.Forms.Main
             borrowForm.ShowDialog(this);
         }
 
+        private void btnFees_Click(object sender, EventArgs e)
+        {
+            var feeForm = _serviceProvider.GetRequiredService<FeeForm>();
+            feeForm.ShowDialog(this);
+        }
+
         private void btnUsers_Click(object sender, EventArgs e)
         {
             using var scope = _serviceProvider.CreateScope();

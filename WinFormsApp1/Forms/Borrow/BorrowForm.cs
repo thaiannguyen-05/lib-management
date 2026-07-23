@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using WinFormsApp1.Data;
 using WinFormsApp1.Helpers;
 using WinFormsApp1.Models;
+using WinFormsApp1.Models.Enums;
 using WinFormsApp1.Services;
 
 namespace WinFormsApp1.Forms.Borrow;
@@ -10,13 +12,18 @@ public partial class BorrowForm : Form
 {
     private readonly BorrowService _borrowService;
     private readonly AppDbContext _context;
+    private readonly IServiceProvider _serviceProvider;
+
     private Member? _selectedMember;
     private BookCopy? _selectedBookCopy;
+    private List<BorrowRecord> _currentBorrows = new();
+    private BorrowRecord? _selectedBorrowRecord;
 
-    public BorrowForm(BorrowService borrowService, AppDbContext context)
+    public BorrowForm(BorrowService borrowService, AppDbContext context, IServiceProvider serviceProvider)
     {
         _borrowService = borrowService;
         _context = context;
+        _serviceProvider = serviceProvider;
         InitializeComponent();
         Load += BorrowForm_Load;
     }
@@ -24,12 +31,13 @@ public partial class BorrowForm : Form
     private async void BorrowForm_Load(object? sender, EventArgs e)
     {
         await LoadMembersAsync();
+        ClearSelectionInfo();
     }
 
     private async Task LoadMembersAsync()
     {
         var members = await _context.Members
-            .Where(m => m.Status == Models.Enums.MemberStatus.Active)
+            .Where(m => m.Status == MemberStatus.Active)
             .OrderBy(m => m.LastName)
             .ThenBy(m => m.FirstName)
             .Select(m => new
@@ -47,15 +55,13 @@ public partial class BorrowForm : Form
 
     private async void cmbMembers_SelectedIndexChanged(object? sender, EventArgs e)
     {
-        if (cmbMembers.SelectedIndex < 0)
+        if (cmbMembers.SelectedIndex < 0 || cmbMembers.SelectedItem == null)
         {
             ClearMemberInfo();
             return;
         }
 
-        var selected = cmbMembers.SelectedItem;
-        var memberId = (int)selected.GetType().GetProperty("Id")!.GetValue(selected)!;
-
+        var memberId = (int)cmbMembers.SelectedItem.GetType().GetProperty("Id")!.GetValue(cmbMembers.SelectedItem)!;
         _selectedMember = await _borrowService.GetMemberByIdAsync(memberId);
 
         if (_selectedMember == null)
@@ -75,7 +81,7 @@ public partial class BorrowForm : Form
         lblMemberBorrows.Text = $"Active Borrows: {borrowCount}";
 
         await LoadActiveBorrowsAsync();
-        ValidateForm();
+        ValidateBorrowForm();
     }
 
     private async void btnSearchBook_Click(object? sender, EventArgs e)
@@ -83,17 +89,17 @@ public partial class BorrowForm : Form
         var keyword = txtBookSearch.Text.Trim();
         if (string.IsNullOrWhiteSpace(keyword))
         {
-            lblError.Text = "Please enter a barcode or ISBN.";
+            lblBorrowError.Text = "Please enter a barcode or ISBN.";
             return;
         }
 
-        lblError.Text = "";
+        lblBorrowError.Text = "";
         _selectedBookCopy = await _borrowService.SearchBookCopyAsync(keyword);
 
         if (_selectedBookCopy == null)
         {
             ClearBookInfo();
-            lblError.Text = "Book copy not found.";
+            lblBorrowError.Text = "Book copy not found.";
             return;
         }
 
@@ -103,12 +109,13 @@ public partial class BorrowForm : Form
         lblBookAuthors.Text = $"Authors: {(string.IsNullOrEmpty(authors) ? "N/A" : authors)}";
         lblBookShelf.Text = $"Shelf: {_selectedBookCopy.Book.ShelfLocation ?? "N/A"}";
 
-        ValidateForm();
+        ValidateBorrowForm();
     }
 
     private async void btnBorrow_Click(object? sender, EventArgs e)
     {
-        if (_selectedMember == null || _selectedBookCopy == null) return;
+        if (_selectedMember == null || _selectedBookCopy == null)
+            return;
 
         var result = await _borrowService.CheckoutAsync(
             _selectedMember.Id,
@@ -118,22 +125,19 @@ public partial class BorrowForm : Form
         if (result.Success)
         {
             MessageBox.Show(result.Message, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            // Reset book search
             _selectedBookCopy = null;
-            txtBookSearch.Text = "";
+            txtBookSearch.Text = string.Empty;
             ClearBookInfo();
 
-            // Refresh member borrow count and list
             var borrowCount = await _borrowService.GetActiveBorrowCountAsync(_selectedMember.Id);
             lblMemberBorrows.Text = $"Active Borrows: {borrowCount}";
-            await LoadActiveBorrowsAsync();
 
-            ValidateForm();
+            await LoadActiveBorrowsAsync();
+            ValidateBorrowForm();
         }
         else
         {
-            lblError.Text = result.Message;
+            lblBorrowError.Text = result.Message;
         }
     }
 
@@ -142,30 +146,125 @@ public partial class BorrowForm : Form
         if (_selectedMember == null)
         {
             dgvActiveBorrows.DataSource = null;
+            _currentBorrows.Clear();
+            _selectedBorrowRecord = null;
+            lblSelectedBorrow.Text = "Selected Borrow: -";
+            btnOpenRenewForm.Enabled = false;
             return;
         }
 
-        var borrows = await _borrowService.GetActiveBorrowsAsync(_selectedMember.Id);
-        dgvActiveBorrows.DataSource = borrows.Select(br => new
+        _currentBorrows = await _borrowService.GetActiveBorrowsAsync(_selectedMember.Id);
+
+        dgvActiveBorrows.DataSource = _currentBorrows.Select(br => new BorrowGridRow
         {
-            br.Id,
+            BorrowRecordId = br.Id,
             BookTitle = br.BookCopy.Book.Title,
-            br.BookCopy.Barcode,
+            Barcode = br.BookCopy.Barcode,
             BorrowDate = br.BorrowDate.ToLocalTime().ToString("yyyy-MM-dd"),
             DueDate = br.DueDate.ToLocalTime().ToString("yyyy-MM-dd"),
-            br.RenewalCount
+            RenewalCount = br.RenewalCount
         }).ToList();
+
+        if (dgvActiveBorrows.Columns.Contains(nameof(BorrowGridRow.BorrowRecordId)))
+        {
+            var idColumn = dgvActiveBorrows.Columns[nameof(BorrowGridRow.BorrowRecordId)];
+            if (idColumn != null)
+                idColumn.Visible = false;
+        }
+
+        if (dgvActiveBorrows.Rows.Count > 0)
+        {
+            dgvActiveBorrows.ClearSelection();
+            dgvActiveBorrows.Rows[0].Selected = true;
+            SetSelectedBorrowFromGrid();
+        }
+        else
+        {
+            _selectedBorrowRecord = null;
+            lblSelectedBorrow.Text = "Selected Borrow: -";
+            btnOpenRenewForm.Enabled = false;
+        }
     }
 
-    private void ValidateForm()
+    private void dgvActiveBorrows_SelectionChanged(object? sender, EventArgs e)
     {
-        bool memberValid = _selectedMember != null && _selectedMember.Status == Models.Enums.MemberStatus.Active;
-        bool bookValid = _selectedBookCopy != null && _selectedBookCopy.Status == Models.Enums.CopyStatus.Available;
+        SetSelectedBorrowFromGrid();
+    }
+
+    private void SetSelectedBorrowFromGrid()
+    {
+        if (dgvActiveBorrows.SelectedRows.Count == 0)
+        {
+            _selectedBorrowRecord = null;
+            lblSelectedBorrow.Text = "Selected Borrow: -";
+            btnOpenRenewForm.Enabled = false;
+            return;
+        }
+
+        if (dgvActiveBorrows.SelectedRows[0].DataBoundItem is not BorrowGridRow row)
+        {
+            _selectedBorrowRecord = null;
+            lblSelectedBorrow.Text = "Selected Borrow: -";
+            btnOpenRenewForm.Enabled = false;
+            return;
+        }
+
+        _selectedBorrowRecord = _currentBorrows.FirstOrDefault(br => br.Id == row.BorrowRecordId);
+        if (_selectedBorrowRecord == null)
+        {
+            lblSelectedBorrow.Text = "Selected Borrow: -";
+            btnOpenRenewForm.Enabled = false;
+            return;
+        }
+
+        lblSelectedBorrow.Text = $"Selected Borrow: {_selectedBorrowRecord.BookCopy.Book.Title} | Due: {_selectedBorrowRecord.DueDate.ToLocalTime():yyyy-MM-dd}";
+        btnOpenRenewForm.Enabled = true;
+    }
+
+    private void SetCurrentCellToVisibleCell(DataGridViewRow row)
+    {
+        var visibleCell = row.Cells
+            .Cast<DataGridViewCell>()
+            .FirstOrDefault(cell => cell.Visible && cell.OwningColumn.Visible);
+
+        if (visibleCell != null)
+        {
+            dgvActiveBorrows.CurrentCell = visibleCell;
+        }
+    }
+
+    private void btnOpenRenewForm_Click(object? sender, EventArgs e)
+    {
+        using var scope = _serviceProvider.CreateScope();
+        var renewForm = scope.ServiceProvider.GetRequiredService<RenewForm>();
+        renewForm.InitializeSelection(_selectedMember?.Id, _selectedBorrowRecord?.Id);
+        renewForm.ShowDialog(this);
+        if (_selectedMember != null)
+        {
+            _ = RefreshAfterRenewAsync();
+        }
+    }
+
+    private async Task RefreshAfterRenewAsync()
+    {
+        if (_selectedMember == null)
+            return;
+
+        var borrowCount = await _borrowService.GetActiveBorrowCountAsync(_selectedMember.Id);
+        lblMemberBorrows.Text = $"Active Borrows: {borrowCount}";
+        await LoadActiveBorrowsAsync();
+        ValidateBorrowForm();
+    }
+
+    private void ValidateBorrowForm()
+    {
+        var memberValid = _selectedMember != null && _selectedMember.Status == MemberStatus.Active;
+        var bookValid = _selectedBookCopy != null && _selectedBookCopy.Status == CopyStatus.Available;
         btnBorrow.Enabled = memberValid && bookValid;
 
-        if (_selectedBookCopy != null && _selectedBookCopy.Status != Models.Enums.CopyStatus.Available)
+        if (_selectedBookCopy != null && _selectedBookCopy.Status != CopyStatus.Available)
         {
-            lblError.Text = "This copy is not available for borrowing.";
+            lblBorrowError.Text = "This copy is not available for borrowing.";
         }
     }
 
@@ -177,6 +276,10 @@ public partial class BorrowForm : Form
         lblMemberCard.Text = "Card: -";
         lblMemberBorrows.Text = "Active Borrows: -";
         dgvActiveBorrows.DataSource = null;
+        _currentBorrows.Clear();
+        _selectedBorrowRecord = null;
+        lblSelectedBorrow.Text = "Selected Borrow: -";
+        btnOpenRenewForm.Enabled = false;
         btnBorrow.Enabled = false;
     }
 
@@ -190,8 +293,25 @@ public partial class BorrowForm : Form
         btnBorrow.Enabled = false;
     }
 
+    private void ClearSelectionInfo()
+    {
+        ClearBookInfo();
+        ClearMemberInfo();
+        lblBorrowError.Text = string.Empty;
+    }
+
     private void btnBack_Click(object? sender, EventArgs e)
     {
-        this.Close();
+        Close();
+    }
+
+    private sealed class BorrowGridRow
+    {
+        public int BorrowRecordId { get; set; }
+        public string BookTitle { get; set; } = string.Empty;
+        public string Barcode { get; set; } = string.Empty;
+        public string BorrowDate { get; set; } = string.Empty;
+        public string DueDate { get; set; } = string.Empty;
+        public int RenewalCount { get; set; }
     }
 }

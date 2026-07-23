@@ -55,6 +55,7 @@ namespace WinFormsApp1.Forms.Main
             btnPublishers.Visible = SessionManager.IsAdmin || SessionManager.IsLibrarian;
             btnInventory.Visible = SessionManager.IsAdmin || SessionManager.IsLibrarian;
             btnReports.Visible = SessionManager.IsAdmin || SessionManager.IsLibrarian;
+            btnRenewBook.Visible = SessionManager.IsAdmin || SessionManager.IsLibrarian;
         }
 
         private async void btnLogout_Click(object sender, EventArgs e)
@@ -175,6 +176,13 @@ namespace WinFormsApp1.Forms.Main
             using var scope = _serviceProvider.CreateScope();
             var returnForm = scope.ServiceProvider.GetRequiredService<ReturnForm>();
             returnForm.ShowDialog(this);
+        }
+
+        private void btnRenewBook_Click(object sender, EventArgs e)
+        {
+            using var scope = _serviceProvider.CreateScope();
+            var renewForm = scope.ServiceProvider.GetRequiredService<RenewForm>();
+            renewForm.ShowDialog(this);
         }
 
         private void MainForm_FormClosing(object? sender, FormClosingEventArgs e)

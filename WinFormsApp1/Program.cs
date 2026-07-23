@@ -60,6 +60,7 @@ namespace WinFormsApp1
                     services.AddScoped<BookService>();
                     services.AddScoped<BookCopyService>();
                     services.AddScoped<BorrowService>();
+                    services.AddScoped<RenewalService>();
                     services.AddScoped<ReturnService>();
                     services.AddScoped<ReservationService>();
                     services.AddScoped<InventoryService>();
@@ -81,6 +82,7 @@ namespace WinFormsApp1
                     services.AddTransient<MemberDetailForm>();
                     services.AddTransient<BookForm>();
                     services.AddTransient<BorrowForm>();
+                    services.AddTransient<RenewForm>();
                     services.AddTransient<ReturnForm>();
                     services.AddTransient<ReservationForm>();
                     services.AddTransient<InventoryForm>();

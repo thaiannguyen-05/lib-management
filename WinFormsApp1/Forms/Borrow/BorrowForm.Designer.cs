@@ -34,9 +34,11 @@ namespace WinFormsApp1.Forms.Borrow
             lblBookAuthors = new Label();
             lblBookShelf = new Label();
             btnBorrow = new Button();
-            lblError = new Label();
-            dgvActiveBorrows = new DataGridView();
+            lblBorrowError = new Label();
             lblActiveBorrows = new Label();
+            dgvActiveBorrows = new DataGridView();
+            lblSelectedBorrow = new Label();
+            btnOpenRenewForm = new Button();
             btnBack = new Button();
             grpMember.SuspendLayout();
             grpBook.SuspendLayout();
@@ -48,7 +50,7 @@ namespace WinFormsApp1.Forms.Borrow
             lblTitle.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
             lblTitle.Location = new Point(20, 10);
             lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(750, 35);
+            lblTitle.Size = new Size(760, 35);
             lblTitle.TabIndex = 0;
             lblTitle.Text = "Borrow Book";
             // 
@@ -63,7 +65,7 @@ namespace WinFormsApp1.Forms.Borrow
             grpMember.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             grpMember.Location = new Point(20, 55);
             grpMember.Name = "grpMember";
-            grpMember.Size = new Size(750, 130);
+            grpMember.Size = new Size(760, 130);
             grpMember.TabIndex = 1;
             grpMember.TabStop = false;
             grpMember.Text = "Member Information";
@@ -84,7 +86,7 @@ namespace WinFormsApp1.Forms.Borrow
             cmbMembers.Font = new Font("Segoe UI", 9F);
             cmbMembers.Location = new Point(125, 27);
             cmbMembers.Name = "cmbMembers";
-            cmbMembers.Size = new Size(450, 28);
+            cmbMembers.Size = new Size(460, 28);
             cmbMembers.TabIndex = 1;
             cmbMembers.SelectedIndexChanged += cmbMembers_SelectedIndexChanged;
             // 
@@ -112,9 +114,9 @@ namespace WinFormsApp1.Forms.Borrow
             // 
             lblMemberCard.AutoSize = true;
             lblMemberCard.Font = new Font("Segoe UI", 9F);
-            lblMemberCard.Location = new Point(400, 65);
+            lblMemberCard.Location = new Point(410, 65);
             lblMemberCard.Name = "lblMemberCard";
-            lblMemberCard.Size = new Size(85, 20);
+            lblMemberCard.Size = new Size(43, 20);
             lblMemberCard.TabIndex = 4;
             lblMemberCard.Text = "Card: -";
             // 
@@ -122,7 +124,7 @@ namespace WinFormsApp1.Forms.Borrow
             // 
             lblMemberBorrows.AutoSize = true;
             lblMemberBorrows.Font = new Font("Segoe UI", 9F);
-            lblMemberBorrows.Location = new Point(400, 90);
+            lblMemberBorrows.Location = new Point(410, 90);
             lblMemberBorrows.Name = "lblMemberBorrows";
             lblMemberBorrows.Size = new Size(110, 20);
             lblMemberBorrows.TabIndex = 5;
@@ -140,7 +142,7 @@ namespace WinFormsApp1.Forms.Borrow
             grpBook.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             grpBook.Location = new Point(20, 195);
             grpBook.Name = "grpBook";
-            grpBook.Size = new Size(750, 130);
+            grpBook.Size = new Size(760, 130);
             grpBook.TabIndex = 2;
             grpBook.TabStop = false;
             grpBook.Text = "Book Information";
@@ -160,7 +162,7 @@ namespace WinFormsApp1.Forms.Borrow
             txtBookSearch.Font = new Font("Segoe UI", 9F);
             txtBookSearch.Location = new Point(158, 27);
             txtBookSearch.Name = "txtBookSearch";
-            txtBookSearch.Size = new Size(337, 27);
+            txtBookSearch.Size = new Size(340, 27);
             txtBookSearch.TabIndex = 1;
             // 
             // btnSearchBook
@@ -169,7 +171,7 @@ namespace WinFormsApp1.Forms.Borrow
             btnSearchBook.FlatStyle = FlatStyle.Flat;
             btnSearchBook.Font = new Font("Segoe UI", 9F);
             btnSearchBook.ForeColor = Color.White;
-            btnSearchBook.Location = new Point(505, 25);
+            btnSearchBook.Location = new Point(508, 25);
             btnSearchBook.Name = "btnSearchBook";
             btnSearchBook.Size = new Size(80, 30);
             btnSearchBook.TabIndex = 2;
@@ -201,7 +203,7 @@ namespace WinFormsApp1.Forms.Borrow
             // 
             lblBookAuthors.AutoSize = true;
             lblBookAuthors.Font = new Font("Segoe UI", 9F);
-            lblBookAuthors.Location = new Point(400, 65);
+            lblBookAuthors.Location = new Point(410, 65);
             lblBookAuthors.Name = "lblBookAuthors";
             lblBookAuthors.Size = new Size(65, 20);
             lblBookAuthors.TabIndex = 5;
@@ -211,7 +213,7 @@ namespace WinFormsApp1.Forms.Borrow
             // 
             lblBookShelf.AutoSize = true;
             lblBookShelf.Font = new Font("Segoe UI", 9F);
-            lblBookShelf.Location = new Point(400, 90);
+            lblBookShelf.Location = new Point(410, 90);
             lblBookShelf.Name = "lblBookShelf";
             lblBookShelf.Size = new Size(55, 20);
             lblBookShelf.TabIndex = 6;
@@ -232,16 +234,16 @@ namespace WinFormsApp1.Forms.Borrow
             btnBorrow.UseVisualStyleBackColor = false;
             btnBorrow.Click += btnBorrow_Click;
             // 
-            // lblError
+            // lblBorrowError
             // 
-            lblError.ForeColor = Color.Red;
-            lblError.Font = new Font("Segoe UI", 9F);
-            lblError.Location = new Point(180, 335);
-            lblError.Name = "lblError";
-            lblError.Size = new Size(590, 40);
-            lblError.TabIndex = 4;
-            lblError.Text = "";
-            lblError.TextAlign = ContentAlignment.MiddleLeft;
+            lblBorrowError.ForeColor = Color.Red;
+            lblBorrowError.Font = new Font("Segoe UI", 9F);
+            lblBorrowError.Location = new Point(180, 335);
+            lblBorrowError.Name = "lblBorrowError";
+            lblBorrowError.Size = new Size(600, 40);
+            lblBorrowError.TabIndex = 4;
+            lblBorrowError.Text = "";
+            lblBorrowError.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // lblActiveBorrows
             // 
@@ -265,8 +267,34 @@ namespace WinFormsApp1.Forms.Borrow
             dgvActiveBorrows.ReadOnly = true;
             dgvActiveBorrows.RowHeadersWidth = 51;
             dgvActiveBorrows.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvActiveBorrows.Size = new Size(750, 180);
+            dgvActiveBorrows.Size = new Size(760, 180);
             dgvActiveBorrows.TabIndex = 6;
+            dgvActiveBorrows.SelectionChanged += dgvActiveBorrows_SelectionChanged;
+            // 
+            // lblSelectedBorrow
+            // 
+            lblSelectedBorrow.AutoSize = true;
+            lblSelectedBorrow.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            lblSelectedBorrow.Location = new Point(20, 605);
+            lblSelectedBorrow.Name = "lblSelectedBorrow";
+            lblSelectedBorrow.Size = new Size(128, 20);
+            lblSelectedBorrow.TabIndex = 7;
+            lblSelectedBorrow.Text = "Selected Borrow: -";
+            // 
+            // btnOpenRenewForm
+            // 
+            btnOpenRenewForm.BackColor = Color.FromArgb(255, 193, 7);
+            btnOpenRenewForm.Enabled = false;
+            btnOpenRenewForm.FlatStyle = FlatStyle.Flat;
+            btnOpenRenewForm.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            btnOpenRenewForm.ForeColor = Color.Black;
+            btnOpenRenewForm.Location = new Point(20, 635);
+            btnOpenRenewForm.Name = "btnOpenRenewForm";
+            btnOpenRenewForm.Size = new Size(170, 40);
+            btnOpenRenewForm.TabIndex = 8;
+            btnOpenRenewForm.Text = "Gia hạn...";
+            btnOpenRenewForm.UseVisualStyleBackColor = false;
+            btnOpenRenewForm.Click += btnOpenRenewForm_Click;
             // 
             // btnBack
             // 
@@ -274,10 +302,10 @@ namespace WinFormsApp1.Forms.Borrow
             btnBack.FlatStyle = FlatStyle.Flat;
             btnBack.Font = new Font("Segoe UI", 9F);
             btnBack.ForeColor = Color.White;
-            btnBack.Location = new Point(20, 605);
+            btnBack.Location = new Point(20, 690);
             btnBack.Name = "btnBack";
             btnBack.Size = new Size(100, 35);
-            btnBack.TabIndex = 7;
+            btnBack.TabIndex = 9;
             btnBack.Text = "Back";
             btnBack.UseVisualStyleBackColor = false;
             btnBack.Click += btnBack_Click;
@@ -286,14 +314,16 @@ namespace WinFormsApp1.Forms.Borrow
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(790, 655);
+            ClientSize = new Size(800, 745);
             Controls.Add(lblTitle);
             Controls.Add(grpMember);
             Controls.Add(grpBook);
             Controls.Add(btnBorrow);
-            Controls.Add(lblError);
+            Controls.Add(lblBorrowError);
             Controls.Add(lblActiveBorrows);
             Controls.Add(dgvActiveBorrows);
+            Controls.Add(lblSelectedBorrow);
+            Controls.Add(btnOpenRenewForm);
             Controls.Add(btnBack);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
@@ -328,9 +358,11 @@ namespace WinFormsApp1.Forms.Borrow
         private Label lblBookAuthors;
         private Label lblBookShelf;
         private Button btnBorrow;
-        private Label lblError;
+        private Label lblBorrowError;
         private Label lblActiveBorrows;
         private DataGridView dgvActiveBorrows;
+        private Label lblSelectedBorrow;
+        private Button btnOpenRenewForm;
         private Button btnBack;
     }
 }

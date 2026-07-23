@@ -33,7 +33,7 @@ namespace WinFormsApp1.Forms.Main
             btnReservations = new Button();
             btnInventory = new Button();
             btnReturn = new Button();
-            btnHidden2 = new Button();
+            btnRenewBook = new Button();
             SuspendLayout();
             // 
             // lblWelcome
@@ -263,19 +263,19 @@ namespace WinFormsApp1.Forms.Main
             btnReturn.UseVisualStyleBackColor = false;
             btnReturn.Click += btnReturn_Click;
             // 
-            // btnHidden2
+            // btnRenewBook
             // 
-            btnHidden2.BackColor = Color.FromArgb(108, 117, 125);
-            btnHidden2.FlatStyle = FlatStyle.Flat;
-            btnHidden2.ForeColor = Color.White;
-            btnHidden2.Location = new Point(315, 480);
-            btnHidden2.Margin = new Padding(4, 4, 4, 4);
-            btnHidden2.Name = "btnHidden2";
-            btnHidden2.Size = new Size(270, 80);
-            btnHidden2.TabIndex = 15;
-            btnHidden2.Text = "Hidden 2";
-            btnHidden2.UseVisualStyleBackColor = false;
-            btnHidden2.Visible = false;
+            btnRenewBook.BackColor = Color.FromArgb(255, 193, 7);
+            btnRenewBook.FlatStyle = FlatStyle.Flat;
+            btnRenewBook.ForeColor = Color.Black;
+            btnRenewBook.Location = new Point(315, 480);
+            btnRenewBook.Margin = new Padding(4, 4, 4, 4);
+            btnRenewBook.Name = "btnRenewBook";
+            btnRenewBook.Size = new Size(270, 80);
+            btnRenewBook.TabIndex = 15;
+            btnRenewBook.Text = "Renew Book";
+            btnRenewBook.UseVisualStyleBackColor = false;
+            btnRenewBook.Click += btnRenewBook_Click;
             //
             // MainForm
             // 
@@ -298,7 +298,7 @@ namespace WinFormsApp1.Forms.Main
             Controls.Add(btnReservations);
             Controls.Add(btnInventory);
             Controls.Add(btnReturn);
-            Controls.Add(btnHidden2);
+            Controls.Add(btnRenewBook);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Margin = new Padding(4);
             MaximizeBox = false;
@@ -326,6 +326,6 @@ namespace WinFormsApp1.Forms.Main
         private Button btnReservations;
         private Button btnInventory;
         private Button btnReturn;
-        private Button btnHidden2;
+        private Button btnRenewBook;
     }
 }

@@ -38,3 +38,8 @@ Desktop.ini
 ## Temporary files
 *.tmp
 *.temp
+
+libraly.db
+# AI Agent Skills
+.agents/
+skills-lock.json

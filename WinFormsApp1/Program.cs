@@ -40,6 +40,8 @@ namespace WinFormsApp1
                     services.AddScoped<UserService>();
                     services.AddScoped<LibraryCardService>();
                     services.AddScoped<MemberService>();
+                    services.AddScoped<LateFeeService>();
+                    services.AddScoped<FeePaymentService>();
 
                     // ── Forms ──────────────────────────────────────
                     services.AddTransient<LoginForm>();
@@ -50,6 +52,7 @@ namespace WinFormsApp1
                     services.AddTransient<PublisherForm>();
                     services.AddTransient<UserManageForm>();
                     services.AddTransient<LibraryCardForm>();
+                    services.AddTransient<FeeForm>();
                     services.AddTransient<MemberListForm>();
                     services.AddTransient<MemberDetailForm>();
                 })
@@ -59,7 +62,7 @@ namespace WinFormsApp1
             using (var scope = host.Services.CreateScope())
             {
                 var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                db.Database.EnsureCreated();
+                InitializeDatabase(db);
             }
 
             // ── Resolve LoginForm and run ─────────────────────────
@@ -67,6 +70,101 @@ namespace WinFormsApp1
             {
                 var loginForm = scope.ServiceProvider.GetRequiredService<LoginForm>();
                 Application.Run(loginForm);
+            }
+        }
+
+        private static void InitializeDatabase(AppDbContext db)
+        {
+            var connection = db.Database.GetDbConnection();
+            if (connection.State != System.Data.ConnectionState.Open)
+                connection.Open();
+
+            try
+            {
+                var hasHistoryTable = TableExists(connection, "__EFMigrationsHistory");
+                var hasAnyTables = HasAnyUserTables(connection);
+
+                if (hasHistoryTable || !hasAnyTables)
+                {
+                    db.Database.Migrate();
+                }
+                else
+                {
+                    // Legacy database created with EnsureCreated(): keep it usable and avoid forcing
+                    // an initial migration replay against an already-populated schema.
+                    EnsureMemberColumn(db, "Department", "TEXT NULL");
+                    EnsureMemberColumn(db, "StudentId", "TEXT NULL");
+                }
+
+                // Keep the legacy schema compatible with the current model.
+                EnsureMemberColumn(db, "Department", "TEXT NULL");
+                EnsureMemberColumn(db, "StudentId", "TEXT NULL");
+            }
+            finally
+            {
+                if (connection.State == System.Data.ConnectionState.Open)
+                    connection.Close();
+            }
+        }
+
+        private static bool HasAnyUserTables(System.Data.Common.DbConnection connection)
+        {
+            using var command = connection.CreateCommand();
+            command.CommandText = "SELECT 1 FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%' AND name <> '__EFMigrationsHistory' LIMIT 1;";
+
+            using var reader = command.ExecuteReader();
+            return reader.Read();
+        }
+
+        private static bool TableExists(System.Data.Common.DbConnection connection, string tableName)
+        {
+            using var command = connection.CreateCommand();
+            command.CommandText = "SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = $name LIMIT 1;";
+            var parameter = command.CreateParameter();
+            parameter.ParameterName = "$name";
+            parameter.Value = tableName;
+            command.Parameters.Add(parameter);
+
+            using var reader = command.ExecuteReader();
+            return reader.Read();
+        }
+
+        private static void EnsureMemberColumn(AppDbContext db, string columnName, string columnTypeSql)
+        {
+            var connection = db.Database.GetDbConnection();
+            if (connection.State != System.Data.ConnectionState.Open)
+                connection.Open();
+
+            try
+            {
+                using var tableInfoCommand = connection.CreateCommand();
+                tableInfoCommand.CommandText = "PRAGMA table_info(Members);";
+
+                var hasColumn = false;
+                using (var reader = tableInfoCommand.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var existingColumnName = reader["name"]?.ToString();
+                        if (string.Equals(existingColumnName, columnName, StringComparison.OrdinalIgnoreCase))
+                        {
+                            hasColumn = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!hasColumn)
+                {
+                    using var alterCommand = connection.CreateCommand();
+                    alterCommand.CommandText = $"ALTER TABLE Members ADD COLUMN {columnName} {columnTypeSql};";
+                    alterCommand.ExecuteNonQuery();
+                }
+            }
+            finally
+            {
+                if (connection.State == System.Data.ConnectionState.Open)
+                    connection.Close();
             }
         }
     }

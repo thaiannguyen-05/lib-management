@@ -23,6 +23,7 @@ namespace WinFormsApp1.Forms
             btnBorrowing = new Button();
             btnUsers = new Button();
             btnReports = new Button();
+            btnFees = new Button();
             btnLogout = new Button();
             btnChangePassword = new Button();
             btnAuthors = new Button();
@@ -47,7 +48,7 @@ namespace WinFormsApp1.Forms
             btnBooks.FlatStyle = FlatStyle.Flat;
             btnBooks.ForeColor = Color.White;
             btnBooks.Location = new Point(30, 120);
-            btnBooks.Margin = new Padding(4, 4, 4, 4);
+            btnBooks.Margin = new Padding(4);
             btnBooks.Name = "btnBooks";
             btnBooks.Size = new Size(270, 90);
             btnBooks.TabIndex = 1;
@@ -61,7 +62,7 @@ namespace WinFormsApp1.Forms
             btnMembers.FlatStyle = FlatStyle.Flat;
             btnMembers.ForeColor = Color.White;
             btnMembers.Location = new Point(315, 120);
-            btnMembers.Margin = new Padding(4, 4, 4, 4);
+            btnMembers.Margin = new Padding(4);
             btnMembers.Name = "btnMembers";
             btnMembers.Size = new Size(270, 90);
             btnMembers.TabIndex = 2;
@@ -75,7 +76,7 @@ namespace WinFormsApp1.Forms
             btnBorrowing.FlatStyle = FlatStyle.Flat;
             btnBorrowing.ForeColor = Color.Black;
             btnBorrowing.Location = new Point(600, 120);
-            btnBorrowing.Margin = new Padding(4, 4, 4, 4);
+            btnBorrowing.Margin = new Padding(4);
             btnBorrowing.Name = "btnBorrowing";
             btnBorrowing.Size = new Size(270, 90);
             btnBorrowing.TabIndex = 3;
@@ -89,7 +90,7 @@ namespace WinFormsApp1.Forms
             btnUsers.FlatStyle = FlatStyle.Flat;
             btnUsers.ForeColor = Color.White;
             btnUsers.Location = new Point(30, 240);
-            btnUsers.Margin = new Padding(4, 4, 4, 4);
+            btnUsers.Margin = new Padding(4);
             btnUsers.Name = "btnUsers";
             btnUsers.Size = new Size(270, 90);
             btnUsers.TabIndex = 4;
@@ -103,7 +104,7 @@ namespace WinFormsApp1.Forms
             btnReports.FlatStyle = FlatStyle.Flat;
             btnReports.ForeColor = Color.White;
             btnReports.Location = new Point(315, 240);
-            btnReports.Margin = new Padding(4, 4, 4, 4);
+            btnReports.Margin = new Padding(4);
             btnReports.Name = "btnReports";
             btnReports.Size = new Size(270, 90);
             btnReports.TabIndex = 5;
@@ -111,13 +112,27 @@ namespace WinFormsApp1.Forms
             btnReports.UseVisualStyleBackColor = false;
             btnReports.Click += btnReports_Click;
             // 
+            // btnFees
+            // 
+            btnFees.BackColor = Color.FromArgb(32, 201, 151);
+            btnFees.FlatStyle = FlatStyle.Flat;
+            btnFees.ForeColor = Color.White;
+            btnFees.Location = new Point(1284, 240);
+            btnFees.Margin = new Padding(4);
+            btnFees.Name = "btnFees";
+            btnFees.Size = new Size(270, 75);
+            btnFees.TabIndex = 11;
+            btnFees.Text = "Fees";
+            btnFees.UseVisualStyleBackColor = false;
+            btnFees.Click += btnFees_Click;
+            // 
             // btnLogout
             // 
             btnLogout.BackColor = Color.FromArgb(108, 117, 125);
             btnLogout.FlatStyle = FlatStyle.Flat;
             btnLogout.ForeColor = Color.White;
-            btnLogout.Location = new Point(600, 375);
-            btnLogout.Margin = new Padding(4, 4, 4, 4);
+            btnLogout.Location = new Point(593, 443);
+            btnLogout.Margin = new Padding(4);
             btnLogout.Name = "btnLogout";
             btnLogout.Size = new Size(270, 60);
             btnLogout.TabIndex = 6;
@@ -131,7 +146,7 @@ namespace WinFormsApp1.Forms
             btnChangePassword.FlatStyle = FlatStyle.Flat;
             btnChangePassword.ForeColor = Color.White;
             btnChangePassword.Location = new Point(315, 445);
-            btnChangePassword.Margin = new Padding(4, 4, 4, 4);
+            btnChangePassword.Margin = new Padding(4);
             btnChangePassword.Name = "btnChangePassword";
             btnChangePassword.Size = new Size(270, 60);
             btnChangePassword.TabIndex = 7;
@@ -145,7 +160,7 @@ namespace WinFormsApp1.Forms
             btnAuthors.FlatStyle = FlatStyle.Flat;
             btnAuthors.ForeColor = Color.White;
             btnAuthors.Location = new Point(600, 240);
-            btnAuthors.Margin = new Padding(4, 4, 4, 4);
+            btnAuthors.Margin = new Padding(4);
             btnAuthors.Name = "btnAuthors";
             btnAuthors.Size = new Size(270, 90);
             btnAuthors.TabIndex = 8;
@@ -159,7 +174,7 @@ namespace WinFormsApp1.Forms
             btnCategories.FlatStyle = FlatStyle.Flat;
             btnCategories.ForeColor = Color.White;
             btnCategories.Location = new Point(30, 360);
-            btnCategories.Margin = new Padding(4, 4, 4, 4);
+            btnCategories.Margin = new Padding(4);
             btnCategories.Name = "btnCategories";
             btnCategories.Size = new Size(270, 75);
             btnCategories.TabIndex = 9;
@@ -173,7 +188,7 @@ namespace WinFormsApp1.Forms
             btnPublishers.FlatStyle = FlatStyle.Flat;
             btnPublishers.ForeColor = Color.White;
             btnPublishers.Location = new Point(315, 360);
-            btnPublishers.Margin = new Padding(4, 4, 4, 4);
+            btnPublishers.Margin = new Padding(4);
             btnPublishers.Name = "btnPublishers";
             btnPublishers.Size = new Size(270, 75);
             btnPublishers.TabIndex = 10;
@@ -185,7 +200,7 @@ namespace WinFormsApp1.Forms
             // 
             AutoScaleDimensions = new SizeF(12F, 30F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(900, 518);
+            ClientSize = new Size(1596, 625);
             Controls.Add(lblWelcome);
             Controls.Add(btnBooks);
             Controls.Add(btnMembers);
@@ -197,8 +212,9 @@ namespace WinFormsApp1.Forms
             Controls.Add(btnAuthors);
             Controls.Add(btnCategories);
             Controls.Add(btnPublishers);
+            Controls.Add(btnFees);
             FormBorderStyle = FormBorderStyle.FixedSingle;
-            Margin = new Padding(4, 4, 4, 4);
+            Margin = new Padding(4);
             MaximizeBox = false;
             Name = "MainForm";
             StartPosition = FormStartPosition.CenterScreen;
@@ -219,5 +235,6 @@ namespace WinFormsApp1.Forms
         private Button btnAuthors;
         private Button btnCategories;
         private Button btnPublishers;
+        private Button btnFees;
     }
 }

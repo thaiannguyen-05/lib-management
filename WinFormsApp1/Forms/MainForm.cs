@@ -80,6 +80,12 @@ namespace WinFormsApp1.Forms
             MessageBox.Show("Borrowing module - Coming in Milestone 5", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        private void btnFees_Click(object sender, EventArgs e)
+        {
+            var feeForm = _serviceProvider.GetRequiredService<FeeForm>();
+            feeForm.ShowDialog(this);
+        }
+
         private void btnUsers_Click(object sender, EventArgs e)
         {
             var userForm = _serviceProvider.GetRequiredService<UserManageForm>();
